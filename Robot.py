@@ -2,29 +2,28 @@ class Environnement :
     def __init__(self,largeur,hauteur):
         self.largeur = largeur
         self.hauteur = hauteur
-        self.grille =[["_" for _ in range(largeur)]for _ in range (hauteur)]
-    """def afficher (self,robot):
+        self.grille =[["." for _ in range(largeur)]for _ in range (hauteur)]
+    def afficher (self,robot):
         for y in range (self.hauteur):
             for x in range(self.largeur):
                 if (x,y)==(robot.x,robot.y):
-                    print(robot.orientation,end=" ")
+                    print("R",end=" ")
                 else:
                     print(self.grille[y][x],end=" ")
             print()
-        print()"""
-    def afficher(self):
-        for pos in self.parcours:
-            print(pos) 
+        print()
+     
 
 class Robot:
     def __init__(self,x,y,environnement,vitesse=1):
         self.x = x
         self.y = y
+        self.env = environnement
         self.vitesse = vitesse
         self.position = (0,0)
-        self.parcours=[]
+        self.parcours=[self.position]
+        self.env.afficher(self)
         
-        self.env = environnement
     """def avancer(self):
         if self.orientation == "N" and self.y > 0: 
             self.y -= 1
@@ -44,29 +43,34 @@ class Robot:
         self.orientation = directions[i]"""
     def deplacer(self,x,y):
         self.position =(x,y)
-        self.parcours.appends(self.position)
+        self.parcours.append(self.position)
     def parcourir_grille(self):
-        for ligne in range (self.largeur):
+        for ligne in range (self.env.largeur):
             if ligne % 2 == 0:
-                for col in range (self.hauteur):
+                for col in range (self.env.hauteur):
                     self.deplacer(ligne,col)
             else:
-                for col in range (self.hauteur-1,-1,-1):
+                for col in range (self.env.hauteur-1,-1,-1):
                     self.deplacer(ligne,col)
+                    
+    def afficher(self):
+        
+        for pos in self.parcours:
+            print(pos)
+            
+
     
-largeur = 12
-hauteur = 12
+largeur = 5
+hauteur = 5
 env = Environnement(largeur,hauteur)
-x=5
-y=5
+x=0
+y=0
 
 
 robot = Robot(x,y,env,vitesse=1)
 
-#env.afficher(robot)
+env.afficher(robot)
 robot.parcourir_grille()
-robot.afficher()
+env.afficher(robot)
 
-#robot.tourner_droite()
-#robot.avancer()
-#env.afficher(robot)
+robot.afficher()
