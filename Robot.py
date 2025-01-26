@@ -41,9 +41,9 @@ class Robot:
         directions = ["N","E","S","O"]
         i = (directions.index(self.orientation) - 1) % 4
         self.orientation = directions[i]"""
-    def deplacer(self,x,y):
+    """def deplacer(self,x,y):
         self.position =(x,y)
-        self.parcours.append(self.position)
+        self.parcours.append(self.position)""" 
     def parcourir_grille(self):
         for ligne in range (self.env.largeur):
             if ligne % 2 == 0:
@@ -58,7 +58,50 @@ class Robot:
         for pos in self.parcours:
             print(pos)
             
+def deplacer(self, angle):
+        # Conversion de l'angle en radians
+        angle_rad = math.radians(angle)
+        # Calcul des nouveaux déplacements
+        dx = round(self.vitesse * math.cos(angle_rad))
+        dy = round(self.vitesse * math.sin(angle_rad))
+        # Nouvelles positions
+        new_x = self.x + dx
+        new_y = self.y + dy
 
+        # Vérification des limites de la grille
+        if 0 <= new_x < self.env.largeur and 0 <= new_y < self.env.hauteur:
+            self.x = new_x
+            self.y = new_y
+        else:
+            print("Obstacle ou limite atteinte ! Le robot s'arrête.")
+
+    def afficher_position(self):
+        print(f"Position actuelle : ({self.x}, {self.y})")
+
+
+# Initialisation
+largeur = 5
+hauteur = 5
+env = Environnement(largeur, hauteur)
+
+# Position initiale du robot
+x = 0
+y = 0
+robot = Robot(x, y, env)
+
+# Entrée utilisateur pour la vitesse et l'angle
+vitesse = int(input("Entrez la vitesse du robot (en unités par pas) : "))
+angle = int(input("Entrez l'angle de déplacement (en degrés) : "))
+robot.vitesse = vitesse
+
+# Déplacement du robot
+while True:
+    robot.deplacer(angle)
+    env.afficher(robot)
+    robot.afficher_position()
+    continuer = input("Voulez-vous continuer (o/n) ? ").lower()
+    if continuer != 'o':
+        break
     
 largeur = 5
 hauteur = 5
