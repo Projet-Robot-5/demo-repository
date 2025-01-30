@@ -1,12 +1,12 @@
 # 🚀 **Robot Simulation Project**
 
-Bienvenue dans le **Robot Simulation Project** ! Ce projet contient une simulation de robot interactive, construite avec **Tkinter**. Le robot peut se déplacer, tourner, éviter les obstacles et réagir aux bords du canevas.
+Bienvenue dans le **Robot Simulation Project** ! Ce projet contient une simulation de robot interactive. Le robot peut se déplacer, tourner, éviter les obstacles et réagir aux bords du canevas.
 
 ---
 
 ## ⚠️ **Branche de Test**
 
-Cette branche est **réservée aux tests** seulement. Elle est utilisée pour tester de nouvelles fonctionnalités et expérimentations dans la simulation de robot avant de les intégrer dans la branche principale. Nous encourageons l'ajout de nouveaux tests et de fonctionnalités tout en veillant à maintenir la stabilité du code dans cette branche.
+Cette branche est **réservée aux tests** seulement. Elle est utilisée pour tester de nouvelles fonctionnalités et expérimentations dans la simulation de robot avant de les intégrer dans la branche principale. 
 
 ---
 
