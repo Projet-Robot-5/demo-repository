@@ -59,10 +59,13 @@ class Robot:
     def eviter_obstacle(self,obstacles,largeur_canvas,hauteur_canvas):
         """eviter un obstacle en tournant à gauche ou à droite"""
         if self.detecter_obstacle(obstacles):
+            #Tourner à droite si un obstacle est détecté
             self.tourner("droite")
         elif self.detecter_bordure(largeur_canvas,hauteur_canvas):
+            #Tourner à gauche si le robot atteint le bord
             self.tourner("gauche")
         else:
+            #Avancer si aucun oobstacle ou bordure n'est detecté
             self.avancer(10)
     
    
