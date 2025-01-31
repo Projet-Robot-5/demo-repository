@@ -9,6 +9,8 @@ class Robot:
         self.taille = taille
         self.angle = angle  # L'angle du robot pour la rotation
         self.robot = self.canevas.create_oval(x, y, x + taille, y + taille, fill="blue")
+        self.vitesse_roue_gauche = 0 #vitesse de la roue gauche
+        self.vitesse_roue_droite = 0 #vitesse de la roue droite
 
     def deplacer(self, dx, dy):
         """Déplacer le robot de dx, dy."""
