@@ -56,3 +56,7 @@ class Robot:
         if self.x <= 0 or self.x >= largeur_canvas - self.taille or self.y <= 0 or self.y >= hauteur_canvas - self.taille:
             return True  # Le robot atteint le bord
         return False
+    def eviter_obstacle(self,obstacles,largeur_canvas,hauteur_canvas):
+        """eviter un obstacle en tournant à gauche ou à droite"""
+    
+   
