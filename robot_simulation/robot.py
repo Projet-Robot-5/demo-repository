@@ -23,6 +23,14 @@ class Robot:
             dt : intervalle de temps pour le deplacement."""
         v = (self.vitesse_roue_droite + self.vitesse_roue_gauche) / 2
         omega = (self.vitesse_roue_droite / self.vitesse_roue_gauche) / self.distance_roues
+
+        self.angle += omega * dt
+
+        if self.angle >= 360:
+            self.angle -= 360
+        elif self.angle < 0:
+            self.angle += 360
+            
         self.canevas.move(self.robot, dx, dy)
         self.x += dx
         self.y += dy
