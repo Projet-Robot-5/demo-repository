@@ -23,6 +23,10 @@ class Simulation:
         """Accélérer les deux roues."""
         self.robot.set_vitesse_roues(10,10)
         self.deplacer_robot()
+    def ralentir(self, event):
+        """Ralentir les deux roues. """
+        self.robot.set_vitesse_roues(-10,-10)
+        self.deplacer_robot()
     def deplacer_robot(self, event):
         """Déplacer le robot en évitant les obstacles et les bordures."""
         # Si un obstacle est détecté, tourner
