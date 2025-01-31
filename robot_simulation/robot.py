@@ -30,6 +30,10 @@ class Robot:
             self.angle -= 360
         elif self.angle < 0:
             self.angle += 360
+
+        radian = math.radians(self.angle)
+        dx = v * math.cos(radian) * dt
+        dy = v * math.sin(radian) * dt
             
         self.canevas.move(self.robot, dx, dy)
         self.x += dx
