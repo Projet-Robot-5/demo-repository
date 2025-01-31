@@ -20,14 +20,9 @@ class Simulation:
         racine.bind("<Right>", self.tourner_droite)
 
     def deplacer_robot(self, event):
-        """Déplacer le robot dans la direction qu'il regarde, avec détection d'obstacle et bordure."""
+        """Déplacer le robot en évitant les obstacles et les bordures."""
         # Si un obstacle est détecté, tourner
-        if self.robot.detecter_obstacle(self.obstacles):
-            self.robot.tourner("droite")  # Tourner à droite si obstacle détecté
-        elif self.robot.detecter_bordure(self.canevas.winfo_width(), self.canevas.winfo_height()):
-            self.robot.tourner("gauche")  # Tourner à gauche si au bord
-        else:
-            self.robot.avancer(10)  # Avancer si aucune détection
+        self.robot.eviter_obstacle(self.obstacles,self.canevas.winfo_width(),self.canevas.winfo_height())
 
     def tourner_gauche(self, event):
         """Tourner le robot à gauche."""
