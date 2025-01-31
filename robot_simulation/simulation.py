@@ -33,9 +33,11 @@ class Simulation:
         self.robot.eviter_obstacle(self.obstacles,self.canevas.winfo_width(),self.canevas.winfo_height())
 
     def tourner_gauche(self, event):
-        """Tourner le robot à gauche."""
-        self.robot.tourner("gauche")
+        """Tourner le robot à gauche en reduisant la vitesse de la roue gauche ."""
+        self.robot.set_vitesses_roues(5,10)
+        self.deplacer_robot()
 
     def tourner_droite(self, event):
-        """Tourner le robot à droite."""
-        self.robot.tourner("droite")
+        """Tourner le robot à droite en reduisant la vitesse de la roue droitr ."""
+        self.robot.set_vitesses_roues(10,5)
+        self.deplacer_robot()
