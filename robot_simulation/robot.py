@@ -88,12 +88,13 @@ class Robot:
         """eviter un obstacle en tournant à gauche ou à droite"""
         if self.detecter_obstacle(obstacles):
             #Tourner à droite si un obstacle est détecté
-            self.tourner("droite")
+            self.set_vitesse_roues(5,10) # Roue gauche plus lente, roue droite plus rapide
         elif self.detecter_bordure(largeur_canvas,hauteur_canvas):
             #Tourner à gauche si le robot atteint le bord
-            self.tourner("gauche")
+            self.set_vitesse_roues(10,5) #Roue gauche plus rapide, roue droite plus lente
         else:
             #Avancer si aucun oobstacle ou bordure n'est detecté
-            self.avancer(10)
+            self.set_vitesse_roues(10,10) #vitesses égales pour avancer tout droit
+            
     
    
