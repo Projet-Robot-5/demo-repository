@@ -11,6 +11,7 @@ class Robot:
         self.robot = self.canevas.create_oval(x, y, x + taille, y + taille, fill="blue")
         self.vitesse_roue_gauche = 0 #vitesse de la roue gauche
         self.vitesse_roue_droite = 0 #vitesse de la roue droite
+        self.distance_roues = distance_roues #Distance entre les deux roues 
 
     def set_vitesse_roues(self, vitesse_gauche, vitesse_droite):
         """Définir les vitesses des roues gauche et droite."""
@@ -18,7 +19,10 @@ class Robot:
         self.vitesse_roue_droite = vitesse_droite
 
     def deplacer(self, dt):
-        """Déplacer le robot de dx, dy."""
+        """Déplacer le robot en fonction des vitesses des roues0.
+            dt : intervalle de temps pour le deplacement."""
+        v = (self.vitesse_roue_droite + self.vitesse_roue_gauche) / 2
+        omega = (self.vitesse_roue_droite / self.vitesse_roue_gauche) / self.distance_roues
         self.canevas.move(self.robot, dx, dy)
         self.x += dx
         self.y += dy
