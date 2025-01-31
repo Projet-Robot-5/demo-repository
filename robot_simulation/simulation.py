@@ -31,6 +31,7 @@ class Simulation:
         """Déplacer le robot en évitant les obstacles et les bordures."""
         # Si un obstacle est détecté, tourner
         self.robot.eviter_obstacle(self.obstacles,self.canevas.winfo_width(),self.canevas.winfo_height())
+        self.robot.deplacer(1) #Déplacer le robot aec un intervalle de temps de 1
 
     def tourner_gauche(self, event):
         """Tourner le robot à gauche en reduisant la vitesse de la roue gauche ."""
