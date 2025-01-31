@@ -15,10 +15,14 @@ class Simulation:
             self.env.dessiner_obstacle(obs[0], obs[1])
 
         # Lier les touches du clavier pour déplacer et faire tourner le robot
-        racine.bind("<Up>", self.deplacer_robot)
+        racine.bind("<Up>", self.accelerer)
+        racine.bind("<Donwn>", self.ralentir)
         racine.bind("<Left>", self.tourner_gauche)
         racine.bind("<Right>", self.tourner_droite)
-
+    def accelerer(self , event):
+        """Accélérer les deux roues."""
+        self.robot.set_vitesse_roues(10,10)
+        self.deplacer_robot()
     def deplacer_robot(self, event):
         """Déplacer le robot en évitant les obstacles et les bordures."""
         # Si un obstacle est détecté, tourner
