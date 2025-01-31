@@ -21,20 +21,25 @@ class Robot:
     def deplacer(self, dt):
         """Déplacer le robot en fonction des vitesses des roues0.
             dt : intervalle de temps pour le deplacement."""
+        # Calculer la vitesse linéaire et angulaire
         v = (self.vitesse_roue_droite + self.vitesse_roue_gauche) / 2
         omega = (self.vitesse_roue_droite / self.vitesse_roue_gauche) / self.distance_roues
 
+        #Mettre à jour l'angle du robot
         self.angle += omega * dt
-
+        
+        # Limiter l'angle entre 0 et 360 degrés
         if self.angle >= 360:
             self.angle -= 360
         elif self.angle < 0:
             self.angle += 360
 
+        # Calculer les nouvelles coordonnées en fonction de l'angle
         radian = math.radians(self.angle)
         dx = v * math.cos(radian) * dt
         dy = v * math.sin(radian) * dt
-            
+
+        # Dépacer le robot
         self.canevas.move(self.robot, dx, dy)
         self.x += dx
         self.y += dy
