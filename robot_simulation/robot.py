@@ -12,6 +12,11 @@ class Robot:
         self.vitesse_roue_gauche = 0 #vitesse de la roue gauche
         self.vitesse_roue_droite = 0 #vitesse de la roue droite
 
+    def set_vitesse_roues(self, vitesse_gauche, vitesse_droite):
+        """Définir les vitesses des roues gauche et droite."""
+        self.vitesse_roue_gauche = vitesse_gauche
+        self.vitesse_roue_droite = vitesse_droite
+
     def deplacer(self, dx, dy):
         """Déplacer le robot de dx, dy."""
         self.canevas.move(self.robot, dx, dy)
