@@ -10,3 +10,6 @@ class Environnement:
         self.height = height
         self.obstacles = self.generate_obstacles(obstacle_count)
     
+    def generate_obstacles(self, count):
+        return [(random.randint(0, self.width), random.randint(0, self.height)) for _ in range(count)]
+    
