@@ -6,4 +6,6 @@ def main():
     racine.title("Simulation de Robot")
     simulation = Simulation(racine)  # Créer et lancer la simulation
     racine.mainloop()  # Lancer la boucle Tkinter
+if __name__ == "__main__":
+    main()
 
