@@ -65,5 +65,27 @@ class Simulation:
 
         self.robot.set_wheel_speed(left_speed, right_speed)
 
+    def update(self):
+        """Met à jour la position du robot et gère les collisions"""
+        self.update_movement()
+
+        # Détecter les obstacles et réagir
+        if self.environnement.detect_obstacle(self.robot.x, self.robot.y):
+            # Si un obstacle est détecté, le robot recule puis tourne
+            self.robot.set_wheel_speed(-20, -20)  # Recule
+            self.robot.move(dt=0.1)
+            self.robot.set_wheel_speed(20, -20)  # Tourne
+            self.robot.move(dt=0.1)
+
+        # Déplacement normal
+        self.robot.move(dt=0.1)
+
+        # Mise à jour graphique
+        x, y = self.robot.x, self.robot.y
+        # Calcul de la rotation du robot à partir de son orientation
+        self.update_robot_graphics(x, y)
+
+        self.master.after(50, self.update)  # Rafraîchir toutes les 50ms
+
 
 
