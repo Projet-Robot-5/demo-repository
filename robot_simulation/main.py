@@ -1,6 +1,6 @@
 import tkinter as tk
 from robot_simulation.simulation import Simulation
-
+# main.py
 def main():
     """Initialiser et démarrer la simulation."""
     racine = tk.Tk()  # Créer la fenêtre principale
