@@ -46,5 +46,24 @@ class Simulation:
         """Retire la touche relâchée de la liste"""
         self.pressed_keys.discard(event.keysym)
 
+    def update_movement(self):
+        """Met à jour la vitesse des roues en fonction des touches pressées"""
+        speed = 30  # Vitesse de déplacement
+        turn_speed = 5  # Vitesse de rotation
+        left_speed, right_speed = 0, 0
+
+        if "Up" in self.pressed_keys:
+            left_speed += speed
+            right_speed += speed
+        if "Down" in self.pressed_keys:
+            left_speed -= speed
+            right_speed -= speed
+        if "Left" in self.pressed_keys:
+            self.robot.orientation -= turn_speed  # Tourner à gauche
+        if "Right" in self.pressed_keys:
+            self.robot.orientation += turn_speed  # Tourner à droite
+
+        self.robot.set_wheel_speed(left_speed, right_speed)
+
 
 
