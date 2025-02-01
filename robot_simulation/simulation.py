@@ -87,5 +87,33 @@ class Simulation:
 
         self.master.after(50, self.update)  # Rafraîchir toutes les 50ms
 
+    def update_robot_graphics(self, x, y):
+        """Met à jour la représentation graphique du robot avec rotation"""
+        # Rotation des coordonnées du robot en fonction de l'orientation
+        angle_rad = math.radians(self.robot.orientation)
+        cos_angle = math.cos(angle_rad)
+        sin_angle = math.sin(angle_rad)
+
+        # Calcul des nouvelles coordonnées du robot après rotation
+        coords = [
+            (x - 10 * cos_angle - 15 * sin_angle, y - 15 * cos_angle + 10 * sin_angle),  # coin supérieur gauche
+            (x + 10 * cos_angle - 15 * sin_angle, y - 15 * cos_angle - 10 * sin_angle),  # coin supérieur droit
+            (x + 10 * cos_angle + 15 * sin_angle, y + 15 * cos_angle - 10 * sin_angle),  # coin inférieur droit
+            (x - 10 * cos_angle + 15 * sin_angle, y + 15 * cos_angle + 10 * sin_angle)   # coin inférieur gauche
+        ]
+
+        self.canvas.coords(self.robot_body, *coords[0], *coords[1], *coords[2], *coords[3])
+
+        # Mise à jour des roues (en rotation aussi)
+        wheel_coords = [
+            (x - 15 * cos_angle - 5 * sin_angle, y - 5 * cos_angle + 5 * sin_angle),  # roue gauche
+            (x - 10 * cos_angle - 5 * sin_angle, y + 5 * cos_angle + 5 * sin_angle),
+            (x + 10 * cos_angle + 5 * sin_angle, y - 5 * cos_angle - 5 * sin_angle),  # roue droite
+            (x + 15 * cos_angle + 5 * sin_angle, y + 5 * cos_angle - 5 * sin_angle)
+        ]
+
+        self.canvas.coords(self.left_wheel, *wheel_coords[0], *wheel_coords[1])
+        self.canvas.coords(self.right_wheel, *wheel_coords[2], *wheel_coords[3])
+
 
 
