@@ -1,44 +1,37 @@
 import tkinter as tk
-from robot_simulation.robot import Robot
-from robot_simulation.environnement import Environnement
+from .robot import Robot
+from .environnement import Environnement
+import math
 
 class Simulation:
-    def __init__(self, racine):
-        """Initialise la simulation, l'environnement et le robot."""
-        self.env = Environnement(racine, largeur=500, hauteur=500)  # Pass width and height
-        self.canevas = self.env.obtenir_canevas()
-        self.robot = Robot(self.canevas)
+    def __init__(self, master):
+        self.master = master
+        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
+        self.robot = Robot()
 
-        # Ajouter des obstacles pour tester
-        self.obstacles = [(150, 150), (250, 250), (350, 150)]  # Exemple d'obstacles
-        for obs in self.obstacles:
-            self.env.dessiner_obstacle(obs[0], obs[1])
+        self.pressed_keys = set()
 
-        # Lier les touches du clavier pour déplacer et faire tourner le robot
-        racine.bind("<Up>", self.accelerer)
-        racine.bind("<Donwn>", self.ralentir)
-        racine.bind("<Left>", self.tourner_gauche)
-        racine.bind("<Right>", self.tourner_droite)
-    def accelerer(self , event):
-        """Accélérer les deux roues."""
-        self.robot.set_vitesse_roues(10,10)
-        self.deplacer_robot()
-    def ralentir(self, event):
-        """Ralentir les deux roues. """
-        self.robot.set_vitesse_roues(-10,-10)
-        self.deplacer_robot()
-    def deplacer_robot(self, event):
-        """Déplacer le robot en évitant les obstacles et les bordures."""
-        # Si un obstacle est détecté, tourner
-        self.robot.eviter_obstacle(self.obstacles,self.canevas.winfo_width(),self.canevas.winfo_height())
-        self.robot.deplacer(1) #Déplacer le robot aec un intervalle de temps de 1
+        # Création de la fenêtre graphique
+        self.canvas = tk.Canvas(self.master, width=self.environnement.width, height=self.environnement.height, bg="white")
+        self.canvas.pack()
 
-    def tourner_gauche(self, event):
-        """Tourner le robot à gauche en reduisant la vitesse de la roue gauche ."""
-        self.robot.set_vitesses_roues(5,10)
-        self.deplacer_robot()
+        # Dessiner les obstacles
+        self.draw_obstacles()
 
-    def tourner_droite(self, event):
-        """Tourner le robot à droite en reduisant la vitesse de la roue droitr ."""
-        self.robot.set_vitesses_roues(10,5)
-        self.deplacer_robot()
+        # Représentation du robot avec un corps (polygon) et deux roues
+        self.robot_body = self.canvas.create_polygon(
+            self.robot.x - 10, self.robot.y - 15, 
+            self.robot.x + 10, self.robot.y - 15,
+            self.robot.x + 10, self.robot.y + 15,
+            self.robot.x - 10, self.robot.y + 15, 
+            fill="blue", outline="black"
+        )
+
+        self.left_wheel = self.canvas.create_rectangle(self.robot.x - 15, self.robot.y - 5, self.robot.x - 10, self.robot.y + 5, fill="black")
+        self.right_wheel = self.canvas.create_rectangle(self.robot.x + 10, self.robot.y - 5, self.robot.x + 15, self.robot.y + 5, fill="black")
+
+        # Gestion des touches
+        self.master.bind("<KeyPress>", self.on_key_press)
+        self.master.bind("<KeyRelease>", self.on_key_release)
+
+        self.update()
