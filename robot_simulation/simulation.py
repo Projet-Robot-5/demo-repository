@@ -115,5 +115,7 @@ class Simulation:
         self.canvas.coords(self.left_wheel, *wheel_coords[0], *wheel_coords[1])
         self.canvas.coords(self.right_wheel, *wheel_coords[2], *wheel_coords[3])
 
+    def run(self):
+        self.master.mainloop()
 
 
