@@ -4,9 +4,9 @@ Bienvenue dans le **Robot Simulation Project** ! Ce projet contient une simulati
 
 ---
 
-## ⚠️ **Branche de Test**
+## ⚠️ **Branche de Main**
 
-Cette branche est **réservée aux tests** seulement. Elle est utilisée pour tester de nouvelles fonctionnalités et expérimentations dans la simulation de robot avant de les intégrer dans la branche principale. 
+La branche principale **Main** est la version stable et officielle du projet. Elle contient le code validé et testé, prêt à être utilisé en production.
 
 ---
 
