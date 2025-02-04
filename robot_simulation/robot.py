@@ -16,7 +16,7 @@ class Robot:
         self.vitesse_gauche = vitesse_gauche
         self.vitesse_droite = vitesse_droite
 
-    def move(self, dt=1, max_x=500, max_y=500):
+    def move(self, dt=1):
         """Met à jour la position du robot en fonction des vitesses des roues."""
         vitesse_moyenne = (self.vitesse_gauche + self.vitesse_droite) / 2
         angle_rad = math.radians(self.orientation)
@@ -25,15 +25,8 @@ class Robot:
         self.x += vitesse_moyenne * math.cos(angle_rad) * dt
         self.y += vitesse_moyenne * math.sin(angle_rad) * dt
 
-        # Empêcher le robot de sortir des limites de la fenêtre
-        self.x = max(0, min(self.x, max_x))  # Limiter x entre 0 et max_x
-        self.y = max(0, min(self.y, max_y))  # Limiter y entre 0 et max_y
-
-        # Mise à jour de l'orientation (rotation si les roues ne tournent pas à la même vitesse)
-        delta_orientation = (self.vitesse_droite - self.vitesse_gauche) / self.wheel_distance
-        self.orientation += math.degrees(delta_orientation) * dt
-        self.orientation %= 360  # Garde l'angle entre 0 et 360
-
-    def turn(self, angle):
-        """Tourne le robot d'un certain angle (en degrés)."""
-        self.orientation = (self.orientation + angle) % 360
+        # Ajout de l'angle de rotation
+        if self.vitesse_gauche != self.vitesse_droite:  # Rotation uniquement si vitesses différentes
+            rotation_vitesse = (self.vitesse_droite - self.vitesse_gauche) / self.wheel_distance
+            self.orientation += math.degrees(rotation_vitesse * dt)  # Conversion en degrés
+            self.orientation = round(self.orientation) % 360  # 🔹 Corrige l'angle pour qu'il reste précis

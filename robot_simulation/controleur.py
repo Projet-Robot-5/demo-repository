@@ -1,8 +1,9 @@
 import time
 
 class Controleur:
-    def __init__(self, robot, mode=None, master=None):
-        self.robot = robot
+    def __init__(self, simulation, mode=None, master=None):
+        self.simulation = simulation  # Stocke l'objet simulation
+        self.robot = self.simulation.robot
         self.mode = mode  # Ajouter un mode, avec une valeur par défaut None
         self.queue_strategies = []  # Liste des stratégies à exécuter
         self.strategie_courante = None  # La stratégie en cours
@@ -11,7 +12,7 @@ class Controleur:
         """Démarrer la simulation."""
         if self.mode == "graphique" and self.master:
             from robot_simulation.affichage_graphique import AffichageGraphique
-            self.affichage = AffichageGraphique(self.master, self.robot)
+            self.affichage = AffichageGraphique(self.master, self.simulation)
         
         self.faire_carre()  # Commencer le mouvement en carré
         self.step()
@@ -27,6 +28,13 @@ class Controleur:
 
         if self.strategie_courante:
             self.strategie_courante.step()
+
+        if self.mode == "graphique" and self.master:
+            self.master.after(100, self.step)  # Met à jour toutes les 100ms
+        else:
+            time.sleep(0.1)
+            self.step()
+    
     def faire_carre(self, cote=100):
         """Ajoute les stratégies pour faire un carré."""
         for _ in range(4):
@@ -79,9 +87,9 @@ class Tourner:
         """Effectue la rotation par petites étapes."""
         if not self.actif:
             return
-        self.robot.move(dt=0.1)
-        self.angle_tourne += 5
-        print(f"Rotation: {self.angle_tourne}/{self.angle}")
+        self.robot.move(dt=1)
+        self.angle_tourne += 10
+        print(f"Rotation: {self.angle_tourne}/{self.angle}| Orientation: {self.robot.orientation}")
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         if self.angle_tourne >= self.angle:
