@@ -1,7 +1,7 @@
 import tkinter as tk
 import math
-from robot import Robot
-from environnement import Environnement
+from .robot import Robot
+from .environnement import Environnement
 
 
 class Simulation:
