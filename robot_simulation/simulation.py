@@ -88,3 +88,36 @@ class Simulation:
 
         # Appliquer les vitesses des roues au robot
         self.robot.set_wheel_speed(left_speed, right_speed)
+    def update(self):
+        """Met à jour la position du robot et l'état de la simulation"""
+        self.update_movement()
+
+        # Vérifier les collisions avec les obstacles
+        if self.environnement.detect_obstacle(self.robot):
+            self.robot.set_wheel_speed(0, 0)  # Le robot s'arrête définitivement
+            print("Obstacle détecté! Le robot s'est arrêté.")
+            return  # Sort de la boucle sans mettre à jour la position
+
+        # Vérifier les collisions avec les murs
+        if self.detect_wall_collision():
+            self.robot.set_wheel_speed(0, 0)  # Le robot s'arrête définitivement
+            print("Collision avec un mur! Le robot s'est arrêté.")
+            return  # Sort de la boucle sans mettre à jour la position
+
+        # Si le robot a terminé un côté, il doit tourner de 90° (après avoir parcouru la distance)
+        if self.turning:
+            self.robot.orientation += 90  # Tourner de 90° à droite
+            self.turning = False  # Réinitialiser l'indicateur de rotation
+
+        # Déplacer le robot en fonction de la vitesse des roues
+        self.robot.move(dt=0.1)
+
+        # Mise à jour de l'affichage graphique (si disponible)
+        if hasattr(self, 'canvas'):
+            self.update_robot_graphics()
+
+        # Afficher la position du robot dans le terminal
+        print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
+
+        # Mise à jour de la simulation
+        self.master.after(50, self.update) if hasattr(self, 'master') else None
