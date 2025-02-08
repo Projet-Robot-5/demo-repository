@@ -51,8 +51,11 @@ class Simulation:
             self.master.bind("<KeyRelease>", self.on_key_release)
         
         self.update()
-        
+
     def draw_obstacles(self):
         """Dessine les obstacles sur la carte"""
         for obs in self.environnement.obstacles:
             self.canvas.create_oval(obs[0] - 5, obs[1] - 5, obs[0] + 5, obs[1] + 5, fill="red")
+    def on_key_press(self, event):
+        """Ajoute la touche pressée à la liste"""
+        self.pressed_keys.add(event.keysym)
