@@ -1,5 +1,6 @@
 import tkinter as tk
 from .simulation import Simulation
+from simulation import Simulation
 
 
 def main():
