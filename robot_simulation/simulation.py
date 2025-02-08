@@ -70,3 +70,21 @@ class Simulation:
         if self.robot.y < margin or self.robot.y > self.environnement.height - margin:
             return True
         return False
+    def update_movement(self):
+        """Met à jour les vitesses des roues et fait avancer le robot en suivant un carré"""
+        speed = 10  # Vitesse de base
+        left_speed, right_speed = self.robot.vitesse_gauche, self.robot.vitesse_droite
+
+        if self.current_distance < self.distance_per_side:
+            # Avancer tout droit sur le côté actuel
+            left_speed = right_speed = speed
+            self.current_distance += speed * 0.1  # Mise à jour de la distance parcourue
+        else:
+            # Après avoir parcouru un côté, on tourne de 90°
+            left_speed = right_speed = 0  # Arrêter les roues avant de tourner
+            self.turning = True  # Indiquer que le robot va tourner
+            self.step_count += 1  # Un côté est terminé
+            self.current_distance = 0  # Réinitialiser la distance parcourue pour le prochain côté
+
+        # Appliquer les vitesses des roues au robot
+        self.robot.set_wheel_speed(left_speed, right_speed)
