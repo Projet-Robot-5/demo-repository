@@ -62,3 +62,11 @@ class Simulation:
     def on_key_release(self, event):
         """Retire la touche relâchée de la liste"""
         self.pressed_keys.discard(event.keysym)
+    def detect_wall_collision(self):
+        """Détecte si le robot est trop près d'un mur"""
+        margin = 20  # Distance minimale avant de considérer une collision
+        if self.robot.x < margin or self.robot.x > self.environnement.width - margin:
+            return True
+        if self.robot.y < margin or self.robot.y > self.environnement.height - margin:
+            return True
+        return False
