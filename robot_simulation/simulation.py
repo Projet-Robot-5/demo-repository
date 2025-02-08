@@ -59,3 +59,6 @@ class Simulation:
     def on_key_press(self, event):
         """Ajoute la touche pressée à la liste"""
         self.pressed_keys.add(event.keysym)
+    def on_key_release(self, event):
+        """Retire la touche relâchée de la liste"""
+        self.pressed_keys.discard(event.keysym)
