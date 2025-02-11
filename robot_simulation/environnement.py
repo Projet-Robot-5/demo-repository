@@ -19,9 +19,10 @@ class Environnement:
         return obstacles
 
     def detect_obstacle(self, robot):
-        """Détecte si le robot est trop près d'un obstacle"""
+        """Détecte si le robot est trop près d'un obstacle en prenant en compte sa taille. """
+        robot_radius = robot.taille / 2  # Rayon du robot
         for obs in self.obstacles:
             distance = math.sqrt((robot.x - obs[0]) ** 2 + (robot.y - obs[1]) ** 2)
-            if distance < 20:  # Seuil de détection
+            if distance < robot_radius + 10:  # Prend en compte la taille du robot
                 return True
         return False

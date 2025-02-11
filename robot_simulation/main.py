@@ -1,4 +1,4 @@
-import tkinter as tk
+import tkinter as tk 
 from affichage_graphique import AffichageGraphique
 
 
