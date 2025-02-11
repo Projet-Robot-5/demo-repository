@@ -8,6 +8,8 @@ class Robot:
         self.vitesse_gauche = vitesse_gauche  # Vitesse de la roue gauche
         self.vitesse_droite = vitesse_droite  # Vitesse de la roue droite
         self.wheel_distance = 30  # Distance entre les roues
+        self.taille = taille  # Ajout de la taille du robot
+
 
     def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
         """Définit les vitesses des roues."""
