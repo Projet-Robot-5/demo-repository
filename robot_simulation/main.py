@@ -1,6 +1,6 @@
 import tkinter as tk
-from .simulation import Simulation
-from simulation import Simulation
+from .affichage_graphique import Simulation
+from affichage_graphique import Simulation
 
 
 def main():
