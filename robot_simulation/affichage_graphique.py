@@ -5,7 +5,6 @@ import numpy as np
 from .robot import Robot
 from .environnement import Environnement
 
-
 class Simulation:
     def __init__(self, master=None):
         # Initialisation de l'environnement et du robot
