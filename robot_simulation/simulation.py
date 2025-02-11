@@ -25,6 +25,7 @@ class Simulation:
         """Met à jour la position du robot en fonction des collisions et des déplacements"""
         speed = 10
         left_speed, right_speed = self.robot.vitesse_gauche, self.robot.vitesse_droite
+        print(f"Vitesse roues → Gauche: {left_speed}, Droite: {right_speed}")
 
         if self.current_distance < self.distance_per_side:
             left_speed = right_speed = speed
