@@ -1,6 +1,7 @@
 import sys
 import tkinter as tk 
 from affichage_graphique import AffichageGraphique
+from simulation import Simulation
 
 
 
