@@ -2,10 +2,10 @@ import random
 import math
 import tkinter as tk
 import numpy as np
-from .robot import Robot
-from .environnement import Environnement
+from robot import Robot
+from environnement import Environnement
 
-class Simulation:
+class AffichageGraphique:
     def __init__(self, master=None):
         # Initialisation de l'environnement et du robot
         self.environnement = Environnement(width=500, height=500, obstacle_count=15)
