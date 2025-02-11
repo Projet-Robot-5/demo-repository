@@ -94,9 +94,9 @@ class Simulation:
 
         # Vérifier les collisions avec les obstacles
         if self.environnement.detect_obstacle(self.robot):
-            self.robot.set_wheel_speed(0, 0)  # Le robot s'arrête définitivement
-            print("Obstacle détecté! Le robot s'est arrêté.")
-            return  # Sort de la boucle sans mettre à jour la position
+            print("CRASH ! Le robot a percuté un obstacle.")  # Affichage du crash
+            return  # Pas d’arrêt du robot, il continue de foncer
+
 
         # Vérifier les collisions avec les murs
         if self.detect_wall_collision():
