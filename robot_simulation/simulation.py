@@ -42,8 +42,8 @@ class Simulation:
         self.robot.set_wheel_speed(left_speed, right_speed)
         self.robot.move(dt=0.1)
 
-    def update(self):
-        """Met à jour l'état de la simulation"""
+    def update_all(self):
+        """Met à jour tous les éléments : robot, environnement et affichage."""
         self.update_movement()
 
         if self.environnement.detect_obstacle(self.robot):
