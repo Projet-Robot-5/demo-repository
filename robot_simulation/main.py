@@ -10,7 +10,8 @@ def main():
     if "--no-gui" in sys.argv:
         print("Mode sans interface graphique activé")
         simulation = Simulation()
-        simulation.run()
+        while simulation.update_all():  # Exécuter update en boucle
+            time.sleep(0.1)
         return #Quitte la fonction apres l'execution de la simulation
     
     
