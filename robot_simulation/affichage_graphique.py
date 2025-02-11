@@ -9,12 +9,14 @@ class AffichageGraphique:
         self.canvas = tk.Canvas(self.master, width=500, height=500, bg="white")
         self.canvas.pack()
 
-        self.simulation = Simulation()  
+        self.simulation = Simulation() 
+        if self.simulation.robot is None or self.simulation.environnement is None:
+            raise ValueError("Simulation non initialisée correctement ! Vérifiez l'initialisation de robot et environnement.") 
         self.update_affichage() 
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot."""
-        self.simulation.update_all()  
+        self.simulation.update_all()  # Utiliser update_all() qui synchronise tout
 
         self.canvas.delete("all")
 

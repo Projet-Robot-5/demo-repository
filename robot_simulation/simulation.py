@@ -8,10 +8,13 @@ class Simulation:
         """Initialise l'environnement et le robot."""
         self.environnement = Environnement(width=500, height=500, obstacle_count=15)
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
+        if not hasattr(self, "robot") or not hasattr(self, "environnement"):
+            raise ValueError("Erreur d'initialisation: robot ou environnement manquant.")
         self.step_count = 0
         self.distance_per_side = 100
         self.current_distance = 0
         self.turning = False
+        
 
     def detect_wall_collision(self):
         """Détecte si le robot est trop près d'un mur"""
