@@ -14,7 +14,7 @@ class AffichageGraphique:
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot."""
-        self.simulation.update()  
+        self.simulation.update_all()  
 
         self.canvas.delete("all")
 
