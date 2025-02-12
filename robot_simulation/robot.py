@@ -1,7 +1,7 @@
 import math
 
 class Robot:
-    def __init__(self, x, y, vitesse_gauche=10, vitesse_droite=10, orientation=0):
+    def __init__(self, x, y, vitesse_gauche=10, vitesse_droite=10, orientation=0, taille = 20):
         self.x = x
         self.y = y
         self.orientation = orientation  # En degrés
