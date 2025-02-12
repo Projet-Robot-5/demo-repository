@@ -38,3 +38,9 @@ def mode_graphique():
 
     root.protocol("WM_DELETE_WINDOW", on_close)  # Capture la fermeture de la fenêtre
     root.mainloop()
+def main():
+    """Choix du mode : terminal ou GUI"""
+    if "--no-gui" in sys.argv or not GUI_AVAILABLE:
+        mode_terminal()
+    else:
+        mode_graphique()
