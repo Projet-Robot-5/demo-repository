@@ -44,3 +44,6 @@ def main():
         mode_terminal()
     else:
         mode_graphique()
+if __name__ == "__main__":
+    main()
+
