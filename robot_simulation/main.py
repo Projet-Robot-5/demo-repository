@@ -24,6 +24,7 @@ def mode_terminal():
             else:
                 break
         time.sleep(0.1)
+        
 def mode_graphique():
     """Mode graphique avec Tkinter, et passe au mode terminal si on ferme la fenêtre."""
     root = tk.Tk()

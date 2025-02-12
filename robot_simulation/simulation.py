@@ -1,7 +1,7 @@
 import time
 import math
-from environnement import Environnement
-from robot import Robot
+from .environnement import Environnement
+from .robot import Robot
 
 class Simulation:
     def __init__(self):
