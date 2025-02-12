@@ -1,0 +1,10 @@
+Modifications apportées :
+Ajout d'un contrôleur permettant au robot de tracer un carré en autonomie.
+Ajustement de la vitesse des roues gauche et droite pour une meilleure stabilité.
+Modification de la méthode detect_obstacle pour éviter les collisions et maintenir la trajectoire.
+Création d’un module d'affichage graphique séparé pour une meilleure organisation du code.
+Passage du robot en paramètre dans detect_obstacle au lieu de ses coordonnées.
+Problèmes rencontrés :
+Difficulté à différencier l’interface graphique de la simulation.
+Problèmes de cohérence entre l'affichage et le comportement réel du robot.
+Gestion des données compliquée après le passage du robot en paramètre dans detect_obstacle
