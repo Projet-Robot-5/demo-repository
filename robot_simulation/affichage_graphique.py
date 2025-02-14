@@ -28,7 +28,7 @@ class AffichageGraphique:
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot."""
-        self.simulation.update_all()  # Utiliser update_all() qui synchronise tout
+        self.simulation.update()  # Utiliser update_all() qui synchronise tout
         self.canvas.delete("all")
 
         # Dessiner les obstacles
