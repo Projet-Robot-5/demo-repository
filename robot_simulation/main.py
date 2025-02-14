@@ -16,7 +16,7 @@ def mode_terminal():
     controleur = Controleur(mode="terminal")
 
     while True:
-        if not controleur.update_all():
+        if not controleur.simulation.update_all():
             choix = input("Voulez-vous recommencer ? (o/n) : ")
             if choix.lower() == 'o':
                 controleur = Controleur(mode="terminal")
