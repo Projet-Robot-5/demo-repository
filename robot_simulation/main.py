@@ -1,8 +1,7 @@
 import sys
 import time
 import tkinter as tk
-from .affichage_graphique import AffichageGraphique
-from .simulation import Simulation
+from .controleur import Controleur
 
 # Vérifier si affichage_graphique.py existe
 try:
@@ -14,13 +13,13 @@ except ImportError as e:
 def mode_terminal():
     """Mode terminal sans interface graphique."""
     print("Mode terminal activé (sans interface graphique).")
-    simulation = Simulation()
+    controleur = Controleur(mode="terminal")
 
     while True:
-        if not simulation.update_all():
+        if not controleur.update_all():
             choix = input("Voulez-vous recommencer ? (o/n) : ")
             if choix.lower() == 'o':
-                simulation = Simulation()  # Réinitialiser la simulation
+                controleur = Controleur(mode="terminal")
             else:
                 break
         time.sleep(0.1)
@@ -29,7 +28,7 @@ def mode_graphique():
     """Mode graphique avec Tkinter, et passe au mode terminal si on ferme la fenêtre."""
     root = tk.Tk()
     root.title("Simulation de Robot")
-    simulation = AffichageGraphique(root)
+    controleur = Controleur(mode="graphique", master=root)
 
     def on_close():
         """Si on ferme la fenêtre, on passe en mode terminal."""
@@ -39,6 +38,7 @@ def mode_graphique():
 
     root.protocol("WM_DELETE_WINDOW", on_close)  # Capture la fermeture de la fenêtre
     root.mainloop()
+
 def main():
     """Choix du mode : terminal ou GUI"""
     if "--no-gui" in sys.argv or not GUI_AVAILABLE:
