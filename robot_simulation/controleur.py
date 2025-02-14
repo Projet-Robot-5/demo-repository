@@ -9,11 +9,11 @@ class Controleur:
         """Initialise le contrôleur avec une instance de simulation."""
         self.simulation = Simulation()
 
-    def lancer_simulation_sans_gui(self):
+    def lancer_simulation_sans_AG(self):
         """Exécuter la simulation en mode terminal (sans interface graphique)."""
         self.simulation.run()
 
-    def lancer_simulation_avec_gui(self):
+    def lancer_simulation_avec_AG(self):
         """Lancer l'affichage graphique de la simulation."""
         racine = tk.Tk()
         racine.title("Simulation de Robot")
