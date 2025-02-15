@@ -52,3 +52,14 @@ class Controleur:
 
         self.root.protocol("WM_DELETE_WINDOW", on_close)  # Capture la fermeture de la fenêtre
         self.root.mainloop()
+    # Ajoute ici la méthode run qui exécute la simulation pendant une durée
+    def run(self, duration=10):
+        """Lance la simulation pendant une durée spécifique en secondes."""
+        start_time = time.time()
+
+        while time.time() - start_time < duration:
+            if not self.simulation.updateModele(): #utliser la nouvelle méthode updateModele()
+                break # si la simulation rencontre un problème, elle s'arrête
+            time.sleep(0.1) #Contrôle la vitesse d'itération pour éviter une boucle trop rapide
+
+        print(f"Simulation terminée après {duration} secondes.")
