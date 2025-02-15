@@ -39,4 +39,9 @@ class Controleur:
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
+class AvancerDroit:
+    def __init__(self, robot, distance):
+        self.robot = robot
+        self.distance = distance
+        self.distance_parcourue = 0
 
