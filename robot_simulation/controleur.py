@@ -50,4 +50,9 @@ class AvancerDroit:
         self.distance_parcourue = 0
         self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
 
+    def step(self):
+        """Fait avancer le robot d'une petite étape."""
+        self.robot.move(dt=1)  # Le robot avance d'une petite unité
+        self.distance_parcourue += 10  # On ajuste la distance parcourue
+
 
