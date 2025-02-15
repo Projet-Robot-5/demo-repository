@@ -59,5 +59,12 @@ class AvancerDroit:
         """Retourne vrai si la distance est atteinte."""
         return self.distance_parcourue >= self.distance
     
+class Tourner:
+    def __init__(self, robot, angle):
+        self.robot = robot
+        self.angle = angle
+        self.angle_tourne = 0
+
+
 
 
