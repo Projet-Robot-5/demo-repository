@@ -65,6 +65,11 @@ class Tourner:
         self.angle = angle
         self.angle_tourne = 0
 
+    def start(self):
+        """Démarre la rotation."""
+        self.angle_tourne = 0
+        self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
+
 
 
 
