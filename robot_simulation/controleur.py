@@ -55,4 +55,9 @@ class AvancerDroit:
         self.robot.move(dt=1)  # Le robot avance d'une petite unité
         self.distance_parcourue += 10  # On ajuste la distance parcourue
 
+    def stop(self):
+        """Retourne vrai si la distance est atteinte."""
+        return self.distance_parcourue >= self.distance
+    
+
 
