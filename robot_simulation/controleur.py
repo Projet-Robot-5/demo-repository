@@ -36,5 +36,7 @@ class Controleur:
         for _ in range(4):
             self.ajouter_strategie(AvancerDroit(self.robot, cote))
             self.ajouter_strategie(Tourner(self.robot, 90))
-
+    def ajouter_strategie(self, strategie):
+        """Ajoute une stratégie à la file d'attente."""
+        self.queue_strategies.append(strategie)
 
