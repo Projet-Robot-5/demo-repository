@@ -70,6 +70,11 @@ class Tourner:
         self.angle_tourne = 0
         self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
 
+    def step(self):
+        """Effectue la rotation par petites étapes."""
+        self.robot.move(dt=0.1)  # Le robot tourne
+        self.angle_tourne += 5  # Rotation de 5° à chaque étape (ajustable)
+
 
 
 
