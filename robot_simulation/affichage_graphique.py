@@ -30,7 +30,7 @@ class AffichageGraphique:
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot."""
-        self.simulation.update()  # Utiliser update_all() qui synchronise tout
+        
         self.canvas.delete("all")
 
         # Dessiner les obstacles
@@ -41,7 +41,7 @@ class AffichageGraphique:
         x, y = self.simulation.robot.x, self.simulation.robot.y
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue")
 
-        self.master.after(50, self.update_affichage)
+        
 
 
 if __name__ == "__main__":

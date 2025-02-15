@@ -20,7 +20,7 @@ def mode_terminal():
         if not controleur.simulation.update_all():
             choix = input("Voulez-vous recommencer ? (o/n) : ")
             if choix.lower() == 'o':
-                controleur = Controleur(mode="terminal")
+                controleur.simulation = Controleur()
             else:
                 break
         time.sleep(0.1)
@@ -38,6 +38,7 @@ def mode_graphique():
         mode_terminal()
 
     root.protocol("WM_DELETE_WINDOW", on_close)  # Capture la fermeture de la fenêtre
+    controleur.run(duration=10) #lancer la simulation pendant 10 sec
     root.mainloop()
 
 def main():

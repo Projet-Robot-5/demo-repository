@@ -1,7 +1,6 @@
 from itertools import count
 import math
 import random
-import numpy as np
 
 class Environnement:
     def __init__(self, width=500, height=500, obstacle_count=15):
