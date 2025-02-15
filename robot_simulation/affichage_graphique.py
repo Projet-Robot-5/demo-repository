@@ -3,6 +3,8 @@
 import tkinter as tk
 import math
 from .simulation import Simulation
+import threading
+import time
 
 
 class AffichageGraphique:
@@ -13,21 +15,14 @@ class AffichageGraphique:
         self.canvas.pack()
 
         self.simulation = Simulation()
-        if self.simulation.robot is None or self.simulation.environnement is None:
-            raise ValueError(
-                "Simulation non initialisée correctement ! Vérifiez l'initialisation de robot et environnement.")
-
+        self.running = True # Indicateur pour controler l'execution du thread
         self.update_affichage()
 
-        # 🔹 Ajout du bouton Reset ici
-        self.reset_button = tk.Button(self.master, text="Reset", command=self.reset_simulation)
-        self.reset_button.pack()
-
-    def reset_simulation(self):
-        """Réinitialise la simulation et met à jour l'affichage."""
-        self.simulation = Simulation()
-        self.update_affichage()  # Redémarrer l'affichage
-
+        self.thread = threading.Thread(target=self.update_affichage_thread)
+        self.thread.daemon = True #Le thread se ferme automatiquement quand la fenetre se ferme
+        self.thread.start()
+    
+    
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot sans interférer avec la simulation."""
         
@@ -40,6 +35,13 @@ class AffichageGraphique:
         # Dessiner le robot
         x, y = self.simulation.robot.x, self.simulation.robot.y
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue")
+    
+    def update_affichage_thread(self):
+        """Mise à jour graphique dans un thread séparé"""
+        while self.running:
+            self.update_affichage() # met à jour les elements 
+            self.master.after(50) # Met à jour toutes les 50ms
+            time.sleep(0.05) # pour reduire la charge CPU et laisser de l'espace pour les autres taches
 
         
 
