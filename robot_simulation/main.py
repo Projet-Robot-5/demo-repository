@@ -14,6 +14,7 @@ def mode_terminal():
     """Mode terminal sans interface graphique."""
     print("Mode terminal activé (sans interface graphique).")
     controleur = Controleur(mode="terminal")
+    controleur.run(duration = 10) #lancer la simulation pendant 10 sec
 
     while True:
         if not controleur.simulation.update_all():
