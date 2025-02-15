@@ -44,4 +44,10 @@ class AvancerDroit:
         self.robot = robot
         self.distance = distance
         self.distance_parcourue = 0
+    
+    def start(self):
+        """Démarre la stratégie d'avance."""
+        self.distance_parcourue = 0
+        self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
+
 
