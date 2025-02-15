@@ -30,7 +30,7 @@ class Controleur:
         """Exécuter la simulation en mode terminal (sans interface graphique)."""
         print("Mode terminal activé.")
         while True:
-            if not self.simulation.update():
+            if not self.update():
                 choix = input("Simulation terminée. Recommencer ? (o/n) : ")
                 if choix.lower() == 'o':
                     self.simulation = Simulation()  # Réinitialiser la simulation
