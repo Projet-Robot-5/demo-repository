@@ -29,7 +29,7 @@ class AffichageGraphique:
         self.update_affichage()  # Redémarrer l'affichage
 
     def update_affichage(self):
-        """Met à jour l'affichage graphique du robot."""
+        """Met à jour l'affichage graphique du robot sans interférer avec la simulation."""
         
         self.canvas.delete("all")
 
