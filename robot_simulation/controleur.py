@@ -75,6 +75,9 @@ class Tourner:
         self.robot.move(dt=0.1)  # Le robot tourne
         self.angle_tourne += 5  # Rotation de 5° à chaque étape (ajustable)
 
+    def stop(self):
+        """Retourne vrai si la rotation est terminée."""
+        return self.angle_tourne >= self.angle
 
 
 
