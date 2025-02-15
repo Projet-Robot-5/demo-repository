@@ -43,6 +43,11 @@ class AffichageGraphique:
             self.master.after(50) # Met à jour toutes les 50ms
             time.sleep(0.05) # pour reduire la charge CPU et laisser de l'espace pour les autres taches
 
+    def stop(self):
+        """Arrête le thread d'affichage."""
+        self.running = False
+        self.thread.join() #Attend la fin du thread avant de fermer
+
         
 
 
