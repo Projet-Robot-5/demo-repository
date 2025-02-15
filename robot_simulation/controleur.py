@@ -19,3 +19,15 @@ class Controleur:
         # Démarre l'exécution des stratégies
         self.faire_carre(100)
         self.step()  # Commence à exécuter les étapes des stratégies
+    def step(self):
+        """Exécute la stratégie actuelle et passe à la suivante si elle est terminée."""
+        if self.strategie_courante is None or self.strategie_courante.stop():
+            if self.queue_strategies:
+                self.strategie_courante = self.queue_strategies.pop(0)
+                self.strategie_courante.start()
+            else:
+                # Si toutes les stratégies sont terminées, recommencer le carré
+                self.faire_carre(100)
+
+        if self.strategie_courante:
+            self.strategie_courante.step()
