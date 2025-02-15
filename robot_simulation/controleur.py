@@ -31,3 +31,10 @@ class Controleur:
 
         if self.strategie_courante:
             self.strategie_courante.step()
+    def faire_carre(self, cote=100):
+        """Ajoute les stratégies pour faire un carré."""
+        for _ in range(4):
+            self.ajouter_strategie(AvancerDroit(self.robot, cote))
+            self.ajouter_strategie(Tourner(self.robot, 90))
+
+
