@@ -11,6 +11,20 @@ class Controleur:
         self.simulation = Simulation()
         self.mode = mode
         self.root = None 
+    def detect_wall_collision(self):
+        """Détecte si le robot est trop près d'un mur."""
+        margin = 20 #définir la marge de sécurité pour eviter les collisions avec les murs
+        return (
+            self.robot.x < margin or self.robot.x > self.environnement.width - margin or self.robot.y < margin or self.robot.y > self.environnement.height - margin )
+    def update(self):
+        """Met à jour le modèle de simulation (robot + environnement)."""
+        #verifie d'abord si le robot est en collision avec un obstacle ou un mur
+        if not self.simulation.updateModele(): #Apller la methode updateModele de simulation
+            return False
+        if self.detect_wall_collision():
+            print("Collision avec un mur!")
+            return False
+        return True # Si aucune collision, la simulation continue
         
     def lancer_simulation_sans_AG(self):
         """Exécuter la simulation en mode terminal (sans interface graphique)."""
