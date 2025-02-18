@@ -16,6 +16,7 @@ class Simulation:
         self.turning = False
     def detect_wall_collision(self):
         """Détecte si le robot est trop près d'un mur."""
+
         margin = 20 #définir la marge de sécurité pour eviter les collisions avec les murs
         return (
             self.robot.x < margin or self.robot.x > self.environnement.width - margin or self.robot.y < margin or self.robot.y > self.environnement.height - margin )

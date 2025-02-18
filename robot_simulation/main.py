@@ -1,9 +1,9 @@
 import sys
 import time
 import tkinter as tk
-
 from robot_simulation.robot import Robot
-from .controleur import Controleur
+from robot_simulation.controleur import Controleur
+
 
 # Vérifier si affichage_graphique.py existe
 try:
