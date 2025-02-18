@@ -78,6 +78,3 @@ class Tourner:
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         return self.angle_tourne >= self.angle
-
-
-

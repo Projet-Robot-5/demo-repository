@@ -1,5 +1,7 @@
 import time
 import math
+from .robot import Robot
+from .environnement import Environnement
 from .environnement import Environnement
 from .robot import Robot
 
