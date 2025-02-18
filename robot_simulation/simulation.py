@@ -21,11 +21,18 @@ class Simulation:
         return (
             self.robot.x < margin or self.robot.x > self.environnement.width - margin or self.robot.y < margin or self.robot.y > self.environnement.height - margin )
         
-        
+    def detect_obstacle(self, robot):
+        """Détecte si le robot est trop près d'un obstacle en prenant en compte sa taille. """
+        robot_radius = robot.taille / 2  # Rayon du robot
+        for obs in self.obstacles:
+            distance = math.sqrt((robot.x - obs[0]) ** 2 + (robot.y - obs[1]) ** 2)
+            if distance < robot_radius + 10:  # Prend en compte la taille du robot
+                return True
+        return False
 
     def updateModele(self):
         """Met à jour l'état du robotet de l'environnement, sans logique de mouvement."""
-        if self.environnement.detect_obstacle(self.robot):
+        if self.detect_obstacle(self.robot):
             print("CRASH ! Le robot a percuté un obstacle.")
             return False
         if self.detect_wall_collision():
