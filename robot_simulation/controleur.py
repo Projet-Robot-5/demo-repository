@@ -76,8 +76,10 @@ class Tourner:
         print("Début de la rotation")
     def step(self):
         """Effectue la rotation par petites étapes."""
-        self.robot.move(dt=0.1)  # Le robot tourne
-        self.angle_tourne += 5  # Rotation de 5° à chaque étape (ajustable)
+        if not self.actif:
+            return
+        self.robot.move(dt=0.1)
+        self.angle_tourne += 5
         print(f"Rotation: {self.angle_tourne}/{self.angle}")
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
