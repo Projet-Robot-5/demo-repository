@@ -4,6 +4,8 @@ from .robot import Robot
 from .environnement import Environnement
 from .environnement import Environnement
 from .robot import Robot
+from robot_simulation.environnement import Environnement
+from robot_simulation.robot import Robot
 
 class Simulation:
     def __init__(self):
