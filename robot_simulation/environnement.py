@@ -1,6 +1,6 @@
+from itertools import count
+import math
 import random
-import numpy as np
-
 
 class Environnement:
     def __init__(self, width=500, height=500, obstacle_count=15):
@@ -10,11 +10,9 @@ class Environnement:
 
     def generate_obstacles(self, count):
         """Génère des obstacles aléatoires dans l'environnement."""
-        return [(random.randint(0, self.width), random.randint(0, self.height)) for _ in range(count)]
-
-    def detect_obstacle(self, x, y):
-        """Vérifie si un obstacle est dans une certaine proximité du robot."""
-        for obs in self.obstacles:
-            if np.linalg.norm(np.array([x, y]) - np.array(obs)) < 15:  # Distance de détection
-                return True
-        return False
+        obstacles = []
+        for _ in range(count):
+            x = random.randint(50, self.width - 50)
+            y = random.randint(50, self.height - 50)
+            obstacles.append((x, y))
+        return obstacles
