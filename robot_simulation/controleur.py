@@ -84,7 +84,10 @@ class Tourner:
         print(f"Rotation: {self.angle_tourne}/{self.angle}")
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
-        return self.angle_tourne >= self.angle
+        if self.angle_tourne >= self.angle:
+            self.actif = False
+        return not self.actif
+
 
 
 
