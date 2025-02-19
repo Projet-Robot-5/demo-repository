@@ -51,11 +51,13 @@ class AvancerDroit:
         """Démarre la stratégie d'avance."""
         self.distance_parcourue = 0
         self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
+        print("Début de l'avance droite")
 
     def step(self):
         """Fait avancer le robot d'une petite étape."""
         self.robot.move(dt=1)  # Le robot avance d'une petite unité
         self.distance_parcourue += 10  # On ajuste la distance parcourue
+        print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
