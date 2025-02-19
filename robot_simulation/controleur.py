@@ -22,8 +22,8 @@ class Controleur:
                 self.strategie_courante = self.queue_strategies.pop(0)
                 self.strategie_courante.start()
             else:
-                # Si toutes les stratégies sont terminées, recommencer le carré
-                self.faire_carre(100)
+                return  # Plus rien à exécuter
+
 
         if self.strategie_courante:
             self.strategie_courante.step()
