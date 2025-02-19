@@ -10,15 +10,17 @@ class Controleur:
     def run(self, duration=10):
         """Méthode pour lancer la simulation."""
         if self.mode == "graphique":
-            from .affichage_graphique import AffichageGraphique
-            affichage = AffichageGraphique(self.master, self.robot)
-        else:
-            # Logique pour le mode terminal
-            pass
+            try:
+                from robot_simulation.affichage_graphique import AffichageGraphique
+                affichage = AffichageGraphique(self.master, self.robot)
+            except ImportError:
+                print("Affichage graphique non disponible, passage en mode terminal.")
+                self.mode = "terminal"
         
-        # Démarre l'exécution des stratégies
-        self.faire_carre(100)
-        self.step()  # Commence à exécuter les étapes des stratégies
+        if self.mode == "terminal":
+            # Logique pour le mode terminal
+            self.faire_carre(100)
+            self.step()  # Commence à exécuter les étapes des stratégies
     def step(self):
         """Exécute la stratégie actuelle et passe à la suivante si elle est terminée."""
         if self.strategie_courante is None or self.strategie_courante.stop():
