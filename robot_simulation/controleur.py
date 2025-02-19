@@ -73,12 +73,12 @@ class Tourner:
         """Démarre la rotation."""
         self.angle_tourne = 0
         self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
-
+        print("Début de la rotation")
     def step(self):
         """Effectue la rotation par petites étapes."""
         self.robot.move(dt=0.1)  # Le robot tourne
         self.angle_tourne += 5  # Rotation de 5° à chaque étape (ajustable)
-
+        print(f"Rotation: {self.angle_tourne}/{self.angle}")
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         return self.angle_tourne >= self.angle
