@@ -59,8 +59,9 @@ class AvancerDroit:
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
-        return self.distance_parcourue >= self.distance
-    
+        if self.distance_parcourue >= self.distance:
+                    self.actif = False
+        return not self.actif # Retourne vrai si la distance est atteinte   
 class Tourner:
     def __init__(self, robot, angle):
         self.robot = robot
