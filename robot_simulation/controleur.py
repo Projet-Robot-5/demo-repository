@@ -51,8 +51,10 @@ class AvancerDroit:
 
     def step(self):
         """Fait avancer le robot d'une petite étape."""
-        self.robot.move(dt=1)  # Le robot avance d'une petite unité
-        self.distance_parcourue += 10  # On ajuste la distance parcourue
+        if not self.actif:
+            return
+        self.robot.move(dt=1)
+        self.distance_parcourue += 10
         print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
 
     def stop(self):
