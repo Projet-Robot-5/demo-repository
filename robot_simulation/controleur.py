@@ -8,6 +8,7 @@ class Controleur:
         self.queue_strategies = []  # Liste des stratégies à exécuter
         self.strategie_courante = None  # La stratégie en cours
         self.master = master
+    
     def run(self, duration=30):
         """Démarrer la simulation."""
         if self.mode == "graphique" and self.master:
@@ -16,6 +17,7 @@ class Controleur:
         
         self.faire_carre()  # Commencer le mouvement en carré
         self.step()
+    
     def step(self):
         """Exécute la stratégie actuelle et passe à la suivante si elle est terminée."""
         if self.strategie_courante is None or self.strategie_courante.stop():
@@ -24,7 +26,6 @@ class Controleur:
                 self.strategie_courante.start()
             else:
                 return  # Plus rien à exécuter
-
 
         if self.strategie_courante:
             self.strategie_courante.step()
@@ -35,14 +36,18 @@ class Controleur:
             time.sleep(0.1)
             self.step()
     
-    def faire_carre(self, cote=100):
+    def faire_carre(self, cote=120):
         """Ajoute les stratégies pour faire un carré."""
         for _ in range(4):
-            self.ajouter_strategie(AvancerDroit(self.robot, cote))
-            self.ajouter_strategie(Tourner(self.robot, 90))
+            avancer = AvancerDroit(self.robot, cote)
+            tourner = Tourner(self.robot, 90)  # Correction pour assurer un carré parfait
+            self.ajouter_strategie(avancer)
+            self.ajouter_strategie(tourner)
+    
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
+
 class AvancerDroit:
     def __init__(self, robot, distance):
         self.robot = robot
@@ -53,7 +58,7 @@ class AvancerDroit:
     def start(self):
         """Démarre la stratégie d'avance."""
         self.distance_parcourue = 0
-        self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
+        self.robot.set_wheel_speed(12, 12)
         self.actif = True
         print("Début de l'avance droite")
 
@@ -62,37 +67,43 @@ class AvancerDroit:
         if not self.actif:
             return
         self.robot.move(dt=1)
-        self.distance_parcourue += 10
+        self.distance_parcourue += 12
         print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
         if self.distance_parcourue >= self.distance:
-                    self.actif = False
-        return not self.actif # Retourne vrai si la distance est atteinte   
+            self.actif = False
+            self.robot.set_wheel_speed(0, 0)
+        return not self.actif  
+
 class Tourner:
     def __init__(self, robot, angle):
         self.robot = robot
         self.angle = angle
         self.angle_tourne = 0
-        self.actif = True
+        self.actif = False
 
     def start(self):
         """Démarre la rotation."""
         self.angle_tourne = 0
-        self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
+        self.robot.set_wheel_speed(-12, 12)
         self.actif = True
         print("Début de la rotation")
+
     def step(self):
         """Effectue la rotation par petites étapes."""
         if not self.actif:
             return
         self.robot.move(dt=1)
-        self.angle_tourne += 10
-        print(f"Rotation: {self.angle_tourne}/{self.angle}| Orientation: {self.robot.orientation}")
+        self.angle_tourne += 10  # Ajustement pour forcer un 90° précis
+        self.robot.orientation = (self.robot.orientation + 10) % 360
+        print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation: {self.robot.orientation}")
+    
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         if self.angle_tourne >= self.angle:
             self.actif = False
+            self.robot.set_wheel_speed(0, 0)
+            self.robot.orientation = (self.robot.orientation // 90) * 90  # Correction orientation
         return not self.actif
-
