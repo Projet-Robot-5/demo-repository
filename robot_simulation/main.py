@@ -1,17 +1,15 @@
 import sys
 import time
 import tkinter as tk
-
 from robot_simulation.robot import Robot
-from .controleur import Controleur
+from robot_simulation.controleur import Controleur
+
 
 # Vérifier si affichage_graphique.py existe
-try:
-    from .affichage_graphique import AffichageGraphique
-    GUI_AVAILABLE = True
-except ImportError as e:
-    print("Erreur import GUI :", e)
-    GUI_AVAILABLE = False
+import importlib.util
+affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage_graphique")
+GUI_AVAILABLE = affichage_graphique_spec is not None
+
 
 def mode_terminal():
     """Mode terminal sans interface graphique."""

@@ -18,15 +18,22 @@ class Simulation:
         self.turning = False
     def detect_wall_collision(self):
         """Détecte si le robot est trop près d'un mur."""
+
         margin = 20 #définir la marge de sécurité pour eviter les collisions avec les murs
         return (
             self.robot.x < margin or self.robot.x > self.environnement.width - margin or self.robot.y < margin or self.robot.y > self.environnement.height - margin )
         
-        
+    def detect_obstacle(self, robot):
+        """Détecte si le robot est trop près d'un obstacle en prenant en compte sa taille. """
+        for obs in self.environnement.obstacles:
+            distance = math.sqrt((self.robot.x - obs[0]) ** 2 + (self.robot.y - obs[1]) ** 2)
+            if distance < self.robot.taille / 2 + 10:  # Distance de sécurité
+                return True
+        return False
 
     def updateModele(self):
         """Met à jour l'état du robotet de l'environnement, sans logique de mouvement."""
-        if self.environnement.detect_obstacle(self.robot):
+        if self.detect_obstacle(self.robot):
             print("CRASH ! Le robot a percuté un obstacle.")
             return False
         if self.detect_wall_collision():

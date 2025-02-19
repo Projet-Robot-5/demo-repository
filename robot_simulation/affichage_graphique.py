@@ -8,17 +8,17 @@ from robot_simulation.robot import Robot
 
 
 class AffichageGraphique:
-    def __init__(self, master, robot):
+    def __init__(self, master, simulation):
         """Initialise l'affichage graphique de la simulation."""
         self.master = master
-        self.robot = robot
+        self.simulation = simulation
+        self.robot =self.simulation.robot
         self.canvas = tk.Canvas(self.master, width=500, height=500, bg="white")
         self.canvas.pack()
 
-        # Créer l'objet simulation et controleur
-        self.simulation = Simulation()
-        self.simulation.robot = self.robot  # Assigner le robot à la simulation
-        self.controleur = Controleur(self.simulation.robot)  # Contrôleur qui gère les mouvements
+        # Créer l'objet controleur
+       
+        self.controleur = Controleur(self.simulation)  # Contrôleur qui gère les mouvements
         self.controleur.faire_carre(100)  # Démarrer la simulation du carré
 
         # Indicateur pour contrôler l'exécution du thread

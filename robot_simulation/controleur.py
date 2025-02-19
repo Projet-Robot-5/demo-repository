@@ -7,18 +7,14 @@ class Controleur:
         self.queue_strategies = []  # Liste des stratégies à exécuter
         self.strategie_courante = None  # La stratégie en cours
         self.master = master
-    def run(self, duration=10):
-        """Méthode pour lancer la simulation."""
-        if self.mode == "graphique":
-            from .affichage_graphique import AffichageGraphique
-            affichage = AffichageGraphique(self.master, self.robot)
-        else:
-            # Logique pour le mode terminal
-            pass
+    def run(self, duration=30):
+        """Démarrer la simulation."""
+        if self.mode == "graphique" and self.master:
+            from robot_simulation.affichage_graphique import AffichageGraphique
+            self.affichage = AffichageGraphique(self.master, self.robot)
         
-        # Démarre l'exécution des stratégies
-        self.faire_carre(100)
-        self.step()  # Commence à exécuter les étapes des stratégies
+        self.faire_carre()  # Commencer le mouvement en carré
+        self.step()
     def step(self):
         """Exécute la stratégie actuelle et passe à la suivante si elle est terminée."""
         if self.strategie_courante is None or self.strategie_courante.stop():
@@ -26,8 +22,8 @@ class Controleur:
                 self.strategie_courante = self.queue_strategies.pop(0)
                 self.strategie_courante.start()
             else:
-                # Si toutes les stratégies sont terminées, recommencer le carré
-                self.faire_carre(100)
+                return  # Plus rien à exécuter
+
 
         if self.strategie_courante:
             self.strategie_courante.step()
@@ -44,37 +40,51 @@ class AvancerDroit:
         self.robot = robot
         self.distance = distance
         self.distance_parcourue = 0
+        self.actif = False
     
     def start(self):
         """Démarre la stratégie d'avance."""
         self.distance_parcourue = 0
         self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
+        self.actif = True
+        print("Début de l'avance droite")
 
     def step(self):
         """Fait avancer le robot d'une petite étape."""
-        self.robot.move(dt=1)  # Le robot avance d'une petite unité
-        self.distance_parcourue += 10  # On ajuste la distance parcourue
+        if not self.actif:
+            return
+        self.robot.move(dt=1)
+        self.distance_parcourue += 10
+        print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
-        return self.distance_parcourue >= self.distance
-    
+        if self.distance_parcourue >= self.distance:
+                    self.actif = False
+        return not self.actif # Retourne vrai si la distance est atteinte   
 class Tourner:
     def __init__(self, robot, angle):
         self.robot = robot
         self.angle = angle
         self.angle_tourne = 0
+        self.actif = True
 
     def start(self):
         """Démarre la rotation."""
         self.angle_tourne = 0
         self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
-
+        self.actif = True
+        print("Début de la rotation")
     def step(self):
         """Effectue la rotation par petites étapes."""
-        self.robot.move(dt=0.1)  # Le robot tourne
-        self.angle_tourne += 5  # Rotation de 5° à chaque étape (ajustable)
-
+        if not self.actif:
+            return
+        self.robot.move(dt=0.1)
+        self.angle_tourne += 5
+        print(f"Rotation: {self.angle_tourne}/{self.angle}")
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
-        return self.angle_tourne >= self.angle
+        if self.angle_tourne >= self.angle:
+            self.actif = False
+        return not self.actif
+
