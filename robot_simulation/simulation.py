@@ -23,10 +23,9 @@ class Simulation:
         
     def detect_obstacle(self, robot):
         """Détecte si le robot est trop près d'un obstacle en prenant en compte sa taille. """
-        robot_radius = robot.taille / 2  # Rayon du robot
-        for obs in self.obstacles:
-            distance = math.sqrt((robot.x - obs[0]) ** 2 + (robot.y - obs[1]) ** 2)
-            if distance < robot_radius + 10:  # Prend en compte la taille du robot
+        for obs in self.environnement.obstacles:
+            distance = math.sqrt((self.robot.x - obs[0]) ** 2 + (self.robot.y - obs[1]) ** 2)
+            if distance < self.robot.taille / 2 + 10:  # Distance de sécurité
                 return True
         return False
 
