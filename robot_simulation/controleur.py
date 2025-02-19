@@ -40,11 +40,13 @@ class AvancerDroit:
         self.robot = robot
         self.distance = distance
         self.distance_parcourue = 0
+        self.actif = False
     
     def start(self):
         """Démarre la stratégie d'avance."""
         self.distance_parcourue = 0
         self.robot.set_wheel_speed(10, 10)  # Vitesse constante pour avancer
+        self.actif = True
         print("Début de l'avance droite")
 
     def step(self):
@@ -62,11 +64,13 @@ class Tourner:
         self.robot = robot
         self.angle = angle
         self.angle_tourne = 0
+        self.actif = True
 
     def start(self):
         """Démarre la rotation."""
         self.angle_tourne = 0
         self.robot.set_wheel_speed(5, -5)  # Roues opposées pour tourner sur place
+        self.actif = True
         print("Début de la rotation")
     def step(self):
         """Effectue la rotation par petites étapes."""
