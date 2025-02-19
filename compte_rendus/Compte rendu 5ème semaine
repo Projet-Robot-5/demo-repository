@@ -1,0 +1,47 @@
+Compte rendu 5ème semaine 
+
+Ajout de méthodes dans le sous-module contrôleur
+
+Permettre au robot de :
+
+Aller tout droit
+
+Tourner
+
+Combiner les deux pour exécuter un déplacement en carré
+
+Réalisé par : Dana
+
+Testé par : Nada
+
+Modification de simulation.py
+
+Rendre la simulation indépendante de l’affichage et assurer sa mise à jour via le contrôleur.
+
+
+Réorganisation du code
+
+Améliorer la structure et la lisibilité du projet.
+
+Difficultés rencontrées
+
+Gestion des angles et des vitesses
+
+Ajustements nécessaires pour assurer une exécution fluide.
+
+Séparation de la simulation et de l’affichage
+
+
+
+Difficulté à découpler proprement la simulation du moteur d’affichage.
+
+Requiert une meilleure gestion des événements et des mises à jour du modèle.
+  
+
+Points à améliorer
+
+Optimisation du développement pour éviter les dépassements de planning.
+
+Amélioration de la communication entre les membres.
+
+Vérification approfondie des interactions entre les modules.
