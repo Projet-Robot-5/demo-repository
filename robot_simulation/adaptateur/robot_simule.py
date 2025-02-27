@@ -48,3 +48,7 @@ class RobotSimule:
         difference_distance = distance_droite - distance_gauche
         angle_rotation_rad = difference_distance / self.largeur
         return math.degrees(angle_rotation_rad)
+
+    def get_distance(self):
+        """Retourne la distance totale parcourue par le robot."""
+        return self.distance_parcouru
