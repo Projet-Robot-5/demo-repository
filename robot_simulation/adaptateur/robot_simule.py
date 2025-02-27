@@ -25,3 +25,18 @@ def update_temps_passe(self):
     temps_passe = temps_actuel - self.temps_passe
     self.temps_passe = temps_actuel
     return temps_passe
+
+def update_position(self):
+    """Mise à jour de la position du robot en fonction des vitesses des roues."""
+    vitesse_moyenne = (self.robot.vitesse_gauche + self.robot.vitesse_droite) / 2
+    angle_rad = math.radians(self.angle_parcouru)
+
+    # Calcul de la position du robot
+    self.x += vitesse_moyenne * math.cos(angle_rad) * 0.1  # dt=0.1 pour 100ms
+    self.y += vitesse_moyenne * math.sin(angle_rad) * 0.1
+
+    # Calcul de la rotation en fonction des vitesses des roues
+    if self.robot.vitesse_gauche != self.robot.vitesse_droite:
+        rotation_vitesse = (self.robot.vitesse_droite - self.robot.vitesse_gauche) / self.largeur
+        self.angle_parcouru += math.degrees(rotation_vitesse * 0.1)  # Mise à jour en fonction de dt
+        self.angle_parcouru = self.angle_parcouru % 360  # Normalisation de l'angle entre 0 et 360
