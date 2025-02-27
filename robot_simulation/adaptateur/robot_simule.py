@@ -56,3 +56,11 @@ class RobotSimule:
     def get_position(self):
         """Retourne la position actuelle du robot."""
         return self.x, self.y
+
+    def reset(self):
+        """Réinitialise la position et l'orientation du robot."""
+        self.x = 0
+        self.y = 0
+        self.angle_parcouru = 0
+        self.distance_parcouru = 0
+        self.robot.reset()  # Si le robot réel a une méthode de reset, l'appeler ici
