@@ -1,8 +1,8 @@
 import sys
 import time
 import tkinter as tk
-from robot_simulation.affichage_graphique import AffichageGraphique
-from robot_simulation.robot import Robot
+from robot_simulation.affichage.affichage_graphique import AffichageGraphique
+from robot_simulation.modele.robot import Robot
 from robot_simulation.controleur import Controleur
 
 

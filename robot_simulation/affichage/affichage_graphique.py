@@ -2,9 +2,9 @@ import tkinter as tk
 import time
 import threading
 
-from robot_simulation.controleur import Controleur
-from .simulation import Simulation
-from robot_simulation.robot import Robot
+from robot_simulation.controleur.controleur import Controleur
+from robot_simulation.simulateur.simulation import Simulation
+from robot_simulation.modele.robot import Robot
 
 
 class AffichageGraphique:
