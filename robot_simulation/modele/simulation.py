@@ -1,12 +1,7 @@
 import time
 import math
-from .robot import Robot
-from .environnement import Environnement
-from .environnement import Environnement
-from .robot import Robot
-from robot_simulation.simulateur.environnement import Environnement
+from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
-
 
 class Simulation:
     def __init__(self):

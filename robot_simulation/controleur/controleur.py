@@ -1,5 +1,6 @@
 import time
 
+
 class Controleur:
     def __init__(self, simulation, mode=None, master=None):
         self.simulation = simulation  # Stocke l'objet simulation
@@ -12,7 +13,7 @@ class Controleur:
     def run(self, duration=30):
         """Démarrer la simulation."""
         if self.mode == "graphique" and self.master:
-            from robot_simulation.affichage_graphique import AffichageGraphique
+            from robot_simulation.affichage.affichage_graphique import AffichageGraphique
             self.affichage = AffichageGraphique(self.master, self.simulation)
         
         self.faire_carre()  # Commencer le mouvement en carré
