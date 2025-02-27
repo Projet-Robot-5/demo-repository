@@ -18,3 +18,10 @@ def __init__(self, robot, x, y, direction_x, direction_y, environnement):
 def set_vitesse(self, vitesse_gauche, vitesse_droite):
     """Définit les vitesses des roues gauche et droite du robot."""
     self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)
+
+def update_temps_passe(self):
+    """Mise à jour du temps passé depuis la dernière mise à jour."""
+    temps_actuel = time.time()
+    temps_passe = temps_actuel - self.temps_passe
+    self.temps_passe = temps_actuel
+    return temps_passe
