@@ -68,3 +68,7 @@ class RobotSimule:
     def detection_obstacle(self):
         """Détecte la présence d'obstacles dans l'environnement."""
         return self.robot.get_distance()  # Cette méthode doit être définie dans la classe `Robot` ou une classe héritée
+
+    def afficher_info(self):
+        """Affiche les informations de position et d'orientation du robot."""
+        print(f"Position du robot : ({self.x}, {self.y}), Orientation : {self.angle_parcouru}°")
