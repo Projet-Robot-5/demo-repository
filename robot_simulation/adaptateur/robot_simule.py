@@ -64,3 +64,7 @@ class RobotSimule:
         self.angle_parcouru = 0
         self.distance_parcouru = 0
         self.robot.reset()  # Si le robot réel a une méthode de reset, l'appeler ici
+
+    def detection_obstacle(self):
+        """Détecte la présence d'obstacles dans l'environnement."""
+        return self.robot.get_distance()  # Cette méthode doit être définie dans la classe `Robot` ou une classe héritée
