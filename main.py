@@ -7,7 +7,7 @@ import importlib.util
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.modele.robot import Robot
 from robot_simulation.controleur.controleur import Controleur
-from robot_simulation.simulateur.simulation import Simulation
+from robot_simulation.modele.simulation import Simulation
 
 # Vérifier si affichage_graphique.py existe
 affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage.affichage_graphique")

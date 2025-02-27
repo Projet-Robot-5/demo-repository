@@ -1,6 +1,6 @@
 import time
 import math
-from robot_simulation.simulateur.environnement import Environnement
+from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
 
 class Simulation:

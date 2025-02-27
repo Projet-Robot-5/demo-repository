@@ -3,7 +3,7 @@ import time
 import threading
 
 from robot_simulation.controleur.controleur import Controleur
-from robot_simulation.simulateur.simulation import Simulation
+from robot_simulation.modele.simulation import Simulation
 from robot_simulation.modele.robot import Robot
 
 
