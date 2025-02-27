@@ -52,3 +52,7 @@ class RobotSimule:
     def get_distance(self):
         """Retourne la distance totale parcourue par le robot."""
         return self.distance_parcouru
+
+    def get_position(self):
+        """Retourne la position actuelle du robot."""
+        return self.x, self.y
