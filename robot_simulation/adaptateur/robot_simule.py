@@ -14,3 +14,7 @@ def __init__(self, robot, x, y, direction_x, direction_y, environnement):
     self.temps_passe = time.time()  # Temps initial
     self.rayon_roue = 10  # Rayon des roues (par exemple, 10 unités)
     self.largeur = 20  # Largeur entre les roues du robot, exemple : 20 unités
+
+def set_vitesse(self, vitesse_gauche, vitesse_droite):
+    """Définit les vitesses des roues gauche et droite du robot."""
+    self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)
