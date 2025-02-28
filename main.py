@@ -28,13 +28,13 @@ def mode_terminal():
     controleur.run(duration=10)  # Lance la simulation pendant 10 sec
 
     while True:
-        if not simulation.update_all():
-            choix = input("Voulez-vous recommencer ? (o/n) : ")
+            if not simulation.updateModele():
+                choix = input("Voulez-vous recommencer ? (o/n) : ")
             if choix.lower() == 'o':
                 controleur.simulation = Simulation()
             else:
                 break
-        time.sleep(0.1)
+            time.sleep(0.1)
 
 
 def mode_graphique():
