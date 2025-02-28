@@ -17,26 +17,22 @@ GUI_AVAILABLE = affichage_graphique_spec is not None
 def mode_terminal():
     """Mode terminal sans interface graphique."""
     print("Mode terminal activé (sans interface graphique).")
-    simulation = Simulation()
-
-    # Créer un robot pour le mode terminal
-    robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
-  # Exemple de robot avec position et vitesse initiales de chacune des roues
-    simulation.robot = robot
-    controleur = Controleur(simulation, mode="terminal")
-    
-    controleur.run(duration=10)  # Lance la simulation pendant 10 sec
-
-    choix = ""
 
     while True:
+        simulation = Simulation()
+        robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
+        simulation.robot = robot
+        controleur = Controleur(simulation, mode="terminal")
+
+        controleur.run(duration=10)  # Lance la simulation pendant 10 sec
+
+        while True:
             if not simulation.updateModele():
-                choix = input("Voulez-vous recommencer ? (o/n) : ")
-            if choix.lower() == 'o':
-                    simulation = Simulation()
-            else:
-                break
-            time.sleep(0.1)
+                choix = input("CRASH ! Le robot a percuté un obstacle.\nVoulez-vous recommencer ? (o/n) : ").strip().lower()
+                if choix == 'o':
+                    break  # On sort de cette boucle et recommence la simulation
+                else:
+                    return  # On quitte complètement le mode terminal
 
 
 def mode_graphique():
