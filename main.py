@@ -27,6 +27,8 @@ def mode_terminal():
     
     controleur.run(duration=10)  # Lance la simulation pendant 10 sec
 
+    choix = ""
+
     while True:
             if not simulation.updateModele():
                 choix = input("Voulez-vous recommencer ? (o/n) : ")
