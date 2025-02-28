@@ -33,7 +33,7 @@ def mode_terminal():
             if not simulation.updateModele():
                 choix = input("Voulez-vous recommencer ? (o/n) : ")
             if choix.lower() == 'o':
-                controleur.simulation = Simulation()
+                    simulation = Simulation()
             else:
                 break
             time.sleep(0.1)
