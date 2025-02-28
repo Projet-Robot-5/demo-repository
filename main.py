@@ -20,7 +20,8 @@ def mode_terminal():
     simulation = Simulation()
 
     # Créer un robot pour le mode terminal
-    robot = Robot(x=100, y=100, vitesse=5)  # Exemple de robot avec position et vitesse initiales
+    robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
+  # Exemple de robot avec position et vitesse initiales de chacune des roues
     simulation.robot = robot
     controleur = Controleur(simulation, mode="terminal")
     
