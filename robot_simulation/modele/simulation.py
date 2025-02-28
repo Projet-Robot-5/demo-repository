@@ -10,8 +10,6 @@ class Simulation:
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
         # Évite de placer un obstacle sur la position initiale du robot
         self.obstacles = [(x, y) for (x, y) in self.environnement.obstacles if (x, y) != (self.robot.x, self.robot.y)]
-        if not hasattr(self, "robot") or not hasattr(self, "environnement"):
-            raise ValueError("Erreur d'initialisation: robot ou environnement manquant.")
         self.step_count = 0
         self.distance_per_side = 100
         self.current_distance = 0
