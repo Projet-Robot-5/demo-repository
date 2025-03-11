@@ -28,3 +28,8 @@ class AvancerDroit:
         return not self.actif  
 
 class Tourner:
+    def _init_(self, robot, angle):
+        self.robot = robot
+        self.angle = angle  # Angle total à tourner
+        self.angle_tourne = 0  # Angle déjà tourné
+        self.actif = False
