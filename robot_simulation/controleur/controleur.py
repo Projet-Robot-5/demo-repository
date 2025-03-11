@@ -39,6 +39,12 @@ class Controleur:
             self.step()
     
     def faire_carre(self, cote=120):
+        """Ajoute les stratégies pour faire un carré."""
+        for _ in range(4):
+            avancer = AvancerDroit(self.robot, cote)
+            tourner = Tourner(self.robot, 90)  # Correction pour assurer un carré parfait
+            self.ajouter_strategie(avancer)
+            self.ajouter_strategie(tourner)
     
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
