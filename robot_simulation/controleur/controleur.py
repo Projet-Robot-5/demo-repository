@@ -33,6 +33,11 @@ class Controleur:
 
         if self.strategie_courante:
             self.strategie_courante.step()
+            self.environnement.mettre_a_jour(dt=1)  # Mise à jour du robot via l'environnement
+
+        if self.environnement.detecter_collision():
+            print("Simulation arrêtée à cause d'une collision.")
+            return
 
         if self.mode == "graphique" and self.master:
             self.master.after(100, self.step)  # Met à jour toutes les 100ms
