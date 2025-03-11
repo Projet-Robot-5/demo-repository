@@ -7,6 +7,7 @@ class Controleur:
     def __init__(self, simulation, mode=None, master=None):
         self.simulation = simulation  # Stocke l'objet simulation
         self.robot = self.simulation.robot
+        self.environnement = Environnement(self.robot)  # Associer l'environnement au robot
         self.mode = mode  # Ajouter un mode, avec une valeur par défaut None
         self.queue_strategies = []  # Liste des stratégies à exécuter
         self.strategie_courante = None  # La stratégie en cours
