@@ -77,3 +77,10 @@ class Reculer:
         self.distance = distance
         self.distance_parcourue = 0
         self.actif = False
+
+    def start(self):
+        """Démarre la stratégie de recul."""
+        self.distance_parcourue = 0
+        self.robot.set_wheel_speed(-12, -12)  # Vitesse négative pour reculer
+        self.actif = True
+        print("Début du recul")
