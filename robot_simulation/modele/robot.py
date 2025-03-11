@@ -4,7 +4,7 @@ class Robot:
     def __init__(self, x, y, vitesse_gauche=10, vitesse_droite=10, orientation=0, taille = 20):
         self.x = x
         self.y = y
-        self.orientation = orientation  # En degrés
+        self.orientation = 0  # En degrés
         self.vitesse_gauche = vitesse_gauche  # Vitesse de la roue gauche
         self.vitesse_droite = vitesse_droite  # Vitesse de la roue droite
         self.wheel_distance = 30  # Distance entre les roues
@@ -28,5 +28,6 @@ class Robot:
         # Ajout de l'angle de rotation
         if self.vitesse_gauche != self.vitesse_droite:  # Rotation uniquement si vitesses différentes
             rotation_vitesse = (self.vitesse_droite - self.vitesse_gauche) / self.wheel_distance
-            self.orientation += math.degrees(rotation_vitesse * dt)  # Conversion en degrés
-            self.orientation = round(self.orientation) % 360  # 🔹 Corrige l'angle pour qu'il reste précis
+            self.orientation += math.degrees(rotation_vitesse * dt) 
+             # Conversion en degrés
+            self.orientation = self.orientation % 360
