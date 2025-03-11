@@ -1,5 +1,6 @@
 import time
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
+from robot_simulation.modele.environnement import Environnement
 
 
 class Controleur:
