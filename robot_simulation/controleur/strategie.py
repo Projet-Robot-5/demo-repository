@@ -48,10 +48,10 @@ class Tourner:
         self.robot.move(dt=1)
 
         # Mettre à jour l'angle tourné
-        self.angle_tourne += 45  # Supposons que chaque étape tourne de 5 degrés
+        self.angle_tourne += 10  # Supposons que chaque étape tourne de 5 degrés
 
         # Mettre à jour l'orientation du robot
-        self.robot.orientation = (self.robot.orientation + 45) % 360
+        self.robot.orientation = (self.robot.orientation + 10) % 360
 
         # Ajuster l'orientation pour qu'elle soit toujours proche d'un multiple de 90
         if self.angle_tourne % 90 == 0:
