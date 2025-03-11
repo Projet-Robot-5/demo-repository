@@ -84,3 +84,13 @@ class Reculer:
         self.robot.set_wheel_speed(-12, -12)  # Vitesse négative pour reculer
         self.actif = True
         print("Début du recul")
+    
+    def step(self):
+        """Fait reculer le robot d'une petite étape."""
+        if not self.actif:
+            return
+        self.robot.move(dt=1)
+        self.distance_parcourue += 12
+        print(f"Recul: {self.distance_parcourue}/{self.distance}")
+        print(f"Position: ({self.robot.x}, {self.robot.y})")
+        print(f"Orientation: {self.robot.orientation}")
