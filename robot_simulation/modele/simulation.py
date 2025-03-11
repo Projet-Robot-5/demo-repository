@@ -6,8 +6,9 @@ from robot_simulation.modele.robot import Robot
 class Simulation:
     def __init__(self):
         """Initialise l'environnement et le robot."""
-        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
+        
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
+        self.environnement = Environnement(width=500, height=500, obstacle_count=15, robot=self.robot)
         # Évite de placer un obstacle sur la position initiale du robot
         self.obstacles = [(x, y) for (x, y) in self.environnement.obstacles if (x, y) != (self.robot.x, self.robot.y)]
         self.step_count = 0

@@ -27,3 +27,5 @@ class Environnement:
         self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)
 
     
+
+    

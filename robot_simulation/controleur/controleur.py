@@ -7,7 +7,7 @@ class Controleur:
     def __init__(self, simulation, mode=None, master=None):
         self.simulation = simulation  # Stocke l'objet simulation
         self.robot = self.simulation.robot
-        self.environnement = Environnement(self.robot)  # Associer l'environnement au robot
+        self.environnement = Environnement(robot=self.robot,width=500, height=500, obstacle_count=15)  # Associer l'environnement au robot
         self.mode = mode  # Ajouter un mode, avec une valeur par défaut None
         self.queue_strategies = []  # Liste des stratégies à exécuter
         self.strategie_courante = None  # La stratégie en cours
@@ -32,12 +32,12 @@ class Controleur:
                 return  # Plus rien à exécuter
 
         if self.strategie_courante:
-            self.strategie_courante.step()
-            self.environnement.mettre_a_jour(dt=1)  # Mise à jour du robot via l'environnement
+            self.strategie_courante.step()  # Exécution de la stratégie actuelle
 
-        if self.environnement.detecter_collision():
-            print("Simulation arrêtée à cause d'une collision.")
-            return
+            if self.strategie_courante.stop():  # Vérifie si la stratégie est terminée
+                self.environnement.mettre_a_jour(dt=1)  # Mise à jour de l'environnement après l'étape
+
+        
 
         if self.mode == "graphique" and self.master:
             self.master.after(100, self.step)  # Met à jour toutes les 100ms
