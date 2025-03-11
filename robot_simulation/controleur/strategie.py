@@ -72,3 +72,8 @@ class Tourner:
             print(f"Rotation terminée. Orientation finale: {self.robot.orientation}")
         return not self.actif
 class Reculer:
+    def __init__(self, robot, distance):
+        self.robot = robot
+        self.distance = distance
+        self.distance_parcourue = 0
+        self.actif = False
