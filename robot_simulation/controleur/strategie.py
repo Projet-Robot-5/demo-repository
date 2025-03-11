@@ -33,3 +33,9 @@ class Tourner:
         self.angle = angle  # Angle total à tourner
         self.angle_tourne = 0  # Angle déjà tourné
         self.actif = False
+    def start(self):
+        """Démarre la rotation."""
+        self.angle_tourne = 0
+        self.robot.set_wheel_speed(-4, 4)  # Rotation à gauche
+        self.actif = True
+        print(f"Début de la rotation de {self.angle} degrés")
