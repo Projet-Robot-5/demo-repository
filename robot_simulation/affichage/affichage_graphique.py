@@ -6,17 +6,16 @@ from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.modele.simulation import Simulation
 
 class AffichageGraphique:
-    def __init__(self, master, simulation):
+    def __init__(self, master, robot):
         """Initialise l'affichage graphique de la simulation."""
         self.master = master
-        self.simulation = simulation
-        self.robot = self.simulation.robot
+        self.robot = robot
         self.canvas = tk.Canvas(self.master, width=500, height=500, bg="white")
         self.canvas.pack()
         # Stocker la trajectoire du robot
         self.trajet = []
         # Créer l'objet controleur
-        self.controleur = Controleur(self.simulation)  # Contrôleur qui gère les mouvements
+        self.controleur = Controleur(self.robot, mode="graphique", master=self.master)  # Contrôleur qui gère les mouvements
         self.controleur.faire_carre(120)  # Démarrer la simulation du carré
         # Indicateur pour contrôler l'exécution du thread
         self.running = True
@@ -39,7 +38,7 @@ class AffichageGraphique:
         x, y = self.robot.x, self.robot.y
         if len(self.trajet) > 0:
             prev_x, prev_y = self.trajet[-1]
-            self.canvas.create_line(prev_x, prev_y, x, y, fill="black", width=2)  # 🔥 Traçage du chemin
+            self.canvas.create_line(prev_x, prev_y, x, y, fill="black", width=2)  # Traçage du chemin
 
         self.trajet.append((x, y))  # Sauvegarde des positions
 
@@ -47,12 +46,11 @@ class AffichageGraphique:
         self.canvas.delete("robot")
 
         # Dessiner les obstacles
-        for obs in self.simulation.environnement.obstacles:
+        for obs in self.controleur.environnement.obstacles:
             self.canvas.create_oval(obs[0] - 5, obs[1] - 5, obs[0] + 5, obs[1] + 5, fill="red")
 
         # Dessiner le robot
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")
-        # Vérifier si toutes les stratégies sont terminées
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
             self.running = False
