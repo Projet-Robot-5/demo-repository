@@ -20,3 +20,9 @@ class AvancerDroit:
         print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
         print(f"Position: ({self.robot.x}, {self.robot.y})")
         print(f"Orientation: {self.robot.orientation}")
+    def stop(self):
+        """Retourne vrai si la distance est atteinte."""
+        if self.distance_parcourue >= self.distance:
+            self.actif = False
+            self.robot.set_wheel_speed(0, 0)
+        return not self.actif  
