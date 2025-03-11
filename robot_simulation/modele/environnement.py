@@ -17,3 +17,7 @@ class Environnement:
             y = random.randint(50, self.height - 50)
             obstacles.append((x, y))
         return obstacles
+    
+    def mettre_a_jour(self, dt=1):
+        """Met à jour la position et l'orientation du robot."""
+        self.robot.move(dt)
