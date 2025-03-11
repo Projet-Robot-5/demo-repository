@@ -4,9 +4,9 @@ from robot_simulation.modele.environnement import Environnement
 
 
 class Controleur:
-    def __init__(self, simulation, mode=None, master=None):
-        self.simulation = simulation  # Stocke l'objet simulation
-        self.robot = self.simulation.robot
+    def __init__(self, robot, mode=None, master=None):
+        
+        self.robot = robot
         self.environnement = Environnement(robot=self.robot,width=500, height=500, obstacle_count=15)  # Associer l'environnement au robot
         self.mode = mode  # Ajouter un mode, avec une valeur par défaut None
         self.queue_strategies = []  # Liste des stratégies à exécuter
@@ -17,7 +17,7 @@ class Controleur:
         """Démarrer la simulation."""
         if self.mode == "graphique" and self.master:
             from robot_simulation.affichage.affichage_graphique import AffichageGraphique
-            self.affichage = AffichageGraphique(self.master, self.simulation)
+            self.affichage = AffichageGraphique(self.master, self.robot)
         
         self.faire_carre()  # Commencer le mouvement en carré
         self.step()
