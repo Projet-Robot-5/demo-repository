@@ -21,3 +21,9 @@ class Environnement:
     def mettre_a_jour(self, dt=1):
         """Met à jour la position et l'orientation du robot."""
         self.robot.move(dt)
+
+    def set_vitesse_roues(self, vitesse_gauche, vitesse_droite):
+        """Modifie la vitesse des roues du robot."""
+        self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)
+
+    
