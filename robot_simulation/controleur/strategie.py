@@ -59,3 +59,15 @@ class Tourner:
             self.robot.orientation %= 360  # Garantir que l'orientation est entre 0 et 360
 
         print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation: {self.robot.orientation}")
+    def stop(self):
+        """Retourne vrai si la rotation est terminée."""
+        if self.angle_tourne >= self.angle:
+            self.actif = False
+            self.robot.set_wheel_speed(0, 0)  # Arrêter les roues
+
+            # Correction finale de l'orientation pour s'assurer qu'elle est un multiple de 90
+            self.robot.orientation = round(self.robot.orientation / 90) * 90
+            self.robot.orientation %= 360  # Garantir que l'orientation est entre 0 et 360
+
+            print(f"Rotation terminée. Orientation finale: {self.robot.orientation}")
+        return not self.actif
