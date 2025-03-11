@@ -26,3 +26,5 @@ class AvancerDroit:
             self.actif = False
             self.robot.set_wheel_speed(0, 0)
         return not self.actif  
+
+class Tourner:
