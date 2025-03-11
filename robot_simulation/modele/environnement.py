@@ -3,10 +3,11 @@ import math
 import random
 
 class Environnement:
-    def __init__(self, width=500, height=500, obstacle_count=15):
+    def __init__(self,robot, width=500, height=500, obstacle_count=15):
         self.width = width
         self.height = height
         self.obstacles = self.generate_obstacles(obstacle_count)
+        self.robot = robot
 
     def generate_obstacles(self, count):
         """Génère des obstacles aléatoires dans l'environnement."""

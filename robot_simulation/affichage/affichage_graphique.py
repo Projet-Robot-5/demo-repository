@@ -17,7 +17,7 @@ class AffichageGraphique:
         self.trajet = []
         # Créer l'objet controleur
         self.controleur = Controleur(self.simulation)  # Contrôleur qui gère les mouvements
-        self.controleur.faire_carre(100)  # Démarrer la simulation du carré
+        self.controleur.faire_carre(120)  # Démarrer la simulation du carré
         # Indicateur pour contrôler l'exécution du thread
         self.running = True
         self.update_affichage()
@@ -30,6 +30,8 @@ class AffichageGraphique:
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot en traçant sa trajectoire."""
+        if not self.running:
+            return
         # Déplacer le robot
         self.robot.move(dt=0.1)
 
@@ -50,7 +52,12 @@ class AffichageGraphique:
 
         # Dessiner le robot
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")
-
+        # Vérifier si toutes les stratégies sont terminées
+        # Vérifier si toutes les stratégies sont terminées
+        if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
+            self.running = False
+            self.master.after(1000, self.master.destroy)  # Fermer la fenêtre après 1 seconde
+            return
         # Continuer la mise à jour après 50ms
         self.master.after(50, self.update_affichage)
 
