@@ -71,3 +71,4 @@ class Tourner:
 
             print(f"Rotation terminée. Orientation finale: {self.robot.orientation}")
         return not self.actif
+class Reculer:
