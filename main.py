@@ -22,7 +22,7 @@ def mode_terminal():
         simulation = Simulation()
         robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
         simulation.robot = robot
-        controleur = Controleur(simulation, mode="terminal")
+        controleur = Controleur(robot, mode="terminal")
 
         controleur.run(duration=10)  # Lance la simulation pendant 10 sec
 
@@ -40,14 +40,12 @@ def mode_graphique():
     root = tk.Tk()
     root.title("Simulation de Robot")
 
-    # Initialisation de la simulation et du robot
-    simulation = Simulation()
-    robot = Robot(x=250, y=250)
-    simulation.robot = robot
+   # Initialisation du robot
+    robot = Robot(x=250, y=250)  # Créer le robot directement
 
     # Création du contrôleur et de l'affichage
-    controleur = Controleur(simulation, mode="graphique", master=root)
-    affichage = AffichageGraphique(root, simulation)
+    controleur = Controleur(robot, mode="graphique", master=root)
+    affichage = AffichageGraphique(root, robot)
 
     def on_close():
         """Si on ferme la fenêtre, on passe en mode terminal."""
