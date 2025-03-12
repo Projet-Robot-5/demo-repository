@@ -1,19 +1,16 @@
 import time
 import math
-from .robot import Robot
-from .environnement import Environnement
-from .environnement import Environnement
-from .robot import Robot
-from robot_simulation.environnement import Environnement
-from robot_simulation.robot import Robot
+from robot_simulation.modele.environnement import Environnement
+from robot_simulation.modele.robot import Robot
 
 class Simulation:
     def __init__(self):
         """Initialise l'environnement et le robot."""
-        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
+        
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
-        if not hasattr(self, "robot") or not hasattr(self, "environnement"):
-            raise ValueError("Erreur d'initialisation: robot ou environnement manquant.")
+        self.environnement = Environnement(width=500, height=500, obstacle_count=15, robot=self.robot)
+        # Évite de placer un obstacle sur la position initiale du robot
+        self.obstacles = [(x, y) for (x, y) in self.environnement.obstacles if (x, y) != (self.robot.x, self.robot.y)]
         self.step_count = 0
         self.distance_per_side = 100
         self.current_distance = 0
