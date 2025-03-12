@@ -20,7 +20,10 @@ class Controleur:
         self.master = master
     
     def run(self, duration=30):
-        """Démarrer la simulation."""
+        """Démarrer la simulation.
+        :param duration: Durée de la simulation (en secondes, non utilisée ici directement).
+        """
+        # Si on est en mode graphique, on initialise l'affichage avec la classe AffichageGraphique"""
         if self.mode == "graphique" and self.master:
             from robot_simulation.affichage.affichage_graphique import AffichageGraphique
             self.affichage = AffichageGraphique(self.master, self.robot)
