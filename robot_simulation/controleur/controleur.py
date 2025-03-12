@@ -5,6 +5,12 @@ from robot_simulation.modele.environnement import Environnement
 
 class Controleur:
     def __init__(self, robot, mode=None, master=None):
+        """Initialise le contrôleur pour gérer les stratégies du robot et l'environnement.
+        
+        :param robot: L'objet robot qui sera contrôlé par le contrôleur.
+        :param mode: Le mode d'affichage (par défaut, il est None).
+        :param master: La fenêtre principale tkinter (utilisée dans le mode graphique).
+        """
         
         self.robot = robot
         self.environnement = Environnement(robot=self.robot,width=500, height=500, obstacle_count=15)  # Associer l'environnement au robot
