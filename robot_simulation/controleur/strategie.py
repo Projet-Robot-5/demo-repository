@@ -147,3 +147,20 @@ class StrategieBoucle:
     
     def stop(self):
         return self.count >= self.n
+class StrategieConditionnelle:
+    def __init__(self, robot):
+        """Recule si un obstacle est détecté."""
+        self.robot = robot
+        self.reculer = Reculer(robot, 50)
+    
+    def start(self):
+        if self.robot.detect_obstacle():
+            print("Obstacle détecté ! Recul en cours...")
+            self.reculer.start()
+    
+    def step(self):
+        if self.reculer.actif:
+            self.reculer.step()
+    
+    def stop(self):
+        return not self.reculer.actif
