@@ -101,3 +101,28 @@ class Reculer:
             self.actif = False
             self.robot.set_wheel_speed(0, 0)  # Arrêter le robot
         return not self.actif
+class StrategieCarre:
+    def __init__(self, robot):
+        """Fait avancer le robot en carré."""
+        self.actions = [
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90)
+        ]
+        self.index = 0
+    
+    def start(self):
+        self.actions[self.index].start()
+    
+    def step(self):
+        if self.index < len(self.actions):
+            self.actions[self.index].step()
+            if self.actions[self.index].stop():
+                self.index += 1
+                if self.index < len(self.actions):
+                    self.actions[self.index].start()
+    
+    def stop(self):
+        return self.index >= len(self.actions)
+
