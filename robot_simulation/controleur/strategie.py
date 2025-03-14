@@ -126,3 +126,24 @@ class StrategieCarre:
     def stop(self):
         return self.index >= len(self.actions)
 
+class StrategieBoucle:
+    def __init__(self, robot, n):
+        """Répète la stratégie du carré n fois."""
+        self.n = n
+        self.count = 0
+        self.carre = StrategieCarre(robot)
+    
+    def start(self):
+        self.carre.start()
+    
+    def step(self):
+        if self.count < self.n:
+            self.carre.step()
+            if self.carre.stop():
+                self.count += 1
+                if self.count < self.n:
+                    self.carre = StrategieCarre(self.carre.actions[0].robot)
+                    self.carre.start()
+    
+    def stop(self):
+        return self.count >= self.n
