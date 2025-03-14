@@ -116,6 +116,8 @@ class StrategieCarre:
         self.actions[self.index].start()
     
     def step(self):
+        """Exécute l'action en cours et passe à la 
+        suivante si nécessaire."""
         if self.index < len(self.actions):
             self.actions[self.index].step()
             if self.actions[self.index].stop():
@@ -124,6 +126,8 @@ class StrategieCarre:
                     self.actions[self.index].start()
     
     def stop(self):
+        """Retourne True si toutes 
+        les actions sont terminées."""
         return self.index >= len(self.actions)
 
 class StrategieBoucle:
@@ -137,6 +141,7 @@ class StrategieBoucle:
         self.carre.start()
     
     def step(self):
+        """Exécute les actions et redémarre si nécessaire."""
         if self.count < self.n:
             self.carre.step()
             if self.carre.stop():
@@ -150,15 +155,18 @@ class StrategieBoucle:
 class StrategieConditionnelle:
     def __init__(self, robot):
         """Recule si un obstacle est détecté."""
+        
         self.robot = robot
         self.reculer = Reculer(robot, 50)
     
     def start(self):
+        """Vérifie la présence d'un obstacle et recule si nécessaire."""
         if self.robot.detect_obstacle():
             print("Obstacle détecté ! Recul en cours...")
             self.reculer.start()
     
     def step(self):
+        """Continue le recul si actif."""
         if self.reculer.actif:
             self.reculer.step()
     
