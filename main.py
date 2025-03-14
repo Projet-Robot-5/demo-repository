@@ -45,7 +45,7 @@ def mode_graphique():
 
     # Création du contrôleur et de l'affichage
     controleur = Controleur(robot, mode="graphique", master=root)
-    affichage = AffichageGraphique(root, robot)
+    affichage = AffichageGraphique(root, robot, controleur)
 
     def on_close():
         """Si on ferme la fenêtre, on passe en mode terminal."""

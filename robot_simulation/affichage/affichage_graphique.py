@@ -4,14 +4,15 @@ import threading  # Pour exécuter des tâches en parallèle (affichage graphiqu
 
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
-
+from robot_simulation.controleur.strategie import StrategieCarre  # Importation de la stratégie Carre
 class AffichageGraphique:
-    def __init__(self, master, robot):
+    def __init__(self, master, robot, controleur):
         """Initialise l'affichage graphique de la simulation.
         
         :param master: La fenêtre principale de l'application tkinter.
         :param robot: L'objet robot qui sera contrôlé dans la simulation.
         """
+        self.controleur=controleur
         self.master = master  # La fenêtre principale de l'application
         self.robot = robot  # Le robot à contrôler
         # Création d'un canevas pour dessiner l'environnement de simulation
@@ -22,9 +23,12 @@ class AffichageGraphique:
         self.trajet = []
 
         # Créer un objet contrôleur pour gérer les mouvements du robot en mode graphique
-        self.controleur = Controleur(self.robot, mode="graphique", master=self.master)  
-        self.controleur.faire_carre(120)  # Démarrer la simulation du robot qui suit une trajectoire carrée
-
+        
+        #self.controleur = Controleur(self.robot, mode="graphique", master=self.master)  
+        #self.controleur.faire_carre(120)  # Démarrer la simulation du robot qui suit une trajectoire carrée
+        # Remplacer l'appel à 'faire_carre' par l'ajout de la stratégie de carré
+        self.controleur.strategie_courante = StrategieCarre(self.controleur.robot)
+        self.controleur.ajouter_strategie(self.controleur.strategie_courante)
         # Indicateur pour contrôler si le thread graphique doit continuer à s'exécuter
         self.running = True
 
@@ -44,6 +48,7 @@ class AffichageGraphique:
         if not self.running:
             return  # Si le thread n'est plus en cours d'exécution, on arrête la mise à jour
 
+        
         # Déplacer le robot dans la simulation
         self.robot.move(dt=0.1)
 
