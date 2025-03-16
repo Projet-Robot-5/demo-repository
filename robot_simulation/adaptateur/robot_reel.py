@@ -27,3 +27,8 @@ class RobotReel:
         """Fait avancer le robot pendant dt secondes."""
         print("Déplacement en cours...")
         time.sleep(dt)  # Simulation du mouvement
+
+    def get_sensor_data(self):
+        """Récupère les données des capteurs (ex: distance, obstacles, etc.)."""
+        # Exemple de récupération de données capteurs
+        return {"distance_obstacle": 50}  # Ex: renvoie une distance de 50 cm
