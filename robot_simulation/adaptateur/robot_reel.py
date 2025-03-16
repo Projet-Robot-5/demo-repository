@@ -48,3 +48,12 @@ class RobotReel:
         time.sleep(temps_rotation)
         self.stop()
 
+    def avancer(self, distance):
+        """Fait avancer le robot d'une certaine distance en cm."""
+        print(f"Avancement de {distance} cm...")
+        vitesse_translation = 200  # Exemple de vitesse de translation en DPS
+        temps_translation = abs(distance) / 10  # Supposons 10 cm/s
+        self.set_motor_dps(vitesse_translation, vitesse_translation)
+        time.sleep(temps_translation)
+        self.stop()
+
