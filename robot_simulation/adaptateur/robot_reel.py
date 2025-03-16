@@ -22,3 +22,8 @@ class RobotReel:
         moteur_gauche_dps = vitesse_gauche * conversion_dps
         moteur_droite_dps = vitesse_droite * conversion_dps
         self.set_motor_dps(moteur_gauche_dps, moteur_droite_dps)
+
+    def move(self, dt=0.1):
+        """Fait avancer le robot pendant dt secondes."""
+        print("Déplacement en cours...")
+        time.sleep(dt)  # Simulation du mouvement
