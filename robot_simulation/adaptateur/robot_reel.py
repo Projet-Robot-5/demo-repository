@@ -28,6 +28,11 @@ class RobotReel:
         print("Déplacement en cours...")
         time.sleep(dt)  # Simulation du mouvement
 
+    def stop(self):
+        """Arrête le robot en mettant les moteurs à 0."""
+        print("Arrêt du robot réel.")
+        self.set_motor_dps(0, 0)
+
     def get_sensor_data(self):
         """Récupère les données des capteurs (ex: distance, obstacles, etc.)."""
         # Exemple de récupération de données capteurs
