@@ -14,3 +14,11 @@ class RobotReel:
         """Contrôle les moteurs en définissant leur vitesse en degrés par seconde (DPS)."""
         print(f"Commande moteur - Gauche: {moteur_gauche_dps} DPS, Droite: {moteur_droite_dps} DPS")
         # Ici, on enverrait la commande aux moteurs via une bibliothèque matérielle
+
+    def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
+        """Convertit une vitesse linéaire en commande moteur et envoie aux moteurs."""
+        # Supposons une conversion simplifiée entre vitesse linéaire et DPS
+        conversion_dps = 20  # Exemple : 1 unité de vitesse correspond à 20 DPS
+        moteur_gauche_dps = vitesse_gauche * conversion_dps
+        moteur_droite_dps = vitesse_droite * conversion_dps
+        self.set_motor_dps(moteur_gauche_dps, moteur_droite_dps)
