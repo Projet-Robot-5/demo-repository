@@ -37,3 +37,14 @@ class RobotReel:
         """Récupère les données des capteurs (ex: distance, obstacles, etc.)."""
         # Exemple de récupération de données capteurs
         return {"distance_obstacle": 50}  # Ex: renvoie une distance de 50 cm
+    
+    def tourner(self, angle):
+        """Fait tourner le robot d'un certain angle en degrés."""
+        print(f"Rotation de {angle} degrés...")
+        vitesse_rotation = 100  # Exemple de vitesse de rotation en DPS
+        temps_rotation = abs(angle) / vitesse_rotation
+        direction = 1 if angle > 0 else -1
+        self.set_motor_dps(direction * vitesse_rotation, -direction * vitesse_rotation)
+        time.sleep(temps_rotation)
+        self.stop()
+
