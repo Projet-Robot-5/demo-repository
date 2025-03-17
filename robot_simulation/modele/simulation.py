@@ -30,6 +30,10 @@ class Simulation:
                 return True
         return False
 
+    def mettre_a_jour_mouvement(self, dt=0.1):
+        """Fait avancer le robot en appelant sa méthode move()."""
+        self.robot.move(dt)
+
     def updateModele(self):
         """Met à jour l'état du robotet de l'environnement, sans logique de mouvement."""
         if self.detect_obstacle(self.robot):
