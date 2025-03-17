@@ -42,5 +42,6 @@ class Simulation:
         if self.detect_wall_collision():
             print("Collision avec un mur")
             return  False
+        self.mettre_a_jour_mouvement()  # Déplacement géré ici
         print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
         return True
