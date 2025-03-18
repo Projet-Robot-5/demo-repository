@@ -44,3 +44,6 @@ class AdaptateurRobotSimule:
 
     def detect_obstacle(self):
         return self.robot.detect_obstacle()
+
+    def set_led(self, led, r, g, b):
+        self.robot.set_led(led, r, g, b)
