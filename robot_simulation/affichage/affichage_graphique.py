@@ -1,7 +1,7 @@
 import tkinter as tk  # Importation de la bibliothèque Tkinter pour l'interface graphique
 import time  # Pour gérer le temps d'attente entre les mises à jour
 import threading  # Pour exécuter des tâches en parallèle (affichage graphique dans un thread)
-
+import math
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieCarre  # Importation de la stratégie Carre
