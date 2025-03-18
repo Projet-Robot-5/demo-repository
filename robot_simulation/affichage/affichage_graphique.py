@@ -78,7 +78,15 @@ class AffichageGraphique:
         # Position des flèches pour les roues gauche et droite
         x_gauche = x + 20 * math.cos(angle_rad_gauche)  # Flèche gauche
         y_gauche = y + 20 * math.sin(angle_rad_gauche)
+        x_droite = x + 20 * math.cos(angle_rad_droite)  # Flèche droite
+        y_droite = y + 20 * math.sin(angle_rad_droite)
 
+        # Effacer les flèches précédentes
+        self.canvas.delete("flèches")
+
+        # Dessiner les flèches des roues, cette fois sur le robot
+        self.canvas.create_line(x, y, x_gauche, y_gauche, arrow=tk.LAST, fill="green", width=2, tags="flèches")  # Flèche roue gauche
+        self.canvas.create_line(x, y, x_droite, y_droite, arrow=tk.LAST, fill="red", width=2, tags="flèches")  # Flèche roue droite
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
             self.running = False  # Arrêter l'exécution du thread si toutes les stratégies sont terminées
