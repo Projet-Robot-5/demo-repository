@@ -72,7 +72,10 @@ class AffichageGraphique:
 
         # Dessiner le robot en bleu à sa position actuelle
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")  # Robot dessiné en bleu
-        
+         # Calculer l'angle de chaque roue en fonction de l'orientation du robot
+        angle_rad_gauche = math.radians(self.robot.orientation - 45)  # Angle de la roue gauche
+        angle_rad_droite = math.radians(self.robot.orientation + 45)  # Angle de la roue droite
+
 
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
