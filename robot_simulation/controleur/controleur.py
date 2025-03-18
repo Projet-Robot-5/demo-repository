@@ -62,4 +62,3 @@ class Controleur:
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
-

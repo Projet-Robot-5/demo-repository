@@ -93,4 +93,9 @@ class AffichageGraphique:
         self.running = False  # Arrêter le thread de mise à jour
         self.thread.join(timeout=1)  # Attendre que le thread se termine proprement
         self.master.destroy()  # Fermer la fenêtre tkinter
+    def run(self):
+        """Lance la mise à jour continue de l'affichage."""
+        while self.running:
+            self.update_affichage()
+            time.sleep(0.05)
 
