@@ -47,3 +47,9 @@ class AdaptateurRobotSimule:
 
     def set_led(self, led, r, g, b):
         self.robot.set_led(led, r, g, b)
+
+    def set_motor_dps(self, port, dps):
+        self.robot.set_motor_speed(port, dps)
+
+    def offset_motor_encoder(self, port, offset):
+        self.robot.set_motor_offset(port, offset)
