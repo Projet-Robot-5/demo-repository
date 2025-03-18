@@ -29,3 +29,19 @@ class AdaptateurRobotReel:
         """Arrête le robot."""
         self.robot.set_motor_dps("MOTOR_LEFT", 0)
         self.robot.set_motor_dps("MOTOR_RIGHT", 0)
+
+    def get_position(self):
+        """Retourne la position actuelle du robot."""
+        return self.robot.get_motor_position("MOTOR_LEFT"), self.robot.get_motor_position("MOTOR_RIGHT")
+
+    def get_orientation(self):
+        """Retourne l'orientation actuelle du robot."""
+        return self.angle_tourne
+
+    def get_distance_parcourue(self):
+        """Retourne la distance totale parcourue."""
+        return self.distance_parcourue
+
+    def get_angle_tourne(self):
+        """Retourne l'angle total tourné."""
+        return self.angle_tourne
