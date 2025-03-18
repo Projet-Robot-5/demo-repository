@@ -75,7 +75,9 @@ class AffichageGraphique:
          # Calculer l'angle de chaque roue en fonction de l'orientation du robot
         angle_rad_gauche = math.radians(self.robot.orientation - 45)  # Angle de la roue gauche
         angle_rad_droite = math.radians(self.robot.orientation + 45)  # Angle de la roue droite
-
+        # Position des flèches pour les roues gauche et droite
+        x_gauche = x + 20 * math.cos(angle_rad_gauche)  # Flèche gauche
+        y_gauche = y + 20 * math.sin(angle_rad_gauche)
 
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
