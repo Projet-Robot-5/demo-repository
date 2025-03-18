@@ -78,7 +78,7 @@ class AffichageGraphique:
         angle_rad = math.radians(self.robot.orientation)  # Convertir l'orientation en radians
         arrow_length = 20  # Longueur de la flèche
         arrow_x = x + arrow_length * math.cos(angle_rad)  # Calculer la position X de la flèche
-        
+        affichage/affichage_graphique.py
 
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
