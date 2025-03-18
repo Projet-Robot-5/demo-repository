@@ -51,3 +51,9 @@ class AdaptateurRobotReel:
 
     def set_led(self, led, r, g, b):
         self.robot.set_led(led, r, g, b)
+
+    def set_motor_dps(self, port, dps):
+        self.robot.set_motor_dps(port, dps)
+
+    def offset_motor_encoder(self, port, offset):
+        self.robot.offset_motor_encoder(port, offset)
