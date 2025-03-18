@@ -21,3 +21,7 @@ class AdaptateurRobotSimule:
         vitesse = distance / 10
         self.robot.set_wheel_speed(-vitesse, -vitesse)
         self.distance_parcourue += distance
+
+    def stop(self):
+        """Arrête le robot."""
+        self.robot.set_wheel_speed(0, 0)
