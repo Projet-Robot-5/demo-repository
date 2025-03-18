@@ -48,3 +48,6 @@ class AdaptateurRobotReel:
 
     def detect_obstacle(self):
         return self.robot.get_distance() < 20
+
+    def set_led(self, led, r, g, b):
+        self.robot.set_led(led, r, g, b)
