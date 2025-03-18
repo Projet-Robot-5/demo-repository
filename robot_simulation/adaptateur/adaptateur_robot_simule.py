@@ -53,3 +53,6 @@ class AdaptateurRobotSimule:
 
     def offset_motor_encoder(self, port, offset):
         self.robot.set_motor_offset(port, offset)
+
+    def servo_rotate(self, port, angle):
+        self.robot.rotate_servo(port, angle)
