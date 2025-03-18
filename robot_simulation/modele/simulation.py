@@ -23,7 +23,7 @@ class Simulation:
 
         # Afficher la position du robot en mode console (utile pour le mode terminal)
         print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
-<<<<<<< HEAD
+
         return True
     def run(self, duration=30):
         """Lance la simulation pendant une durée donnée."""
@@ -31,9 +31,9 @@ class Simulation:
         while time.time() - start_time < duration:
             self.updateModele()
             time.sleep(0.1)
-=======
+
 
         # Si on utilise une interface graphique, on continue l'update
         if self.master:
             self.master.after(50, self.update_all)  # Répète l'update toutes les 50ms
->>>>>>> aafcc2acb87e759be1da3a3ca0a54411d63368e7
+
