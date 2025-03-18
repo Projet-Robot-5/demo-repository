@@ -72,6 +72,13 @@ class AffichageGraphique:
 
         # Dessiner le robot en bleu à sa position actuelle
         self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")  # Robot dessiné en bleu
+        
+        
+        # Ajouter la flèche indiquant la direction du robot
+        angle_rad = math.radians(self.robot.orientation)  # Convertir l'orientation en radians
+        arrow_length = 20  # Longueur de la flèche
+        arrow_x = x + arrow_length * math.cos(angle_rad)  # Calculer la position X de la flèche
+        
 
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
