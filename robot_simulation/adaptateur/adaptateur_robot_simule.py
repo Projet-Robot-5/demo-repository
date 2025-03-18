@@ -16,3 +16,8 @@ class AdaptateurRobotSimule:
         else:
             self.robot.set_wheel_speed(4, -4)  # Rotation à droite
         self.angle_tourne += angle
+    
+    def reculer(self, distance):
+        vitesse = distance / 10
+        self.robot.set_wheel_speed(-vitesse, -vitesse)
+        self.distance_parcourue += distance
