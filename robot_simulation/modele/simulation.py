@@ -45,3 +45,9 @@ class Simulation:
         self.mettre_a_jour_mouvement()  # Déplacement géré ici
         print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
         return True
+    def run(self, duration=30):
+        """Lance la simulation pendant une durée donnée."""
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            self.updateModele()
+            time.sleep(0.1)
