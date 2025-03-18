@@ -57,3 +57,6 @@ class AdaptateurRobotReel:
 
     def offset_motor_encoder(self, port, offset):
         self.robot.offset_motor_encoder(port, offset)
+
+    def servo_rotate(self, port, angle):
+        self.robot.servo_rotate(port, angle)
