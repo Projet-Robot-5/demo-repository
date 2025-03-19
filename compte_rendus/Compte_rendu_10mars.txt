@@ -1,0 +1,29 @@
+Compte Rendu de la semaine de 10 mars 
+
+
+1. Objectif
+
+Améliorer la simulation et le contrôle du robot en intégrant des stratégies de mouvement et en assurant la compatibilité entre un robot réel et simulé.
+
+2. Tâches effectuées
+
+Simulation et environnement : Mise à jour du robot et de son environnement. (2h)
+Adaptateurs : Intégration des stratégies pour traduire les ordres vers le robot réel ou simulé. (4h)
+Affichage graphique : Ajout d’un indicateur de direction des roues. (2h)
+Fonction run() : Implémentée dans l'affichage, le contrôleur et la simulation. (2h30)
+Contrôleur : Suppression de faire_carre(), appel direct à la stratégie séquentielle. (1h30, bug détecté : 3 carrés au lieu d’un seul)
+Déplacement du robot : simulation.py utilise move() de robot.py. (3h)
+Robot réel : Création de robot_reel.py et ajout des API. (4h)
+Refonte robot_simule.py : Suppression d’update_position(). (2h)
+Adaptateurs : Création de adaptateur_robot_reel.py et adaptateur_robot_simule.py. (15 min)
+Stratégies : Ajout des stratégies conditionnelle, séquentielle et en boucle. (3h30)
+
+3. Difficultés
+Conception des adaptateurs : Assurer la cohérence entre robot réel et simulé a été complexe.
+Bug d’affichage : L’affichage graphique génère 3 carrés au lieu d’un seul.
+Dépassement de temps : Certaines tâches ont pris plus de temps que prévu.
+
+4. Prochaines étapes
+Corriger le bug d'affichage.
+Finaliser les adaptateurs et tester la compatibilité.
+Optimiser les stratégies pour le robot réel.
