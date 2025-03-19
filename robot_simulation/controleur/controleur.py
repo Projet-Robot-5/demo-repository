@@ -1,10 +1,17 @@
 import time
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
 from robot_simulation.modele.environnement import Environnement
+from robot_simulation.controleur.strategie import StrategieCarre
 
 
 class Controleur:
     def __init__(self, robot, mode=None, master=None):
+        """Initialise le contrôleur pour gérer les stratégies du robot et l'environnement.
+        
+        :param robot: L'objet robot qui sera contrôlé par le contrôleur.
+        :param mode: Le mode d'affichage (par défaut, il est None).
+        :param master: La fenêtre principale tkinter (utilisée dans le mode graphique).
+        """
         
         self.robot = robot
         self.environnement = Environnement(robot=self.robot,width=500, height=500, obstacle_count=15)  # Associer l'environnement au robot
@@ -14,12 +21,17 @@ class Controleur:
         self.master = master
     
     def run(self, duration=30):
-        """Démarrer la simulation."""
+        """Démarrer la simulation.
+        :param duration: Durée de la simulation (en secondes, non utilisée ici directement).
+        """
+        # Si on est en mode graphique, on initialise l'affichage avec la classe AffichageGraphique"""
         if self.mode == "graphique" and self.master:
             from robot_simulation.affichage.affichage_graphique import AffichageGraphique
-            self.affichage = AffichageGraphique(self.master, self.robot)
+            self.affichage = AffichageGraphique(self.master, self.robot,self)
         
-        self.faire_carre()  # Commencer le mouvement en carré
+        # Utilisation de la stratégie carré au lieu de faire_carre()
+        self.strategie_courante = StrategieCarre(self.robot)
+        self.ajouter_strategie(self.strategie_courante)   # Ajout de la stratégie à la queue
         self.step()
     
     def step(self):
@@ -45,15 +57,8 @@ class Controleur:
             time.sleep(0.1)
             self.step()
     
-    def faire_carre(self, cote=120):
-        """Ajoute les stratégies pour faire un carré."""
-        for _ in range(4):
-            avancer = AvancerDroit(self.robot, cote)
-            tourner = Tourner(self.robot, 90)  # Correction pour assurer un carré parfait
-            self.ajouter_strategie(avancer)
-            self.ajouter_strategie(tourner)
+
     
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
-

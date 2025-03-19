@@ -101,3 +101,74 @@ class Reculer:
             self.actif = False
             self.robot.set_wheel_speed(0, 0)  # Arrêter le robot
         return not self.actif
+class StrategieCarre:
+    def __init__(self, robot):
+        """Fait avancer le robot en carré."""
+        self.actions = [
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90),
+            AvancerDroit(robot, 100), Tourner(robot, 90)
+        ]
+        self.index = 0
+    
+    def start(self):
+        self.actions[self.index].start()
+    
+    def step(self):
+        """Exécute l'action en cours et passe à la 
+        suivante si nécessaire."""
+        if self.index < len(self.actions):
+            self.actions[self.index].step()
+            if self.actions[self.index].stop():
+                self.index += 1
+                if self.index < len(self.actions):
+                    self.actions[self.index].start()
+    
+    def stop(self):
+        """Retourne True si toutes 
+        les actions sont terminées."""
+        return self.index >= len(self.actions)
+
+class StrategieBoucle:
+    def __init__(self, robot, n):
+        """Répète la stratégie du carré n fois."""
+        self.n = n
+        self.count = 0
+        self.carre = StrategieCarre(robot)
+    
+    def start(self):
+        self.carre.start()
+    
+    def step(self):
+        """Exécute les actions et redémarre si nécessaire."""
+        if self.count < self.n:
+            self.carre.step()
+            if self.carre.stop():
+                self.count += 1
+                if self.count < self.n:
+                    self.carre = StrategieCarre(self.carre.actions[0].robot)
+                    self.carre.start()
+    
+    def stop(self):
+        return self.count >= self.n
+class StrategieConditionnelle:
+    def __init__(self, robot):
+        """Recule si un obstacle est détecté."""
+        
+        self.robot = robot
+        self.reculer = Reculer(robot, 50)
+    
+    def start(self):
+        """Vérifie la présence d'un obstacle et recule si nécessaire."""
+        if self.robot.detect_obstacle():
+            print("Obstacle détecté ! Recul en cours...")
+            self.reculer.start()
+    
+    def step(self):
+        """Continue le recul si actif."""
+        if self.reculer.actif:
+            self.reculer.step()
+    
+    def stop(self):
+        return not self.reculer.actif

@@ -1,0 +1,35 @@
+
+# Compte Rendu de la Semaine
+
+## 1. Déplacement de la dynamique du robot de `controleur.py` vers `environnement.py`
+   - **Objectif** : Séparer la gestion de la dynamique du robot pour améliorer la lisibilité et l'organisation du code.
+   - **Détails** : 
+     - La logique qui gérait la dynamique du robot a été déplacée depuis le fichier `controleur.py` vers `environnement.py`. 
+     - Cette modification permet de mieux structurer le code en séparant la gestion de l'environnement et celle des contrôles du robot. 
+     - Quelques ajustements ont été nécessaires pour garantir la bonne interaction entre les deux fichiers.
+
+## 2. Création du fichier `robot_simule.py` dans le sous-module `adaptateur`
+   - **Objectif** : Créer un fichier pour y mettre des fonctions génériques liées à la simulation du robot.
+   - **Détails** :
+     - Un fichier `robot_simule.py` a été créé dans le sous-module `adaptateur`, où des fonctions génériques ont été ajoutées pour simuler les actions du robot.
+     - Ce travail a été fait principalement par Dana, ajusté et testé par Nada.
+     - L'objectif était de centraliser les fonctions qui ne sont pas spécifiques à une stratégie, mais qui peuvent être utilisées dans différentes situations de simulation.
+
+## 3. Ajout des fonctions simples de déplacement dans `strategie.py`
+   - **Objectif** : Implémenter des fonctions simples pour le déplacement du robot dans la simulation.
+   - **Détails** :
+     - Des fonctions ont été ajoutées dans le fichier `strategie.py` pour permettre au robot de se déplacer de manière basique (par exemple, avancer tout droit ou tourner).
+     - Le travail a été fait par Rima et Dana, puis testé par Nada. 
+     - Des tests ont permis de s'assurer que les fonctions de déplacement étaient opérationnelles et que le robot réagissait correctement aux différentes commandes.
+
+## 4. Ajout du tracé en temps réel du carré pour la simulation graphique du robot
+   - **Objectif** : Ajouter un tracé graphique du carré que le robot doit parcourir pendant la simulation.
+   - **Détails** :
+     - Un tracé en temps réel du carré a été ajouté à la simulation graphique du robot pour permettre de visualiser le parcours effectué.
+     - Cela améliore l'interactivité et l'expérience utilisateur lors de la simulation graphique, en donnant un retour visuel immédiat des déplacements du robot.
+
+## Bilan de la semaine
+   - Des progrès significatifs ont été réalisés dans l'organisation et la structure du projet. 
+   - Les tâches se sont globalement bien déroulées, bien que quelques ajustements aient été nécessaires pour certaines étapes.
+   - Le travail d'équipe a été bien coordonné, avec des ajustements et des tests collaboratifs pour garantir la qualité du code.
+
