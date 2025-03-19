@@ -53,7 +53,7 @@ def mode_graphique():
     controleur = Controleur(robot, mode="graphique", master=root)
     
     # Lancer la simulation avec la méthode `run`
-    controleur.run(duration=10)  # Démarrer la simulation pendant 10 sec
+    controleur.run()  # Démarrer la simulation pendant 10 sec
 
     # Lancer la boucle principale de Tkinter
     root.mainloop()
