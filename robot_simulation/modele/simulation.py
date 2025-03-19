@@ -36,4 +36,14 @@ class Simulation:
         # Si on utilise une interface graphique, on continue l'update
         if self.master:
             self.master.after(50, self.update_all)  # Répète l'update toutes les 50ms
+    def updateModele(self):
+        """Met à jour l'état du robotet de l'environnement, sans logique de mouvement."""
+        if self.detect_obstacle(self.robot):
+            print("CRASH ! Le robot a percuté un obstacle.")
+            return False
+        if self.detect_wall_collision():
+            print("Collision avec un mur")
+            return  False
+        print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
+        return True
 

@@ -35,7 +35,7 @@ def mode_terminal():
         
         # Logique d'interaction utilisateur en cas de collision
         while True:
-            if not simulation.updateModele():
+            if not simulation.run():
                 choix = input("CRASH ! Le robot a percuté un obstacle.\nVoulez-vous recommencer ? (o/n) : ").strip().lower()
                 if choix == 'o':
                     break
