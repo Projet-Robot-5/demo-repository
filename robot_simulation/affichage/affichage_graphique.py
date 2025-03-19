@@ -1,115 +1,106 @@
-import tkinter as tk  # Importation de la bibliothèque Tkinter pour l'interface graphique
-import time  # Pour gérer le temps d'attente entre les mises à jour
-import threading  # Pour exécuter des tâches en parallèle (affichage graphique dans un thread)
+import tkinter as tk
 import math
-from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
-from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
-from robot_simulation.controleur.strategie import StrategieCarre  # Importation de la stratégie Carre
+from robot_simulation.controleur.controleur import Controleur
+from robot_simulation.controleur.strategie import StrategieCarre
+
 class AffichageGraphique:
-    def __init__(self, master, robot, controleur):
-        """Initialise l'affichage graphique de la simulation.
-        
-        :param master: La fenêtre principale de l'application tkinter.
-        :param robot: L'objet robot qui sera contrôlé dans la simulation.
+    def __init__(self, master, adaptateur, controleur):
         """
-        self.controleur=controleur
-        self.master = master  # La fenêtre principale de l'application
-        self.robot = robot  # Le robot à contrôler
-        # Création d'un canevas pour dessiner l'environnement de simulation
+        Initialise l'affichage graphique de la simulation.
+
+        :param master: La fenêtre principale tkinter.
+        :param adaptateur: L'adaptateur du robot (simulé ou réel).
+        :param controleur: Le contrôleur de la simulation.
+        """
+        self.controleur = controleur
+        self.master = master
+        self.adaptateur = adaptateur
         self.canvas = tk.Canvas(self.master, width=500, height=500, bg="white")
         self.canvas.pack()
+        self.trajet = []  # Liste pour stocker la trajectoire du robot
+        self.running = True  # Indicateur pour contrôler la boucle d'affichage
 
-        # Stocker la trajectoire du robot pour dessiner le chemin qu'il a parcouru
-        self.trajet = []
-
-        # Créer un objet contrôleur pour gérer les mouvements du robot en mode graphique
-        
-        #self.controleur = Controleur(self.robot, mode="graphique", master=self.master)  
-        #self.controleur.faire_carre(120)  # Démarrer la simulation du robot qui suit une trajectoire carrée
-        # Remplacer l'appel à 'faire_carre' par l'ajout de la stratégie de carré
-        self.controleur.strategie_courante = StrategieCarre(self.controleur.robot)
+        # Démarrer la stratégie du carré
+        self.controleur.strategie_courante = StrategieCarre(self.adaptateur)
         self.controleur.ajouter_strategie(self.controleur.strategie_courante)
-        # Indicateur pour contrôler si le thread graphique doit continuer à s'exécuter
-        self.running = True
 
-        # Lancer la mise à jour graphique sur l'interface
+        # Lancer la mise à jour graphique
         self.update_affichage()
-
-        # Lancer un thread séparé pour mettre à jour l'affichage graphique
-        self.thread = threading.Thread(target=self.update_affichage_thread)
-        self.thread.daemon = True  # Le thread se termine automatiquement lorsque la fenêtre est fermée
-        self.thread.start()
-
-        # Gérer la fermeture de la fenêtre pour arrêter proprement le thread
-        self.master.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def update_affichage(self):
         """Met à jour l'affichage graphique du robot en traçant sa trajectoire."""
         if not self.running:
-            return  # Si le thread n'est plus en cours d'exécution, on arrête la mise à jour
+            return  # Arrêter la mise à jour si la simulation est terminée
 
-        
-        # Déplacer le robot dans la simulation
-        self.robot.move(dt=0.1)
+        # Effacer le robot précédent
+        self.canvas.delete("robot")  # Supprime uniquement le robot, pas la trajectoire
 
-        # Ajouter la nouvelle position du robot à sa trajectoire
-        x, y = self.robot.x, self.robot.y
+        # Récupérer la position actuelle du robot
+        x, y = self.adaptateur.get_position()
+        orientation = self.adaptateur.get_orientation()
 
-        # Dessiner la ligne entre la position précédente et la position actuelle du robot
+        # Ajouter la nouvelle position à la trajectoire
         if len(self.trajet) > 0:
             prev_x, prev_y = self.trajet[-1]
-            self.canvas.create_line(prev_x, prev_y, x, y, fill="black", width=2)  # Traçage du chemin du robot
+            self.canvas.create_line(prev_x, prev_y, x, y, fill="black", width=2)  # Tracer la trajectoire
 
-        # Sauvegarder la nouvelle position du robot
-        self.trajet.append((x, y))
+        self.trajet.append((x, y))  # Ajouter la nouvelle position à la trajectoire
 
-        # Effacer le robot précédent sur le canevas pour éviter de dessiner plusieurs fois la même forme
-        self.canvas.delete("robot")
-
-        # Dessiner les obstacles dans l'environnement
+        # Dessiner les obstacles
         for obs in self.controleur.environnement.obstacles:
-            self.canvas.create_oval(obs[0] - 5, obs[1] - 5, obs[0] + 5, obs[1] + 5, fill="red")  # Obstacles en rouge
+            self.canvas.create_oval(obs[0] - 5, obs[1] - 5, obs[0] + 5, obs[1] + 5, fill="red")
 
-        # Dessiner le robot en bleu à sa position actuelle
-        self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")  # Robot dessiné en bleu
-         # Calculer l'angle de chaque roue en fonction de l'orientation du robot
-        angle_rad_gauche = math.radians(self.robot.orientation - 45)  # Angle de la roue gauche
-        angle_rad_droite = math.radians(self.robot.orientation + 45)  # Angle de la roue droite
-        # Position des flèches pour les roues gauche et droite
-        x_gauche = x + 20 * math.cos(angle_rad_gauche)  # Flèche gauche
-        y_gauche = y + 20 * math.sin(angle_rad_gauche)
-        x_droite = x + 20 * math.cos(angle_rad_droite)  # Flèche droite
-        y_droite = y + 20 * math.sin(angle_rad_droite)
+        # Dessiner le robot à sa nouvelle position
+        self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="blue", tags="robot")
 
-        # Effacer les flèches précédentes
-        self.canvas.delete("flèches")
+        # Dessiner la direction du robot
+        angle_rad = math.radians(orientation)
+        dir_x = x + 20 * math.cos(angle_rad)
+        dir_y = y + 20 * math.sin(angle_rad)
+        self.canvas.create_line(x, y, dir_x, dir_y, fill="green", arrow=tk.LAST, tags="robot")
 
-        # Dessiner les flèches des roues, cette fois sur le robot
-        self.canvas.create_line(x, y, x_gauche, y_gauche, arrow=tk.LAST, fill="green", width=2, tags="flèches")  # Flèche roue gauche
-        self.canvas.create_line(x, y, x_droite, y_droite, arrow=tk.LAST, fill="red", width=2, tags="flèches")  # Flèche roue droite
+        # Dessiner les roues du robot avec rotation et flèches
+        wheel_distance = 15  # Distance entre les roues
+        wheel_size = 5  # Taille des roues
+        left_wheel_x = x - wheel_distance * math.sin(angle_rad)
+        left_wheel_y = y + wheel_distance * math.cos(angle_rad)
+        right_wheel_x = x + wheel_distance * math.sin(angle_rad)
+        right_wheel_y = y - wheel_distance * math.cos(angle_rad)
+
+        # Calculer l'angle des roues en fonction de l'orientation du robot
+        wheel_angle = orientation  # Utiliser l'orientation du robot pour les roues
+
+        # Dessiner les roues avec rotation et flèches
+        self.draw_rotated_wheel_with_arrow(left_wheel_x, left_wheel_y, wheel_size, wheel_angle)
+        self.draw_rotated_wheel_with_arrow(right_wheel_x, right_wheel_y, wheel_size, wheel_angle)
+
         # Vérifier si toutes les stratégies sont terminées
         if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
-            self.running = False  # Arrêter l'exécution du thread si toutes les stratégies sont terminées
-            # Fermer la fenêtre après un délai d'une seconde
-            self.master.after(1000, self.master.destroy)
+            self.running = False  # Arrêter la simulation si toutes les stratégies sont terminées
+            self.master.after(1000, self.master.destroy)  # Fermer la fenêtre après un délai
             return
 
-        # Continuer la mise à jour graphique après 50 millisecondes
+        # Continuer la mise à jour après 50ms
         self.master.after(50, self.update_affichage)
 
-    def update_affichage_thread(self):
-        """Mise à jour graphique dans un thread séparé."""
-        while self.running:
-            time.sleep(0.05)  # Réduit la charge CPU et ne bloque pas l'interface graphique
+    def draw_rotated_wheel_with_arrow(self, x, y, size, angle):
+        """Dessine une roue avec un angle de rotation donné et une flèche indiquant la direction."""
+        angle_rad = math.radians(angle)
+        cos, sin = math.cos(angle_rad), math.sin(angle_rad)
+
+        # Calculer les coins de la roue tournée
+        top_left = (x - size * cos - size * sin, y - size * sin + size * cos)
+        bottom_right = (x + size * cos - size * sin, y + size * sin + size * cos)
+
+        self.canvas.create_oval(top_left[0], top_left[1], bottom_right[0], bottom_right[1], fill="gray", tags="robot")
+
+        # Dessiner une flèche indiquant la direction de la roue
+        arrow_length = 10
+        arrow_x = x + arrow_length * cos
+        arrow_y = y + arrow_length * sin
+        self.canvas.create_line(x, y, arrow_x, arrow_y, fill="red", arrow=tk.LAST, tags="robot")
 
     def on_close(self):
-        """Ferme la fenêtre et arrête proprement le thread."""
-        self.running = False  # Arrêter le thread de mise à jour
-        self.thread.join(timeout=1)  # Attendre que le thread se termine proprement
-        self.master.destroy()  # Fermer la fenêtre tkinter
-    def run(self):
-        """Lance la mise à jour continue de l'affichage."""
-        while self.running:
-            self.update_affichage()
-            time.sleep(0.05)
-
+        """Ferme la fenêtre et arrête proprement l'exécution."""
+        self.running = False
+        self.master.destroy()
