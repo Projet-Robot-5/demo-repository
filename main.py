@@ -10,11 +10,11 @@ from robot_simulation.modele.robot import Robot
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.modele.simulation import Simulation
 
-# Vérifier si affichage_graphique.py existe
+# Vérifie dynamiquement si le module graphique est disponible
 affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage.affichage_graphique")
 GUI_AVAILABLE = affichage_graphique_spec is not None
 
-# Ajout des fonctions run_simulation, run_controleur et run_affichage qui seront exécutées en parallèle dans les threads.
+# --- THREADS DE TRAVAIL ---
 
 def run_simulation(simulation):
     """Thread pour mettre à jour le modèle (robot + environnement)"""
@@ -37,14 +37,7 @@ def run_affichage(simulation):
     gui = AffichageGraphique(root, simulation)
     root.mainloop()
 
-
-def main():
-    """Choix du mode : terminal ou GUI"""
-    if "--no-gui" in sys.argv or not GUI_AVAILABLE:
-        mode_terminal()  # Si le mode graphique n'est pas disponible ou si l'argument --no-gui est passé
-    else:
-        mode_graphique()  # Sinon, passe au mode graphique
-
+# --- MODES D’EXÉCUTION ---
 
 def mode_terminal():
     """Mode terminal sans interface graphique."""
@@ -54,34 +47,39 @@ def mode_terminal():
         robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
         simulation.robot = robot
         controleur = Controleur(robot, mode="terminal")
-        
-        controleur.run(duration=10)  # Lance la simulation pendant 10 sec
-        
-        # Logique d'interaction utilisateur en cas de collision
-        while True:
-            if not simulation.updateModele():
-                choix = input("CRASH ! Le robot a percuté un obstacle.\nVoulez-vous recommencer ? (o/n) : ").strip().lower()
-                if choix == 'o':
-                    break
-                else:
-                    return  # Quitter complètement le mode terminal
 
+        controleur.run(duration=10)  # Simulation pendant 10 secondes
+
+        if not simulation.updateModele():
+            choix = input("CRASH ! Le robot a percuté un obstacle.\nVoulez-vous recommencer ? (o/n) : ").strip().lower()
+            if choix != 'o':
+                break  # Quitte le mode terminal
 
 def mode_graphique():
-    """Mode graphique avec Tkinter."""
-    root = tk.Tk()
-    root.title("Simulation de Robot")
-
-    # Initialisation du robot et du contrôleur
+    """Mode graphique avec threads pour chaque composant."""
+    # Initialisation
+    simulation = Simulation()
     robot = Robot(x=250, y=250)
-    controleur = Controleur(robot, mode="graphique", master=root)
-    
-    # Lancer la simulation avec la méthode `run`
-    controleur.run()  # Démarrer la simulation pendant 10 sec
+    simulation.robot = robot
+    controleur = Controleur(robot, mode="graphique", simulation=simulation)
 
-    # Lancer la boucle principale de Tkinter
-    root.mainloop()
+    # Lancer les 3 threads en parallèle
+    threading.Thread(target=run_simulation, args=(simulation,), daemon=True).start()
+    threading.Thread(target=run_controleur, args=(controleur,), daemon=True).start()
+    threading.Thread(target=run_affichage, args=(simulation,), daemon=True).start()
 
+    # Garder le programme actif
+    while True:
+        time.sleep(1)
+
+# --- POINT D’ENTRÉE PRINCIPAL ---
+
+def main():
+    """Choix du mode : terminal ou GUI"""
+    if "--no-gui" in sys.argv or not GUI_AVAILABLE:
+        mode_terminal()
+    else:
+        mode_graphique()
 
 if __name__ == "__main__":
     main()
