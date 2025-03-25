@@ -3,11 +3,9 @@ import math
 import random
 
 class Environnement:
-    def __init__(self, robot, width=500, height=500, obstacle_count=15):
+    def __init__(self, width=500, height=500, obstacle_count=15):
         """
         Initialise l'environnement dans lequel le robot évolue.
-        
-        :param robot: Le robot à placer dans l'environnement.
         :param width: Largeur de l'environnement (par défaut 500).
         :param height: Hauteur de l'environnement (par défaut 500).
         :param obstacle_count: Nombre d'obstacles à générer (par défaut 15).
@@ -15,7 +13,6 @@ class Environnement:
         self.width = width  # Largeur de l'environnement
         self.height = height  # Hauteur de l'environnement
         self.obstacles = self.generate_obstacles(obstacle_count)  # Génère les obstacles
-        self.robot = robot  # Le robot qui interagira avec l'environnement
 
     def generate_obstacles(self, count):
         """
@@ -24,29 +21,23 @@ class Environnement:
         :param count: Nombre d'obstacles à générer.
         :return: Liste des positions des obstacles sous forme de tuples (x, y).
         """
-        obstacles = []  # Liste pour stocker les positions des obstacles
-        for _ in range(count):
-            x = random.randint(50, self.width - 50)  # Position x aléatoire dans l'environnement
-            y = random.randint(50, self.height - 50)  # Position y aléatoire dans l'environnement
-            obstacles.append((x, y))  # Ajouter l'obstacle à la liste
-        return obstacles  # Retourne la liste des obstacles générés
+        margin = 50  # Marge pour éviter les bords
+        return [
+            (random.randint(margin, self.width - margin),
+             random.randint(margin, self.height - margin))
+            for _ in range(count)
+        ]
     
-    def mettre_a_jour(self, dt=1):
+    def detect_collision(self, robot):
+        """Détecte les collisions entre le robot et les obstacles en utilisant la distance.
+            Args:robot (Robot): Instance du robot à vérifier
+            Returns:bool: True si collision détectée, False sinon
         """
-        Met à jour la position et l'orientation du robot à chaque itération de simulation.
+        robot_x, robot_y = robot.get_position()
+        robot_radius = robot.taille
         
-        :param dt: Temps écoulé (par défaut 1 unité de temps).
-        """
-        self.robot.move(dt)  # Déplace le robot en fonction du temps écoulé
-    
-    def set_vitesse_roues(self, vitesse_gauche, vitesse_droite):
-        """
-        Modifie la vitesse des roues du robot pour le contrôle du mouvement.
-        
-        :param vitesse_gauche: Vitesse de la roue gauche du robot.
-        :param vitesse_droite: Vitesse de la roue droite du robot.
-        """
-        self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)  # Modifie la vitesse des roues
-
-
-    
+        for (obs_x, obs_y) in self.obstacles:
+            distance = math.sqrt((robot_x - obs_x)**2 + (robot_y - obs_y)**2)
+            if distance < robot_radius:
+                return True
+        return False
