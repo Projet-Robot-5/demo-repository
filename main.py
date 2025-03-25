@@ -1,3 +1,4 @@
+import threading
 import sys
 import time
 import tkinter as tk
@@ -12,6 +13,29 @@ from robot_simulation.modele.simulation import Simulation
 # Vérifier si affichage_graphique.py existe
 affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage.affichage_graphique")
 GUI_AVAILABLE = affichage_graphique_spec is not None
+
+# Ajout des fonctions run_simulation, run_controleur et run_affichage qui seront exécutées en parallèle dans les threads.
+
+def run_simulation(simulation):
+    """Thread pour mettre à jour le modèle (robot + environnement)"""
+    while True:
+        simulation.update_modele()
+        time.sleep(0.01)  # 10 ms
+
+
+def run_controleur(controleur):
+    """Thread pour mettre à jour le contrôleur (stratégie du robot)"""
+    while True:
+        controleur.update()
+        time.sleep(0.01)
+
+
+def run_affichage(simulation):
+    """Thread pour lancer l'interface graphique"""
+    root = tk.Tk()
+    root.title("Simulation de Robot")
+    gui = AffichageGraphique(root, simulation)
+    root.mainloop()
 
 
 def main():
