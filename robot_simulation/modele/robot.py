@@ -9,21 +9,25 @@ class Robot:
         self.vitesse_droite = vitesse_droite  # Vitesse de la roue droite
         self.wheel_distance = 30  # Distance entre les roues
         self.taille = taille  # Ajout de la taille du robot
-
+        self.is_moving = False  # État de mouvement
 
     def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
         """Définit les vitesses des roues."""
         self.vitesse_gauche = vitesse_gauche
         self.vitesse_droite = vitesse_droite
+        self.is_moving = (vitesse_gauche != 0 or vitesse_droite != 0)
 
     def move(self, dt=1):
         """Met à jour la position du robot en fonction des vitesses des roues."""
-        vitesse_moyenne = (self.vitesse_gauche + self.vitesse_droite) / 2
+        if not self.is_moving:
+            return
+
+        # Calcul du déplacement linéaire
+        vitesse_lineaire = (self.vitesse_gauche + self.vitesse_droite) / 2
         angle_rad = math.radians(self.orientation)
 
-        # Déplacement basé sur la vitesse moyenne et l'orientation
-        self.x += vitesse_moyenne * math.cos(angle_rad) * dt
-        self.y += vitesse_moyenne * math.sin(angle_rad) * dt
+        self.x += vitesse_lineaire * math.cos(angle_rad) * dt
+        self.y += vitesse_lineaire * math.sin(angle_rad) * dt
 
         # Ajout de l'angle de rotation
         if self.vitesse_gauche != self.vitesse_droite:  # Rotation uniquement si vitesses différentes
@@ -31,3 +35,17 @@ class Robot:
             delta_orientation = math.degrees(rotation_vitesse * dt) 
             self.orientation += delta_orientation# Conversion en degrés
             self.orientation %= 360
+
+    def stop(self):
+        """Arrête immédiatement le robot."""
+        self.vitesse_gauche = 0
+        self.vitesse_droite = 0
+        self.is_moving = False
+
+    def get_position(self):
+        """Retourne la position actuelle (x,y)."""
+        return (self.x, self.y)
+
+    def get_orientation(self):
+        """Retourne l'orientation actuelle en degrés."""
+        return self.orientation
