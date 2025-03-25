@@ -13,7 +13,7 @@ class Controleur:
         :param master: La fenêtre principale tkinter (pour le mode graphique).
         """
         self.adaptateur = AdaptateurRobotSimule(robot)  # Instanciation de l'adaptateur
-        self.environnement = Environnement(robot=self.adaptateur, width=500, height=500, obstacle_count=15)
+        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
         self.mode = mode
         self.queue_strategies = []
         self.strategie_courante = None
