@@ -28,9 +28,6 @@ class Simulation:
             self.robot.stop()
             return False
         
-        # Mettre à jour l'environnement si nécessaire
-        self.environnement.update(self.robot)
-        
         return True
 
     def run(self, duration=30):
