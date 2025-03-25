@@ -44,10 +44,7 @@ def mode_terminal():
     print("Mode terminal activé (sans interface graphique).")
     while True:
         simulation = Simulation()
-        robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
-        simulation.robot = robot
-        controleur = Controleur(robot, mode="terminal")
-
+        controleur = Controleur(simulation.robot, mode="terminal")
         controleur.run(duration=10)  # Simulation pendant 10 secondes
 
         if not simulation.updateModele():
