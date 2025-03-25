@@ -42,7 +42,7 @@ def mode_terminal():
 
 def mode_graphique():
     simulation = Simulation()
-    controleur = Controleur(simulation.robot, mode="graphique", simulation=simulation)
+    controleur = Controleur(simulation.robot, mode="graphique")
 
     threading.Thread(target=run_simulation, args=(simulation,), daemon=True).start()
     threading.Thread(target=run_controleur, args=(controleur,), daemon=True).start()
