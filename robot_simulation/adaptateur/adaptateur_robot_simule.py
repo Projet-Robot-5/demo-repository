@@ -1,3 +1,6 @@
+import math
+
+
 class AdaptateurRobotSimule:
     def __init__(self, robot):
         """Initialise l'adaptateur pour le robot simulé."""
@@ -6,20 +9,54 @@ class AdaptateurRobotSimule:
         self.angle_tourne = 0  # Angle total tourné
 
     def avancer(self, distance):
+        """
+        Fait avancer le robot simulé d'une certaine distance.
+        
+        :param distance: La distance à parcourir.
+        """
+        # Calculer la vitesse en fonction de la distance
         vitesse = distance / 10  # Exemple de conversion
         self.robot.set_wheel_speed(vitesse, vitesse)
+        
+        # Mettre à jour la position du robot
+        angle_rad = math.radians(self.robot.orientation)
+        self.robot.x += vitesse * math.cos(angle_rad)
+        self.robot.y += vitesse * math.sin(angle_rad)
+        
+        # Mettre à jour la distance parcourue
         self.distance_parcourue += distance
 
     def tourner(self, angle):
+        """
+        Fait tourner le robot simulé d'un certain angle.
+        
+        :param angle: L'angle à tourner (en degrés).
+        """
         if angle > 0:
             self.robot.set_wheel_speed(-4, 4)  # Rotation à gauche
         else:
             self.robot.set_wheel_speed(4, -4)  # Rotation à droite
+        
+        # Mettre à jour l'orientation du robot
+        self.robot.orientation = (self.robot.orientation + angle) % 360
         self.angle_tourne += angle
-    
+
     def reculer(self, distance):
-        vitesse = distance / 10
+        """
+        Fait reculer le robot simulé d'une certaine distance.
+        
+        :param distance: La distance à reculer.
+        """
+        # Calculer la vitesse en fonction de la distance
+        vitesse = distance / 10  # Exemple de conversion
         self.robot.set_wheel_speed(-vitesse, -vitesse)
+        
+        # Mettre à jour la position du robot
+        angle_rad = math.radians(self.robot.orientation)
+        self.robot.x -= vitesse * math.cos(angle_rad)
+        self.robot.y -= vitesse * math.sin(angle_rad)
+        
+        # Mettre à jour la distance parcourue
         self.distance_parcourue += distance
 
     def stop(self):

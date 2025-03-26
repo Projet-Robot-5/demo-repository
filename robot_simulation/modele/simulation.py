@@ -8,32 +8,34 @@ class Simulation:
         """Initialise la simulation, gère l'environnement et le robot"""
         self.environnement = Environnement(width=500, height=500, obstacle_count=15)
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
-        self.master = master
 
-    def update_all(self):
-        """Met à jour l'état du robot et de l'environnement à chaque itération"""
-        self.robot.move(dt=0.1)  # Mise à jour de la position du robot
-        self.environnement.detect_obstacle(self.robot)  # Vérifie les collisions
-
-        # Détecte si le robot percute un mur
-        if self.robot.x < 20 or self.robot.x > self.environnement.width - 20 or \
-           self.robot.y < 20 or self.robot.y > self.environnement.height - 20:
-            print("Collision avec un mur ! Le robot s'arrête.")
-            return
-
-        # Afficher la position du robot en mode console (utile pour le mode terminal)
-        print(f"Position du robot: ({self.robot.x:.2f}, {self.robot.y:.2f})")
-
+    def updateModele(self):
+        """
+        Met à jour le modèle de simulation à chaque tick:
+        1. Fait bouger le robot
+        2. Détecte les collisions
+        3. Met à jour l'environnement si nécessaire
+        Retourne False si collision détectée, True sinon
+        """
+        # Faire bouger le robot
+        self.robot.move()
+        
+        # Détecter les collisions
+        collision = self.environnement.detect_collision(self.robot)
+        
+        if collision:
+            # Gérer la collision (arrêter le robot, etc.)
+            self.robot.stop()
+            return False
+        
         return True
+
     def run(self, duration=30):
         """Lance la simulation pendant une durée donnée."""
         start_time = time.time()
         while time.time() - start_time < duration:
-            self.updateModele()
-            time.sleep(0.1)
-
-
-        # Si on utilise une interface graphique, on continue l'update
-        if self.master:
-            self.master.after(50, self.update_all)  # Répète l'update toutes les 50ms
+           if not self.updateModele():
+                print("Collision détectée !")
+                break
+                time.sleep(0.1)
 
