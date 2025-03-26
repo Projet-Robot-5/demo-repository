@@ -7,7 +7,7 @@ import importlib.util
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.modele.simulation import Simulation
-
+# Vérifie dynamiquement si le module graphique est disponible
 affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage.affichage_graphique")
 GUI_AVAILABLE = affichage_graphique_spec is not None
 
