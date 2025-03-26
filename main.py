@@ -13,7 +13,7 @@ GUI_AVAILABLE = affichage_graphique_spec is not None
 
 def run_simulation(simulation):
     while True:
-        simulation.update_modele()
+        simulation.updateModele()
         time.sleep(0.01)
 
 def run_controleur(controleur):
