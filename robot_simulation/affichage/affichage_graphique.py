@@ -2,75 +2,101 @@ import tkinter as tk
 import math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.controleur.strategie import StrategieCarre
 
 class AffichageGraphique:
     def __init__(self, master, adaptateur, controleur):
-        self.controleur = controleur
+        """
+        Initialise l'affichage graphique 3D de la simulation.
+        Args:
+            master: Fenêtre Tkinter parente
+            adaptateur: Adaptateur du robot pour récupérer les positions
+            controleur: Contrôleur pour accéder aux stratégies et environnement
+        """
         self.master = master
         self.adaptateur = adaptateur
-        
-        # Création de la figure 3D
-        self.fig = plt.figure()
+        self.controleur = controleur
+        self.trajet = []  # Stocke les positions (x, y, z)
+        self.running = True
+
+        # Configuration de la figure matplotlib
+        self.fig = plt.figure(figsize=(8, 6))
         self.ax = self.fig.add_subplot(111, projection='3d')
-        self.trajet = []  # Liste pour stocker la trajectoire du robot
-        self.running = True  # Indicateur pour contrôler la boucle d'affichage
+        self.ax.set_xlabel('X')
+        self.ax.set_ylabel('Y')
+        self.ax.set_zlabel('Z')
+        self.ax.set_xlim(0, 500)
+        self.ax.set_ylim(0, 500)
+        self.ax.set_zlim(0, 50)
 
-        # Démarrer la stratégie du carré
-        self.controleur.strategie_courante = StrategieCarre(self.adaptateur)
-        self.controleur.ajouter_strategie(self.controleur.strategie_courante)
+        # Intégration dans Tkinter
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        # Lancer la mise à jour graphique
+        # Bouton de fermeture
+        btn_quit = tk.Button(master, text="Quitter", command=self.on_close)
+        btn_quit.pack(side=tk.BOTTOM)
+
+        # Démarrer les mises à jour
         self.update_affichage()
 
     def update_affichage(self):
+        """Met à jour l'affichage 3D à intervalle régulier."""
         if not self.running:
             return
 
-        self.ax.clear()  # Efface le graphique précédent
-        self.ax.set_xlim(-100, 100)
-        self.ax.set_ylim(-100, 100)
-        self.ax.set_zlim(0, 50)  # Ajout d'une dimension Z
-        
-        # Récupérer la position actuelle du robot
-        x, y = self.adaptateur.get_position()
-        z = 10  # Position en hauteur (ex: constante ou avec une variation)
-        orientation = self.adaptateur.get_orientation()
-        
-        # Ajouter la nouvelle position à la trajectoire
-        if len(self.trajet) > 0:
-            prev_x, prev_y, prev_z = self.trajet[-1]
-            self.ax.plot([prev_x, x], [prev_y, y], [prev_z, z], 'black')
+        try:
+            # Récupération des données
+            x, y = self.adaptateur.get_position()
+            z = 10  # Hauteur fixe pour la visualisation
+            orientation = self.adaptateur.get_orientation()
+            
+            # Mise à jour de la trajectoire
+            self.trajet.append((x, y, z))
+            
+            # Nettoyage et réaffichage
+            self.ax.clear()
+            self.ax.set_xlim(0, 500)
+            self.ax.set_ylim(0, 500)
+            self.ax.set_zlim(0, 50)
 
-        self.trajet.append((x, y, z))
+            # Affichage de la trajectoire
+            if len(self.trajet) > 1:
+                xs, ys, zs = zip(*self.trajet)
+                self.ax.plot(xs, ys, zs, 'b-', linewidth=1)
 
-        # Dessiner les obstacles
-        for obs in self.controleur.environnement.obstacles:
-            self.ax.scatter(obs[0], obs[1], 5, c='red', marker='o')
+            # Affichage des obstacles (si existants)
+            if hasattr(self.controleur, 'environnement') and hasattr(self.controleur.environnement, 'obstacles'):
+                for obs in self.controleur.environnement.obstacles:
+                    if len(obs) >= 2:  # Vérifie qu'on a bien x et y
+                        self.ax.scatter(obs[0], obs[1], 5, c='r', marker='o')
 
-        # Dessiner le robot
-        self.ax.scatter(x, y, z, c='blue', marker='o')
-        
-        # Dessiner la direction du robot
-        angle_rad = math.radians(orientation)
-        dir_x = x + 10 * math.cos(angle_rad)
-        dir_y = y + 10 * math.sin(angle_rad)
-        dir_z = z  # Conserver la même hauteur
-        self.ax.plot([x, dir_x], [y, dir_y], [z, dir_z], 'green')
+            # Affichage du robot
+            self.ax.scatter(x, y, z, c='blue', s=100, marker='o')
+            
+            # Affichage de l'orientation
+            angle_rad = math.radians(orientation)
+            dx = 20 * math.cos(angle_rad)
+            dy = 20 * math.sin(angle_rad)
+            self.ax.quiver(x, y, z, dx, dy, 0, color='green', arrow_length_ratio=0.1)
 
-        # Rafraîchir l'affichage
-        plt.pause(0.05)
+            # Rafraîchissement
+            self.canvas.draw()
 
-        if not self.controleur.queue_strategies and not self.controleur.strategie_courante:
+            # Planification de la prochaine mise à jour
+            if self.running:
+                self.master.after(50, self.update_affichage)
+
+        except Exception as e:
+            print(f"Erreur lors de la mise à jour: {e}")
             self.running = False
-            plt.close()
-            return
-
-        self.master.after(50, self.update_affichage)
 
     def on_close(self):
+        """Gère la fermeture propre de l'interface."""
         self.running = False
-        plt.close()
+        plt.close('all')
         self.master.destroy()
