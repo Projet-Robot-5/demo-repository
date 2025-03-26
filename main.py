@@ -8,6 +8,7 @@ from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotS
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.controleur.strategie import StrategieCarre
+from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
 from robot_simulation.modele.simulation import Simulation
 def mode_terminal():
@@ -37,7 +38,7 @@ def mode_graphique():
     
     # Configuration de la stratégie
     controleur.set_strategie(StrategieCarre(adaptateur))
-    
+    controleur.environnement=Environnement()
     # Thread pour le contrôleur
     def run_controleur():
         while getattr(controleur, 'running', True):
