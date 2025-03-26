@@ -57,11 +57,6 @@ class Controleur:
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 2156eaac53fe2ddd9a8aacac68c6dfdf84d07033
     def stop(self):
         """Arrête la simulation proprement."""
         self.running = False
