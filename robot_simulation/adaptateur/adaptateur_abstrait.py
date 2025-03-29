@@ -40,7 +40,7 @@ class AdaptateurAbstrait(ABC):
     def get_distance_parcourue(self):
         """Retourne la distance totale parcourue."""
         pass
-     @abstractmethod
+    @abstractmethod
     def get_angle_tourne(self):
         """Retourne l'angle total tourné."""
         pass
