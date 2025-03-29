@@ -8,4 +8,12 @@ class AdaptateurAbstrait(ABC):
         self.distance_parcourue = 0
         self.angle_tourne = 0
 
-    
+    @abstractmethod
+    def avancer(self, distance):
+        """Fait avancer le robot d'une certaine distance."""
+        pass
+
+    @abstractmethod
+    def tourner(self, angle):
+        """Fait tourner le robot d'un certain angle."""
+        pass 
