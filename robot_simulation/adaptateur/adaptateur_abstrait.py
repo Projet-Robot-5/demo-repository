@@ -54,3 +54,17 @@ class AdaptateurAbstrait(ABC):
     def set_led(self, led, r, g, b):
         """Active ou désactive les LEDs du robot avec une couleur spécifiée."""
         pass 
+    @abstractmethod
+    def set_motor_dps(self, port, dps):
+        """Régle la vitesse du moteur à une valeur donnée."""
+        pass
+
+    @abstractmethod
+    def offset_motor_encoder(self, port, offset):
+        """Effectue un offset sur l'encodeur du moteur."""
+        pass
+
+    @abstractmethod
+    def servo_rotate(self, port, angle):
+        """Fait tourner un servo à un angle donné."""
+        pass
