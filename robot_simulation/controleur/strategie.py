@@ -173,3 +173,51 @@ class StrategieConditionnelle:
     
     def stop(self):
         return not self.reculer.actif
+# robot_simulation/controleur/strategie.py
+
+class StrategieBoucle:
+    def __init__(self, actions, nb_iterations=None):
+        """
+        Initialise la stratégie de boucle.
+        
+        :param actions: Liste des actions à exécuter dans la boucle
+        :param nb_iterations: Nombre d'itérations avant d'arrêter (None pour une boucle infinie)
+        """
+        self.actions = actions
+        self.nb_iterations = nb_iterations
+        self.iteration = 0
+
+    def start(self):
+        """
+        Démarre l'exécution des actions en boucle.
+        """
+        print("Démarrage de la boucle.")
+        self.iteration = 0
+
+    def step(self):
+        """
+        Exécute une étape de la boucle.
+        Si nb_iterations est défini, cela arrêtera après le nombre spécifié.
+        """
+        if self.nb_iterations is not None and self.iteration >= self.nb_iterations:
+            print("Fin des itérations.")
+            return
+        
+        # Répéter les actions à chaque itération
+        for action in self.actions:
+            action.start()  # Lance chaque action de la liste
+            
+            # Une fois l'action terminée, on passe à la suivante
+            action.step()
+            action.stop()
+
+        # Incrémenter l'itération
+        self.iteration += 1
+
+    def stop(self):
+        """
+        Arrête la boucle si nécessaire.
+        """
+        print("Arrêt de la boucle.")
+        for action in self.actions:
+            action.stop()
