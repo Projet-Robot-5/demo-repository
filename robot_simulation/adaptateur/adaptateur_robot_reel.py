@@ -1,9 +1,12 @@
-class AdaptateurRobotReel:
+from robot_simulation.adaptateur.adaptateur_abstrait import AdaptateurAbstrait
+
+
+
+class AdaptateurRobotReel(AdaptateurAbstrait):
     def __init__(self, robot):
-        self.robot = robot
-        self.distance_parcourue = 0  # Distance totale parcourue
-        self.angle_tourne = 0  # Angle total tourné
-    
+        super().__init__(robot)
+
+        
     def avancer(self, distance):
         vitesse = distance / 10
         self.robot.set_motor_dps("MOTOR_LEFT", vitesse)
