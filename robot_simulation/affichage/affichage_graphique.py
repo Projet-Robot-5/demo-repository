@@ -4,7 +4,7 @@ import threading  # Pour exécuter des tâches en parallèle (affichage graphiqu
 import math
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
-from robot_simulation.controleur.strategie import StrategieCarre  # Importation de la stratégie Carre
+from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
 class AffichageGraphique:
     def __init__(self, master, adaptateur, controleur):
         self.master = master
