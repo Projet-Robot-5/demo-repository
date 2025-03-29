@@ -17,3 +17,12 @@ class AdaptateurAbstrait(ABC):
     def tourner(self, angle):
         """Fait tourner le robot d'un certain angle."""
         pass 
+    @abstractmethod
+    def reculer(self, distance):
+        """Fait reculer le robot d'une certaine distance."""
+        pass
+
+    @abstractmethod
+    def stop(self):
+        """Arrête le robot."""
+        pass
