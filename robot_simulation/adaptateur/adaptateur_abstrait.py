@@ -40,3 +40,17 @@ class AdaptateurAbstrait(ABC):
     def get_distance_parcourue(self):
         """Retourne la distance totale parcourue."""
         pass
+     @abstractmethod
+    def get_angle_tourne(self):
+        """Retourne l'angle total tourné."""
+        pass
+
+    @abstractmethod
+    def detect_obstacle(self):
+        """Détecte un obstacle et retourne True si détecté, False sinon."""
+        pass
+
+    @abstractmethod
+    def set_led(self, led, r, g, b):
+        """Active ou désactive les LEDs du robot avec une couleur spécifiée."""
+        pass 
