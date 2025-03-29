@@ -1,12 +1,10 @@
 import math
+from robot_simulation.adaptateur.adaptateur_abstrait import AdaptateurAbstrait
 
 
-class AdaptateurRobotSimule:
+class AdaptateurRobotSimule(AdaptateurAbstrait):
     def __init__(self, robot):
-        """Initialise l'adaptateur pour le robot simulé."""
-        self.robot = robot
-        self.distance_parcourue = 0  # Distance totale parcourue
-        self.angle_tourne = 0  # Angle total tourné
+        super().__init__(robot)
 
     def avancer(self, distance):
         """
