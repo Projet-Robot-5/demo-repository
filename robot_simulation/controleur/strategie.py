@@ -118,55 +118,41 @@ class Reculer:
             self.adaptateur.stop()  # Arrêter le robot
         return not self.actif
     
-class StrategieCarre:
-    def __init__(self, adaptateur):
-        """Fait avancer le robot en carré."""
-        self.actions = [
-            AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-            AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-            AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-            AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
-        ]
-        self.index = 0
     
+class StrategieSequencielle:
+    def __init__(self, actions):
+        """
+        Stratégie séquentielle qui exécute une liste d'actions dans l'ordre donné.
+        
+        :param actions: Liste d'actions (objets de type stratégie comme AvancerDroit, Tourner, etc.)
+        """
+        self.actions = actions  # Liste des actions à exécuter
+        self.index = 0  # Indice de l'action courante
+
     def start(self):
-        self.actions[self.index].start()
-    
+        """Démarre la première action de la séquence."""
+        if self.actions:
+            print("Démarrage de la stratégie séquentielle.")
+            self.actions[self.index].start()
+
     def step(self):
         """Exécute l'action en cours et passe à la suivante si nécessaire."""
         if self.index < len(self.actions):
             self.actions[self.index].step()
             if self.actions[self.index].stop():
+                print(f"Action {self.index + 1} terminée.")
                 self.index += 1
                 if self.index < len(self.actions):
+                    print(f"Passage à l'action {self.index + 1}.")
                     self.actions[self.index].start()
-    
+
     def stop(self):
-        """Retourne True si toutes les actions sont terminées."""
-        return self.index >= len(self.actions)
-    
-class StrategieBoucle:
-    def __init__(self, adaptateur, n):
-        """Répète la stratégie du carré n fois."""
-        self.n = n
-        self.count = 0
-        self.carre = StrategieCarre(adaptateur)
-    
-    def start(self):
-        self.carre.start()
-    
-    def step(self):
-        """Exécute les actions et redémarre si nécessaire."""
-        if self.count < self.n:
-            self.carre.step()
-            if self.carre.stop():
-                self.count += 1
-                if self.count < self.n:
-                    self.carre = StrategieCarre(self.carre.actions[0].adaptateur)
-                    self.carre.start()
-    
-    def stop(self):
-        return self.count >= self.n
+        """Retourne True si toutes les actions de la séquence sont terminées."""
+        if self.index >= len(self.actions):
+            print("Stratégie séquentielle terminée.")
+            return True
+        return False  
+
     
 class StrategieConditionnelle:
     def __init__(self, adaptateur):
