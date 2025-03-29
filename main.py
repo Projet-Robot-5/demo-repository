@@ -3,11 +3,12 @@ import sys
 import time
 import tkinter as tk
 import importlib.util
-
+# robot_simulation/controleur/controleur.py
+from robot_simulation.controleur.strategie import AvancerDroit, Tourner, Reculer 
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.controleur.controleur import Controleur
-from robot_simulation.controleur.strategie import StrategieCarre
+from robot_simulation.controleur.strategie import StrategieSequencielle
 from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
 from robot_simulation.modele.simulation import Simulation
@@ -16,9 +17,15 @@ def mode_terminal():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
-    
+    # Création d'une séquence pour un carré
+    actions = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    ]
     # Configuration de la stratégie
-    controleur.set_strategie(StrategieCarre(adaptateur))
+    controleur.set_strategie(StrategieSequencielle(actions))
     
     try:
         while True:
@@ -35,9 +42,14 @@ def mode_graphique():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
-    
+    # Création d'une séquence pour un carré
+    actions = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90) ]
     # Configuration de la stratégie
-    controleur.set_strategie(StrategieCarre(adaptateur))
+    controleur.set_strategie(StrategieSequencielle(actions))
     controleur.environnement=Environnement()
     # Thread pour le contrôleur
     def run_controleur():
