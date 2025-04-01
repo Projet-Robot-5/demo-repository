@@ -76,6 +76,12 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
     def get_angle_tourne(self):
         """Retourne l'angle total tourné."""
         return self.angle_tourne
+    
+    def get_distance_devant(self, obstacles):
+        """
+        Retourne la distance à l'obstacle devant en appelant le robot simulé.
+        """
+        return self.robot.get_distance_devant(obstacles)
 
     def detect_obstacle(self):
         return self.robot.detect_obstacle()
