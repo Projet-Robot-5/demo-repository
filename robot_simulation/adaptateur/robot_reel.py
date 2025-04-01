@@ -18,6 +18,8 @@ class RobotReel:
 
     def set_motor_dps(self, moteur_gauche_dps, moteur_droite_dps):
         """Contrôle les moteurs en définissant leur vitesse en degrés par seconde (DPS)."""
+        self.vitesse_gauche = moteur_gauche_dps  # Enregistre la vitesse gauche pour le suivi de distance
+        self.vitesse_droite = moteur_droite_dps  # Enregistre la vitesse droite pour le suivi de distance
         print(f"Commande moteur - Gauche: {moteur_gauche_dps} DPS, Droite: {moteur_droite_dps} DPS")
         # Ici, on enverrait la commande aux moteurs via une bibliothèque matérielle
 
