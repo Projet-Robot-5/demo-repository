@@ -95,3 +95,29 @@ class RobotSimule:
         - L'angle d'orientation du robot
         """
         print(f"Position du robot : ({self.x}, {self.y}), Orientation : {self.angle_parcouru}°")
+
+    
+    def get_distance_devant(self, obstacles):
+        """
+        Calcule la distance entre le robot et l'obstacle le plus proche dans sa direction.
+        :param obstacles: liste de tuples (x, y)
+        :return: distance minimale, ou -1 s'il n'y a aucun obstacle dans l'axe
+        """
+        x_r, y_r = self.get_position()
+        angle_rad = math.radians(self.orientation)
+
+        dx = math.cos(angle_rad)
+        dy = math.sin(angle_rad)
+
+        distance_min = float('inf')
+        for (x_o, y_o) in obstacles:
+            vx = x_o - x_r
+            vy = y_o - y_r
+            projection = vx * dx + vy * dy
+            if projection > 0:
+                distance = math.hypot(vx, vy)
+                if distance < distance_min:
+                    distance_min = distance
+
+        return distance_min if distance_min != float('inf') else -1
+
