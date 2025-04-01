@@ -46,13 +46,33 @@ class RobotReel:
         # Exemple de récupération de données capteurs
         return {"distance_obstacle": 50}  # Ex: renvoie une distance de 50 cm
 
+    
     def get_distance_devant(self):
-        """
-        Retourne la distance détectée à l'obstacle devant le robot.
-        Lecture simulée via get_sensor_data.
-        """
-        donnees = self.get_sensor_data()
-        return donnees.get("distance_obstacle", -1)
+        # Récupère l'heure actuelle
+        maintenant = time.time()
+
+        # Calcule le temps écoulé depuis le dernier appel
+        temps_ecoule = maintenant - self.dernier_temps
+
+        # Met à jour le dernier temps enregistré
+        self.dernier_temps = maintenant
+
+        # Calcule la vitesse moyenne des deux roues
+        vitesse_moyenne = (self.vitesse_gauche + self.vitesse_droite) / 2  # en DPS
+
+        # Conversion fictive de DPS vers cm/s (à adapter selon le matériel réel)
+        conversion_cm_par_dps = 0.05
+        vitesse_cm_s = vitesse_moyenne * conversion_cm_par_dps
+
+        # Distance parcourue pendant le temps écoulé
+        distance_parcourue = vitesse_cm_s * temps_ecoule
+
+        # Mise à jour de la distance restante simulée devant le robot
+        self.distance_restante -= distance_parcourue
+
+        # Retourne la distance actuelle devant (jamais négative)
+        return max(self.distance_restante, 0)
+
     
     def tourner(self, angle):
         """Fait tourner le robot d'un certain angle en degrés."""
