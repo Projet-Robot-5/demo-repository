@@ -12,11 +12,20 @@ from robot_simulation.controleur.strategie import StrategieSequencielle
 from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
 from robot_simulation.modele.simulation import Simulation
-def mode_terminal():
-    print("Mode terminal activé")
-    robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
-    controleur = Controleur(adaptateur)
+def initialiser_simulation():
+    """
+    Fonction pour initialiser la simulation avec les objets nécessaires,
+    utilisée par les modes terminal et graphique.
+    
+    Retourne :
+    - adaptateur : L'adaptateur pour le robot.
+    - controleur : Le contrôleur qui gère les actions du robot.
+    - actions : La liste des actions à effectuer (séquence).
+    """
+    robot = Robot(x=250, y=250)  # Création du robot
+    adaptateur = AdaptateurRobotSimule(robot)  # Création de l'adaptateur pour le robot simulé
+    controleur = Controleur(adaptateur)  # Création du contrôleur
+    
     # Création d'une séquence pour un carré
     actions = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
@@ -24,8 +33,14 @@ def mode_terminal():
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
     ]
+    
     # Configuration de la stratégie
     controleur.set_strategie(StrategieSequencielle(actions))
+    
+    return adaptateur, controleur, actions 
+def mode_terminal():
+    print("Mode terminal activé")
+    adaptateur, controleur, actions = initialiser_simulation() 
     
     try:
         while True:
@@ -39,17 +54,8 @@ def mode_terminal():
 
 def mode_graphique():
     # Initialisation des composants
-    robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
-    controleur = Controleur(adaptateur)
-    # Création d'une séquence pour un carré
-    actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90) ]
-    # Configuration de la stratégie
-    controleur.set_strategie(StrategieSequencielle(actions))
+    adaptateur, controleur, actions = initialiser_simulation()
+    
     controleur.environnement=Environnement()
     # Thread pour le contrôleur
     def run_controleur():
