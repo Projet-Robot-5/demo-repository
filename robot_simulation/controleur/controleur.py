@@ -3,7 +3,7 @@ from robot_simulation import adaptateur
 from robot_simulation.controleur.strategie import StrategieSequencielle
 from robot_simulation.modele.environnement import Environnement
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
-
+""""""
 class Controleur:
     def __init__(self, adptateur):
         """ Initialise le contrôleur pour gérer les stratégies du robot.
