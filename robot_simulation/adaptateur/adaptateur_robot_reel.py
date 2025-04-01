@@ -48,6 +48,12 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
     def get_angle_tourne(self):
         """Retourne l'angle total tourné."""
         return self.angle_tourne
+    
+    def get_distance_devant(self):
+        """
+        Retourne la distance à l'obstacle devant pour un robot réel.
+        """
+        return self.robot.get_distance_devant()
 
     def detect_obstacle(self):
         return self.robot.get_distance() < 20
