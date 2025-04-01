@@ -5,7 +5,6 @@ class RobotReel:
         """Initialisation du robot réel en utilisant les API de contrôle matériel."""
         self.robot = robot
         self.initialiser_materiel()
-        def __init__(self, robot):
         self.vitesse_gauche = 0
         self.vitesse_droite = 0
         self.dernier_temps = time.time()
