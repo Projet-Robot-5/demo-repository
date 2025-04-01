@@ -5,6 +5,12 @@ class RobotReel:
         """Initialisation du robot réel en utilisant les API de contrôle matériel."""
         self.robot = robot
         self.initialiser_materiel()
+        def __init__(self, robot):
+        self.vitesse_gauche = 0
+        self.vitesse_droite = 0
+        self.dernier_temps = time.time()
+        self.distance_restante = 1000  # Distance estimée au mur en mm/cm
+
 
     def initialiser_materiel(self):
         """Initialise les moteurs et les capteurs du robot réel."""
