@@ -37,6 +37,14 @@ class RobotReel:
         """Récupère les données des capteurs (ex: distance, obstacles, etc.)."""
         # Exemple de récupération de données capteurs
         return {"distance_obstacle": 50}  # Ex: renvoie une distance de 50 cm
+
+    def get_distance_devant(self):
+        """
+        Retourne la distance détectée à l'obstacle devant le robot.
+        Lecture simulée via get_sensor_data.
+        """
+        donnees = self.get_sensor_data()
+        return donnees.get("distance_obstacle", -1)
     
     def tourner(self, angle):
         """Fait tourner le robot d'un certain angle en degrés."""
