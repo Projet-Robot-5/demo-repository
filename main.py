@@ -25,7 +25,7 @@ def initialiser_simulation():
     robot = Robot(x=250, y=250)  # Création du robot
     adaptateur = AdaptateurRobotSimule(robot)  # Création de l'adaptateur pour le robot simulé
     controleur = Controleur(adaptateur)  # Création du contrôleur
-    
+    """"""
     # Création d'une séquence pour un carré
     actions = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
