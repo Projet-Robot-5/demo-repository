@@ -12,3 +12,9 @@ class Affichage3D:
         self.ax.set_ylim([0, 500])
         self.ax.set_zlim([0, 500])
         self.trajet = []
+
+    def update_affichage(self):
+        """Met à jour l'affichage 3D à intervalle régulier"""
+        x, y = self.adaptateur.get_position()
+        z = 0  # Supposons que le robot se déplace sur un plan 2D
+        orientation = self.adaptateur.get_orientation()
