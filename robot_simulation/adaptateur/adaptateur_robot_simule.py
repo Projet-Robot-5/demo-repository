@@ -61,14 +61,6 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
         """Arrête le robot."""
         self.robot.set_wheel_speed(0, 0)
 
-    def get_position(self):
-        """Retourne la position actuelle du robot."""
-        return self.robot.x, self.robot.y
-
-    def get_orientation(self):
-        """Retourne l'orientation actuelle du robot."""
-        return self.robot.orientation
-
     def get_distance_parcourue(self):
         """Retourne la distance totale parcourue."""
         return self.distance_parcourue
