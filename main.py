@@ -14,13 +14,16 @@ from robot_simulation.modele.robot import Robot
 def mode_terminal():
     print("Mode terminal activé")
     robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
+    rayon_roue = 0.05  # Définir le rayon des roues (par exemple 5 cm)
+
+    adaptateur = AdaptateurRobotSimule(robot, rayon_roue)
+
     controleur = Controleur(adaptateur)
     actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+        AvancerDroit(adaptateur,50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur,50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90)
     ]
     controleur.set_strategie(StrategieSequencielle(actions))
 
@@ -35,13 +38,15 @@ def mode_terminal():
 
 def mode_graphique():
     robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
+    rayon_roue = 0.05  # Définir le rayon des roues (par exemple 5 cm)
+
+    adaptateur = AdaptateurRobotSimule(robot, rayon_roue)
     controleur = Controleur(adaptateur)
     actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 50), Tourner(adaptateur, 90)
     ]
     controleur.set_strategie(StrategieSequencielle(actions))
     controleur.environnement = Environnement()

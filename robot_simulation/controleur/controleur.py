@@ -12,16 +12,21 @@ class Controleur:
         self.queue_strategies = []
         self.strategie_courante = None
         self.running = True  # Variable pour contrôler la boucle
-
+        self.last_update_time = time.time()  # Initialiser le temps de mise à jour
     def update(self):
-        """
-        Méthode appelée à chaque tick pour appliquer la stratégie courante.
-        """
+        """Méthode appelée à chaque tick pour appliquer la stratégie courante."""
         if not self.running or not self.strategie_courante:
             return False
 
-        # Applique un pas de la stratégie courante
-        self.strategie_courante.step()
+        # Calcul du delta temps (dt) entre la mise à jour actuelle et la dernière
+        current_time = time.time()
+        dt = current_time - self.last_update_time  # Delta temps écoulé
+
+        # Applique un pas de la stratégie courante en passant le dt
+        self.strategie_courante.step(dt)
+
+        # Mettre à jour le temps de la dernière mise à jour
+        self.last_update_time = current_time
 
         # Passe à la stratégie suivante si nécessaire
         if self.strategie_courante.stop():
