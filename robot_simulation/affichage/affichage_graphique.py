@@ -2,100 +2,93 @@ import tkinter as tk  # Importation de la bibliothèque Tkinter pour l'interface
 import time  # Pour gérer le temps d'attente entre les mises à jour
 import threading  # Pour exécuter des tâches en parallèle (affichage graphique dans un thread)
 import math
+from tkinter import ttk
 from robot_simulation.adaptateur.adaptateur_robot_reel import AdaptateurRobotReel
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
-class AffichageGraphique:
+class AffichageGraphique(ttk.Frame):
     def __init__(self, master, adaptateur, controleur):
-        self.master = master
+        super().__init__(master)
         self.adaptateur = adaptateur
         self.controleur = controleur
-        self.running = True
-        self.trajet = []
-
+        self.trajectoire = []  # Pour stocker le parcours
+        
         # Configuration du canvas
-        self.canvas = tk.Canvas(master, width=500, height=500, bg="white")
-        self.canvas.pack()
+        self.canvas = tk.Canvas(self, width=500, height=500, bg='white')
+        self.canvas.pack(fill=tk.BOTH, expand=True)
+        
+        # Paramètres visuels
+        self.robot_color = 'blue'
+        self.obstacle_color = 'red'
+        self.trajectoire_color = 'gray'
+        self.robot_size = 10
+        self.obstacle_size = 8
+        self.line_width = 2
 
-        # Dessiner les obstacles initiaux
-        self.draw_obstacles()
-
-        # Démarrer les mises à jour
+        # Dessin initial
+        self.draw_environment()
         self.update_affichage()
 
-    def draw_obstacles(self):
-        """Dessine les obstacles une seule fois au début"""
+    def draw_environment(self):
+        """Dessine les obstacles"""
+        self.canvas.delete("obstacle")
         if hasattr(self.controleur, 'environnement'):
             for obs in self.controleur.environnement.obstacles:
-                self.canvas.create_oval(obs[0]-5, obs[1]-5, obs[0]+5, obs[1]+5, fill="red")
+                x, y = obs
+                self.canvas.create_oval(
+                    x-self.obstacle_size, y-self.obstacle_size,
+                    x+self.obstacle_size, y+self.obstacle_size,
+                    fill=self.obstacle_color,
+                    outline='darkred',
+                    tags="obstacle"
+                )
+
+    def draw_robot(self):
+        """Dessine le robot et sa trajectoire"""
+        self.canvas.delete("robot")
+        try:
+            x, y = self.adaptateur.robot.x, self.adaptateur.robot.y
+            angle = self.adaptateur.robot.orientation
+            
+            # Ajouter le point actuel à la trajectoire
+            self.trajectoire.append((x, y))
+            
+            # Dessiner la trajectoire
+            if len(self.trajectoire) > 1:
+                self.canvas.create_line(
+                    self.trajectoire,
+                    fill=self.trajectoire_color,
+                    width=self.line_width,
+                    smooth=True,
+                    tags="trajectoire"
+                )
+            
+            # Dessiner le robot
+            self.canvas.create_oval(
+                x-self.robot_size, y-self.robot_size,
+                x+self.robot_size, y+self.robot_size,
+                fill=self.robot_color,
+                outline='darkblue',
+                width=2,
+                tags="robot"
+            )
+            
+            # Dessiner la direction
+            end_x = x + self.robot_size * 2 * math.cos(math.radians(angle))
+            end_y = y + self.robot_size * 2 * math.sin(math.radians(angle))
+            self.canvas.create_line(
+                x, y, end_x, end_y,
+                arrow=tk.LAST,
+                width=3,
+                fill='yellow',
+                tags="robot"
+            )
+            
+        except AttributeError:
+            print("Erreur: Impossible d'accéder à la position du robot")
 
     def update_affichage(self):
-        """Met à jour l'affichage à intervalle régulier"""
-        if not self.running:
-            return
-
-        try:
-            # Récupération des données ACTUELLES
-            x, y = self.adaptateur.get_position()
-            orientation = self.adaptateur.get_orientation()
-
-            # Mise à jour trajectoire
-            if len(self.trajet) > 0:
-                prev_x, prev_y = self.trajet[-1]
-                self.canvas.create_line(prev_x, prev_y, x, y, fill="black", width=2)
-            self.trajet.append((x, y))
-
-            # Effacer ancien robot
-            self.canvas.delete("robot")
-
-            # Dessiner nouveau robot
-            self.canvas.create_oval(x-10, y-10, x+10, y+10, fill="blue", tags="robot")
-            
-            # Dessiner direction
-            angle_rad = math.radians(orientation)
-            dx = x + 20 * math.cos(angle_rad)
-            dy = y + 20 * math.sin(angle_rad)
-            self.canvas.create_line(x, y, dx, dy, arrow=tk.LAST, fill="green", tags="robot")
-
-            # Planifier prochaine mise à jour
-            self.master.after(50, self.update_affichage)
-
-        except Exception as e:
-            print(f"Erreur affichage: {e}")
-            self.running = False
-
-    def on_close(self):
-        """Arrêt propre"""
-        self.running = False
-        self.master.destroy()
-
-    def update_display(self):
-        # Récupération directe des attributs du robot
-        robot = self.adaptateur.robot
-        x, y = robot.x, robot.y
-        orientation = robot.orientation
-    
-        # Effacer l'ancien robot
-        self.canvas.delete("robot")
-    
-        # Dessiner le robot à la nouvelle position
-        size = 20  # Taille du robot
-        x1 = x - size
-        y1 = y - size
-        x2 = x + size
-        y2 = y + size
-    
-        # Carré représentant le robot
-        self.canvas.create_rectangle(x1, y1, x2, y2, fill="blue", tags="robot")
-    
-        # Ligne indiquant l'orientation
-        end_x = x + size * 1.5 * math.cos(math.radians(orientation))
-        end_y = y + size * 1.5 * math.sin(math.radians(orientation))
-        self.canvas.create_line(x, y, end_x, end_y, arrow=tk.LAST, width=3, fill="red", tags="robot")
-    
-        # Mettre à jour l'affichage des obstacles si nécessaire
-        self.draw_environment()
-    
-        # Planifier la prochaine mise à jour
-        self.master.after(50, self.update_display)
+        """Mise à jour périodique"""
+        self.draw_robot()
+        self.after(50, self.update_affichage)  # 20 FPS
