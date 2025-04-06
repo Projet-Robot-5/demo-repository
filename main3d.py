@@ -1,13 +1,13 @@
 import time
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
+from robot_simulation.controleur.strategie import StrategieSequencielle
+from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.affichage.affichage_3d import Affichage3D
-from robot_simulation.controleur.controleur import Controleur
-from robot_simulation.controleur.strategie import StrategieSequencielle
-from robot_simulation.modele.environnement import Environnement
 from robot_simulation.modele.robot import Robot
+from robot_simulation.modele.environnement import Environnement
 
-def initialiser_robot():
+def mode_3d():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
@@ -19,17 +19,13 @@ def initialiser_robot():
     ]
     controleur.set_strategie(StrategieSequencielle(actions))
     controleur.environnement = Environnement()
-    return robot, adaptateur, controleur
 
-def run_controleur(controleur):
-    while getattr(controleur, 'running', True):
-        controleur.update()
-        time.sleep(0.05)
+    def run_controleur():
+        while getattr(controleur, 'running', True):
+            controleur.update()
+            time.sleep(0.05)
 
-def main():
-    robot, adaptateur, controleur = initialiser_robot()
-
-    ctrl_thread = threading.Thread(target=run_controleur, args=(controleur,), daemon=True)
+    ctrl_thread = threading.Thread(target=run_controleur, daemon=True)
     ctrl_thread.start()
 
     affichage = Affichage3D(adaptateur, controleur)
@@ -43,4 +39,4 @@ def main():
         affichage.on_close()
 
 if __name__ == "__main__":
-    main()
+    mode_3d()
