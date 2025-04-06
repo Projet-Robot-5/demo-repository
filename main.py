@@ -36,11 +36,14 @@ def mode_terminal():
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("\nArrêt du programme")
-        
+
 def mode_graphique():
+    # Initialisation (conservez votre code existant)
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
+    
+    # CONSERVEZ VOTRE SUITE D'ACTIONS EXISTANTE
     actions = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
@@ -48,26 +51,27 @@ def mode_graphique():
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
     ]
     controleur.set_strategie(StrategieSequencielle(actions))
-    controleur.environnement = Environnement()
-
+    controleur.environnement = Environnement(width=500, height=500)
+    
+    # Configuration de la fenêtre
+    root = tk.Tk()
+    root.title("Simulation Robot")
+    
+    # Modification ici: pas besoin de .pack() supplémentaire
+    affichage = AffichageGraphique(root, adaptateur, controleur)
+    affichage.pack(fill=tk.BOTH, expand=True)
+    
+    # Conservez le reste de votre code (thread, etc.)
     def run_controleur():
         while getattr(controleur, 'running', True):
             controleur.update()
             time.sleep(0.05)
-
+    
     ctrl_thread = threading.Thread(target=run_controleur, daemon=True)
     ctrl_thread.start()
-
-    root = tk.Tk()
-    root.title("Simulation Robot")
-    affichage = AffichageGraphique(root, adaptateur, controleur)
-    root.protocol("WM_DELETE_WINDOW", lambda: [
-        setattr(controleur, 'running', False),
-        ctrl_thread.join(timeout=0.1),
-        root.destroy()
-    ])
+    
     root.mainloop()
-
+    
 def mode_3d():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
