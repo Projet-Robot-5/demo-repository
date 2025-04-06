@@ -27,12 +27,16 @@ def mode_terminal():
     try:
         while True:
             controleur.update()
-            x, y = adaptateur.get_position()
-            print(f"Position actuelle: ({x:.1f}, {y:.1f})")
+            # Remplacer par :
+            if hasattr(adaptateur, 'robot'):
+                x, y = adaptateur.robot.x, adaptateur.robot.y
+            else:
+                x, y = 0, 0
+            print(f"Position estimée: ({x:.1f}, {y:.1f})")
             time.sleep(0.1)
     except KeyboardInterrupt:
         print("\nArrêt du programme")
-
+        
 def mode_graphique():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
