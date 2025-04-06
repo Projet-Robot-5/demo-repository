@@ -28,9 +28,13 @@ class AvancerDroit:
         self.distance_parcourue += 12
 
         # Mise à jour de la position et de la distance parcourue
-        position = self.adaptateur.get_position()
+        if hasattr(self.adaptateur, 'robot'):
+            position = (self.adaptateur.robot.x, self.adaptateur.robot.y)
+        else:
+            position = (0, 0)  # Valeur par défaut
+        
         print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
-        print(f"Position: {position}")
+        print(f"Position estimée: {position}")
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
@@ -68,9 +72,13 @@ class Tourner:
         self.angle_tourne += 10
 
         # Mise à jour de l'orientation
-        orientation = self.adaptateur.get_orientation()
-        print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation: {orientation}")
-
+        if hasattr(self.adaptateur, 'robot'):
+            orientation = self.adaptateur.robot.orientation
+        else:
+            orientation = 0  # Valeur par défaut
+            
+        print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation estimée: {orientation}")
+        
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         if self.angle_tourne >= self.angle:
