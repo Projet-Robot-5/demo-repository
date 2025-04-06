@@ -163,25 +163,43 @@ class StrategieSequencielle:
 
     
 class StrategieConditionnelle:
-    def __init__(self, adaptateur):
-        """Recule si un obstacle est détecté."""
-        self.adaptateur = adaptateur
-        self.reculer = Reculer(adaptateur, 50)
+    def __init__(self, strategie1, strategie2, condition):
+        """
+        Initialise la stratégie conditionnelle avec deux stratégies et une condition.
+        :param strategie1: La première stratégie à exécuter si la condition est vraie.
+        :param strategie2: La deuxième stratégie à exécuter si la condition est fausse.
+        :param condition: La condition (fonction ou booléenne) pour choisir la stratégie à exécuter.
+        """
+        self.strategie1 = strategie1  # Première stratégie
+        self.strategie2 = strategie2  # Deuxième stratégie
+        self.condition = condition  # La condition qui détermine quelle stratégie exécuter
     
     def start(self):
-        """Vérifie la présence d'un obstacle et recule si nécessaire."""
-        if self.adaptateur.detect_obstacle():
-            print("Obstacle détecté ! Recul en cours...")
-            self.reculer.start()
+        """Vérifie la condition et exécute la stratégie appropriée."""
+        if self.condition():
+            print("Condition vraie, exécution de la stratégie 1...")
+            self.strategie1.start()  # Exécute la stratégie 1
+        else:
+            print("Condition fausse, exécution de la stratégie 2...")
+            self.strategie2.start()  # Exécute la stratégie 2
     
     def step(self):
-        """Continue le recul si actif."""
-        if self.reculer.actif:
-            self.reculer.step()
+        """Exécute la prochaine étape de la stratégie active."""
+        if self.condition():
+            if hasattr(self.strategie1, 'step'):
+                self.strategie1.step()  # Exécuter la méthode step de la stratégie 1
+        else:
+            if hasattr(self.strategie2, 'step'):
+                self.strategie2.step()  # Exécuter la méthode step de la stratégie 2
     
     def stop(self):
-        return not self.reculer.actif
-# robot_simulation/controleur/strategie.py
+        """Arrête la stratégie active."""
+        if self.condition():
+            return self.strategie1.stop()  # Arrêter la stratégie 1 si la condition est vraie
+        else:
+            return self.strategie2.stop()  # Arrêter la stratégie 2 si la condition est fausse
+
+
 
 class StrategieBoucle:
     def __init__(self, actions, nb_iterations=None):
