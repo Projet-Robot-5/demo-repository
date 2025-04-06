@@ -2,6 +2,7 @@ import tkinter as tk  # Importation de la bibliothèque Tkinter pour l'interface
 import time  # Pour gérer le temps d'attente entre les mises à jour
 import threading  # Pour exécuter des tâches en parallèle (affichage graphique dans un thread)
 import math
+from robot_simulation.adaptateur.adaptateur_robot_reel import AdaptateurRobotReel
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
@@ -68,3 +69,33 @@ class AffichageGraphique:
         """Arrêt propre"""
         self.running = False
         self.master.destroy()
+
+    def update_display(self):
+        # Récupération directe des attributs du robot
+        robot = self.adaptateur.robot
+        x, y = robot.x, robot.y
+        orientation = robot.orientation
+    
+        # Effacer l'ancien robot
+        self.canvas.delete("robot")
+    
+        # Dessiner le robot à la nouvelle position
+        size = 20  # Taille du robot
+        x1 = x - size
+        y1 = y - size
+        x2 = x + size
+        y2 = y + size
+    
+        # Carré représentant le robot
+        self.canvas.create_rectangle(x1, y1, x2, y2, fill="blue", tags="robot")
+    
+        # Ligne indiquant l'orientation
+        end_x = x + size * 1.5 * math.cos(math.radians(orientation))
+        end_y = y + size * 1.5 * math.sin(math.radians(orientation))
+        self.canvas.create_line(x, y, end_x, end_y, arrow=tk.LAST, width=3, fill="red", tags="robot")
+    
+        # Mettre à jour l'affichage des obstacles si nécessaire
+        self.draw_environment()
+    
+        # Planifier la prochaine mise à jour
+        self.master.after(50, self.update_display)
