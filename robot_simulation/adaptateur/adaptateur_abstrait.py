@@ -26,16 +26,7 @@ class AdaptateurAbstrait(ABC):
     def stop(self):
         """Arrête le robot."""
         pass
-    @abstractmethod
-    def get_position(self):
-        """Retourne la position actuelle du robot."""
-        pass
-
-    @abstractmethod
-    def get_orientation(self):
-        """Retourne l'orientation actuelle du robot."""
-        pass
-
+   
     @abstractmethod
     def get_distance_parcourue(self):
         """Retourne la distance totale parcourue."""
