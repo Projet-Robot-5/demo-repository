@@ -1,10 +1,36 @@
 import math
+import time
 from robot_simulation.adaptateur.adaptateur_abstrait import AdaptateurAbstrait
-
 
 class AdaptateurRobotSimule(AdaptateurAbstrait):
     def __init__(self, robot):
         super().__init__(robot)
+        self.last_time = time.time()
+        self.last_position = (robot.x, robot.y)
+        self.last_orientation = robot.orientation
+
+    def update_position(self, dt):
+        """Met à jour la position à partir des vitesses"""
+        vitesse_lineaire = (self.robot.vitesse_gauche + self.robot.vitesse_droite) / 2
+        angle_rad = math.radians(self.robot.orientation)
+        
+        self.robot.x += vitesse_lineaire * math.cos(angle_rad) * dt
+        self.robot.y += vitesse_lineaire * math.sin(angle_rad) * dt
+        
+        if self.robot.vitesse_gauche != self.robot.vitesse_droite:
+            rotation_vitesse = (self.robot.vitesse_droite - self.robot.vitesse_gauche) / self.robot.wheel_distance
+            self.robot.orientation += math.degrees(rotation_vitesse * dt) % 360
+
+    def get_distance_parcourue(self):
+        current_time = time.time()
+        dt = current_time - self.last_time
+        self.last_time = current_time
+        
+        self.update_position(dt)
+        distance = math.sqrt((self.robot.x - self.last_position[0])**2 + 
+                          (self.robot.y - self.last_position[1])**2)
+        self.last_position = (self.robot.x, self.robot.y)
+        return distance
 
     def avancer(self, distance):
         """
