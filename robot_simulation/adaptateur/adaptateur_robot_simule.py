@@ -87,6 +87,9 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
         """Arrête le robot."""
         self.robot.set_wheel_speed(0, 0)
 
+    def dessine(self, b):
+        self.robot.dessine(b)
+
     def get_distance_parcourue(self):
         """Retourne la distance totale parcourue."""
         return self.distance_parcourue
