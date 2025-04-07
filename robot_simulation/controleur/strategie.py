@@ -78,7 +78,7 @@ class Tourner:
             orientation = 0  # Valeur par défaut
             
         print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation estimée: {orientation}")
-        
+
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
         if self.angle_tourne >= self.angle:
@@ -247,3 +247,53 @@ class StrategieBoucle:
         print("Arrêt de la boucle.")
         for action in self.actions:
             action.stop()
+
+class StrategieDemiTours:
+    def __init__(self, adaptateur, env=500, iterations_max=10):
+        self.adaptateur = adaptateur
+        self.env = env  
+        self.iterations_max = iterations_max
+        self.iterations = 0
+        self.actif = False
+        self.direction = 1 
+
+    def start(self):
+        self.actif = True
+        self.iterations = 0
+        self.direction = 1
+        self.adaptateur.robot.x = 30
+        self.adaptateur.robot.y = 470
+
+    def step(self):
+        if not self.actif or self.iterations >= self.iterations_max:
+            return
+
+        robot = self.adaptateur.robot
+        
+        trop_pres_mur = (robot.x >= self.env and self.direction == 1) or \
+                        (robot.x <= 30 and self.direction == -1)
+        
+    
+        obstacle = self.adaptateur.detect_obstacle()
+        
+        if trop_pres_mur or obstacle:
+            self.faire_demi_tour()
+        else:
+            
+            self.adaptateur.avancer(10 * self.direction)
+
+    def faire_demi_tour(self):
+        
+        self.adaptateur.stop()
+        
+        for _ in range(18): 
+            self.adaptateur.tourner(10)
+            self.adaptateur.robot.move(0.1)   
+        
+        self.direction *= -1  
+        self.iterations += 1
+
+    def stop(self):
+        self.actif = False
+        self.adaptateur.stop()
+        return True
