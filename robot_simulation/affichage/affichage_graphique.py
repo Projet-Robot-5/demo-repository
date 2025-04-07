@@ -34,7 +34,7 @@ class AffichageGraphique(ttk.Frame):
         """Dessine les obstacles"""
         self.canvas.delete("obstacle")
         if hasattr(self.controleur, 'environnement'):
-            for obs in self.controleur.environnement.obstacles:
+            for obs in {(250,300),(250,350),(250,400),}:
                 x,y = obs
                 
                 self.canvas.create_oval(
@@ -71,7 +71,7 @@ class AffichageGraphique(ttk.Frame):
                 x-self.robot_size, y-self.robot_size,
                 x+self.robot_size, y+self.robot_size,
                 fill=self.robot_color,
-                outline='darkblue',
+                outline='blue',
                 width=2,
                 tags="robot"
             )

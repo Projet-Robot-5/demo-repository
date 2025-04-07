@@ -3,7 +3,7 @@ import math
 import random
 
 class Environnement:
-    def __init__(self, width=500, height=500, obstacle_count=3):
+    def __init__(self, width=500, height=500, obstacle_count=4):
         """
         Initialise l'environnement dans lequel le robot évolue.
         :param width: Largeur de l'environnement (par défaut 500).
@@ -23,7 +23,9 @@ class Environnement:
         """
         margin = 50  # Marge pour éviter les bords
         return [
-            ((250,350),(450,350),(650,350))
+            ((random.randint(margin, self.width - margin),
+             random.randint(margin, self.height - margin))
+            for _ in range(count+1))
         ]
     
     def detect_collision(self, robot):
