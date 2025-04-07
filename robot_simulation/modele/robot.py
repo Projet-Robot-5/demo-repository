@@ -10,6 +10,11 @@ class Robot:
         self.wheel_distance = 30  # Distance entre les roues
         self.taille = taille  # Ajout de la taille du robot
         self.is_moving = False  # État de mouvement
+        self.crayon = False
+        self.couleur = 'blue'
+
+    def dessine(self, b):
+        self.crayon = b
 
     def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
         """Définit les vitesses des roues."""
@@ -21,6 +26,9 @@ class Robot:
         """Met à jour la position du robot en fonction des vitesses des roues."""
         if not self.is_moving:
             return
+        
+        if self.crayon_abaisse:
+            self.trace.append((self.x, self.y))
 
         # Calcul du déplacement linéaire
         vitesse_lineaire = (self.vitesse_gauche + self.vitesse_droite) / 2
@@ -49,3 +57,4 @@ class Robot:
     def get_orientation(self):
         """Retourne l'orientation actuelle en degrés."""
         return self.orientation
+    
