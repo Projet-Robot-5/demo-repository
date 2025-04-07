@@ -2,8 +2,8 @@ import math
 
 class Robot:
     def __init__(self, x, y, vitesse_gauche=10, vitesse_droite=10, orientation=0, taille = 20):
-        self.x = x
-        self.y = y
+        self.x = 350
+        self.y = 350
         self.orientation = 0  # En degrés
         self.vitesse_gauche = vitesse_gauche  # Vitesse de la roue gauche
         self.vitesse_droite = vitesse_droite  # Vitesse de la roue droite
