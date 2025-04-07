@@ -91,4 +91,6 @@ class AffichageGraphique(ttk.Frame):
     def update_affichage(self):
         """Mise à jour périodique"""
         self.draw_robot()
-        self.after(50, self.update_affichage)  # 20 FPS
+        self.draw_environment()
+        self.after(100, self.update_affichage)
+
