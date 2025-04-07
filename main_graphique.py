@@ -18,13 +18,13 @@ def mode_graphique():
     adaptateur2 = AdaptateurRobotSimule(robot2)
     controleur2 = Controleur(adaptateur2)
  
-    
+    list2 = controleur.set_strategie(StrategieBoucle(Tourner(adaptateur, 360),10))
     actions1 = [
-        AvancerDroit(adaptateur, 800),StrategieBoucle(Tourner(adaptateur, 360),10)]
+        AvancerDroit(adaptateur, 800),list2]
         
    
     controleur.set_strategie(StrategieSequencielle(actions1))
-    #controleur.set_strategie(StrategieBoucle(actions2,10))
+    
     controleur.environnement = Environnement(width=500, height=500)
     actions = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),

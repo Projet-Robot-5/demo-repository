@@ -59,3 +59,4 @@ class AdaptateurAbstrait(ABC):
     def servo_rotate(self, port, angle):
         """Fait tourner un servo à un angle donné."""
         pass
+    
