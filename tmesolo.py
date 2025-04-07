@@ -97,17 +97,17 @@ def q2_1():
     from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 
     # Création de l'environnement avec quelques obstacles (facultatif ici)
-    environnement = Environnement(obstacles=[(200, 200), (300, 100), (150, 300)])
+    environnement = Environnement(obstacles=[(200, 200), (300, 1000), (150, 300)])
 
     # Création de la simulation
     sim = Simulation(environnement)
 
     # Création du robot chat (trace rouge)
     chat = Robot(x=50, y=50, orientation=0)  # Coin supérieur gauche
-    chat.couleur_trace = "red"
+    chat.couleur_trace = "red""
     adaptateur_chat = AdaptateurRobotSimule(chat, environnement)
-    strategie_chat = AvancerDroit(distance=100)
-    controleur_chat = Controleur(adaptateur_chat, strategie_chat)
+    strategie_chat = AvancerDroit(distance= 100)
+    controleur_chat = Controleur(adaptateur_chat, starategie_chat)
     sim.ajouter_robot(chat, controleur_chat)
 
     # Démarrer la simulation
