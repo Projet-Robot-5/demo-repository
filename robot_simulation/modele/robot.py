@@ -10,6 +10,18 @@ class Robot:
         self.wheel_distance = 30  # Distance entre les roues
         self.taille = taille  # Ajout de la taille du robot
         self.is_moving = False  # État de mouvement
+        self.trace_active = False  # Par défaut, la trace est désactivée
+        self.couleur_trace = "blue"  # Couleur bleue par défaut
+
+    
+    def dessine(self, b):
+        self.trace_active = b
+    
+    def rouge(self):
+        self.couleur_trace = "red"
+
+    def bleu(self):
+        self.couleur_trace = "blue"
 
     def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
         """Définit les vitesses des roues."""

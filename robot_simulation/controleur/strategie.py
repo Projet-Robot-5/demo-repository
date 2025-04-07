@@ -247,3 +247,38 @@ class StrategieBoucle:
         print("Arrêt de la boucle.")
         for action in self.actions:
             action.stop()
+
+class StrategieBleu:
+    def __init__(self):
+        self.fait = False  # Pour executer qu’une fois
+
+    def run_step(self, adaptateur):
+        if not self.fait:
+            adaptateur.robot.bleu()
+            adaptateur.robot.dessine(True)
+            self.fait = True
+        return True  # indique que c’est termine
+
+
+class StrategieRouge:
+    def __init__(self):
+        self.fait = False
+
+    def run_step(self, adaptateur):
+        if not self.fait:
+            adapatateur.robot.rouge()
+            adaptateur.robot.dessinne(True)
+            self.fait = True
+        return True
+
+
+class StrategieInvisible:
+    def __init__(self):
+        self.fait = False
+
+    def run_step(self, adaptateur):
+        if not self.fait:
+            adaptateur.robot.dessine(False)  # Desactive la trace
+            self.fait = True
+        return True
+

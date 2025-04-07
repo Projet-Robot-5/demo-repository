@@ -53,16 +53,17 @@ class AffichageGraphique(ttk.Frame):
             
             # Ajouter le point actuel à la trajectoire
             self.trajectoire.append((x, y))
-            
-            # Dessiner la trajectoire
-            if len(self.trajectoire) > 1:
-                self.canvas.create_line(
-                    self.trajectoire,
-                    fill=self.trajectoire_color,
-                    width=self.line_width,
-                    smooth=True,
-                    tags="trajectoire"
-                )
+
+            # dessine la trajectoire uniquement si le crayon est actif
+            if hasattr(self.adaptateur.robot, 'trace_active') and self.adaptateur.robot.trace_active:
+                if len(self.trajectoire) > 1:
+                    self.canvas.create_line(
+                        self.trajectoire,
+                        fill=getattr(self.adaptateur.robot, 'couleur_trace', self.trajectoire_color),
+                        width=self.line_width,
+                        smooth=True,
+                        tags="trajectoir"
+                    )
             
             # Dessiner le robot
             self.canvas.create_oval(
