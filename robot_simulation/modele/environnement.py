@@ -1,6 +1,7 @@
 from itertools import count
 import math
 import random
+from modele.robot import Chat
 
 class Environnement:
     def __init__(self, width=500, height=500, obstacle_count=15):
@@ -13,6 +14,8 @@ class Environnement:
         self.width = width  # Largeur de l'environnement
         self.height = height  # Hauteur de l'environnement
         self.obstacles = self.generate_obstacles(obstacle_count)  # Génère les obstacles
+        self.souris = Robot(x=0, y=0, angle=0)  # deja existant
+        self.chat = Chat(x=10, y=10, angle=0)   # le nouveau
 
     def generate_obstacles(self, count):
         """

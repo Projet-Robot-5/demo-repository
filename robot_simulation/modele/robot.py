@@ -61,3 +61,8 @@ class Robot:
     def get_orientation(self):
         """Retourne l'orientation actuelle en degrés."""
         return self.orientation
+    
+class Chat(Robot):
+    def __init__(self, x, y, angle):
+        super().__init__(x, y, angle)
+        self.couleur_trace = (255, 0, 0)  
