@@ -13,16 +13,23 @@ from robot_simulation.modele.robot import Robot
 
 def mode_terminal():
     print("Mode terminal activé")
-    robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
+    robot_souris = Robot(x=250, y=250)
+    adaptateur = AdaptateurRobotSimule(robot_souris)
     controleur = Controleur(adaptateur)
-    actions = [
+    actions_souris  = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
     ]
-    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.set_strategie(StrategieSequencielle(actions_souris))
+    robot_chat = Robot(x=250, y=250)
+    adaptateur2 = AdaptateurRobotSimule(robot_chat)
+    controleur2 = Controleur(adaptateur)
+    actions_chat  = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 180),
+        AvancerDroit(adaptateur, 800), ]
+    controleur2.set_strategie(StrategieSequencielle(actions_chat))
 
     try:
         while True:
@@ -39,18 +46,24 @@ def mode_terminal():
 
 def mode_graphique():
     # Initialisation (conservez votre code existant)
-    robot = Robot(x=250, y=250)
-    adaptateur = AdaptateurRobotSimule(robot)
+    print("Mode terminal activé")
+    robot_souris = Robot(x=250, y=250)
+    adaptateur = AdaptateurRobotSimule(robot_souris)
     controleur = Controleur(adaptateur)
-    
-    # CONSERVEZ VOTRE SUITE D'ACTIONS EXISTANTE
-    actions = [
+    actions_souris  = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
     ]
-    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.set_strategie(StrategieSequencielle(actions_souris))
+    robot_chat = Robot(x=250, y=250)
+    adaptateur2 = AdaptateurRobotSimule(robot_chat)
+    controleur2 = Controleur(adaptateur)
+    actions_chat  = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 180),
+        AvancerDroit(adaptateur, 800), ]
+    controleur2.set_strategie(StrategieSequencielle(ac
     controleur.environnement = Environnement(width=500, height=500)
     
     # Configuration de la fenêtre

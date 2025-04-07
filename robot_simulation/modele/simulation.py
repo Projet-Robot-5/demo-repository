@@ -6,26 +6,23 @@ from robot_simulation.modele.robot import Robot
 class Simulation:
     def __init__(self, master=None):
         """Initialise la simulation, gère l'environnement et le robot"""
-        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
+        self.environnement = Environnement(width=500, height=500, obstacle_count=3)
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
+        self.robot_chat = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
+        self.robot_souris = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
 
     def updateModele(self):
-        """
-        Met à jour le modèle de simulation à chaque tick:
-        1. Fait bouger le robot
-        2. Détecte les collisions
-        3. Met à jour l'environnement si nécessaire
-        Retourne False si collision détectée, True sinon
-        """
+       
         # Faire bouger le robot
-        self.robot.move()
-        
+        self.robot_chat.move()
+        self.robot_souris.move()
         # Détecter les collisions
-        collision = self.environnement.detect_collision(self.robot)
+        attrape = self.environnement.chat_attrape_souris(self.robot_chat,self.robot_souris)
         
-        if collision:
+        if attrape:
             # Gérer la collision (arrêter le robot, etc.)
-            self.robot.stop()
+            self.robot_chat.stop()
+            self.robot_souris.stop()
             return False
         
         return True

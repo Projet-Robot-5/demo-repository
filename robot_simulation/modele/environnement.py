@@ -41,3 +41,22 @@ class Environnement:
             if distance < robot_radius:
                 return True
         return False
+    
+    def attrape(self, robot_chat, robot_souris):
+
+        robot_chat__or = robot_chat.get_orientation()
+  
+        robot_souris__or= robot_souris.get_orientation()
+        
+        if get_souris(self, robot_chat, robot_souris)!= None:
+             return True
+        return False 
+        
+    def get_souris(self, robot_chat, robot_souris):
+        robot_chat__or = robot_chat.get_orientation()
+  
+        robot_souris__or= robot_souris.get_orientation()
+    )   
+        if (-10 <=(robot_chat_or)-(robot_souris_or) <=10):
+                return robot_souris_or
+        return None
