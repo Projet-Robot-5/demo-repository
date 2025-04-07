@@ -43,6 +43,12 @@ def mode_graphique():
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
     
+    adaptateur.dessine(True)
+
+    adaptateur.avancer(100)
+
+    adaptateur.dessine(False)
+    
     strategie = StrategieDemiTours(
         adaptateur,
         env=500,
