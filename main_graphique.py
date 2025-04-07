@@ -3,6 +3,7 @@ import tkinter as tk
 import threading
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
 from robot_simulation.controleur.strategie import StrategieSequencielle
+from robot_simulation.controleur.strategie import StrategieBoucle
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
@@ -14,13 +15,14 @@ def mode_graphique():
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
     
-    actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    actions1 = [
+        AvancerDroit(adaptateur, 800),]
+        
+    actions2 = [ Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur,360),Tourner(adaptateur, 360)
+         
     ]
-    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.set_strategie(StrategieSequencielle(actions1))
+    controleur.set_strategie(StrategieBoucle(actions2,10))
     controleur.environnement = Environnement(width=500, height=500)
     
     root = tk.Tk()
@@ -39,5 +41,34 @@ def mode_graphique():
     
     root.mainloop()
 
+    robot2 = Robot(x=350, y=450)
+    adaptateur2 = AdaptateurRobotSimule(robot2)
+    controleur2 = Controleur(adaptateur2)
+    
+    actions1 = [
+        AvancerDroit(adaptateur2, 800),]
+        
+    actions2 = [ Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2, 360),Tourner(adaptateur2,360),Tourner(adaptateur2, 360)
+         
+    ]
+    controleur2.set_strategie(StrategieSequencielle(actions1))
+    controleur2.set_strategie(StrategieBoucle(actions2,10))
+    controleur2.environnement = Environnement(width=500, height=500)
+    
+    root = tk.Tk()
+    root.title("Simulation Robot")
+    
+    affichage = AffichageGraphique(root, adaptateur2, controleur2)
+    affichage.pack(fill=tk.BOTH, expand=True)
+    
+    def run_controleur():
+        while getattr(controleur2, 'running', True):
+            controleur2.update()
+            time.sleep(0.05)
+    
+    ctrl_thread = threading.Thread(target=run_controleur, daemon=True)
+    ctrl_thread.start()
+    
+    root.mainloop()
 if __name__ == "__main__":
     mode_graphique()

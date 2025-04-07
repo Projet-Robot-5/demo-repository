@@ -2,6 +2,7 @@ import sys
 import time
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
 from robot_simulation.controleur.strategie import StrategieSequencielle
+from robot_simulation.controleur.strategie import StrategieBoucle
 from robot_simulation.controleur.controleur import Controleur
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.modele.robot import Robot
@@ -11,13 +12,14 @@ def mode_terminal():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
-    actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    actions1 = [
+        AvancerDroit(adaptateur, 800),]
+        
+    actions2 = [ Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur, 360),Tourner(adaptateur,360),Tourner(adaptateur, 360)
+         
     ]
-    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.set_strategie(StrategieSequencielle(actions1))
+    controleur.set_strategie(StrategieBoucle(actions2,10))
 
     try:
         while True:

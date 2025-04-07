@@ -35,7 +35,8 @@ class AffichageGraphique(ttk.Frame):
         self.canvas.delete("obstacle")
         if hasattr(self.controleur, 'environnement'):
             for obs in self.controleur.environnement.obstacles:
-                x, y = obs
+                x,y = obs
+                
                 self.canvas.create_oval(
                     x-self.obstacle_size, y-self.obstacle_size,
                     x+self.obstacle_size, y+self.obstacle_size,
@@ -43,6 +44,7 @@ class AffichageGraphique(ttk.Frame):
                     outline='darkred',
                     tags="obstacle"
                 )
+            
 
     def draw_robot(self):
         """Dessine le robot et sa trajectoire"""

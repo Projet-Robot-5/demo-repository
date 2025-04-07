@@ -6,7 +6,7 @@ from robot_simulation.modele.robot import Robot
 class Simulation:
     def __init__(self, master=None):
         """Initialise la simulation, gère l'environnement et le robot"""
-        self.environnement = Environnement(width=500, height=500, obstacle_count=15)
+        self.environnement = Environnement(width=500, height=500, obstacle_count=3)
         self.robot = Robot(x=250, y=250, vitesse_gauche=10, vitesse_droite=10)
 
     def updateModele(self):
