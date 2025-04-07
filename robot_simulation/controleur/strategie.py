@@ -297,3 +297,39 @@ class StrategieDemiTours:
         self.actif = False
         self.adaptateur.stop()
         return True
+    
+class StrategieBleu:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+    
+    def start(self):
+        self.adaptateur.robot.couleur = 'blue'
+        self.adaptateur.dessine(True)
+        
+
+    def stop(self):
+        return True 
+
+
+class StrategieRouge:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+    
+    def start(self):
+        self.adaptateur.robot.couleur = 'red'
+        self.adaptateur.dessine(True)
+
+    def stop(self):
+        return True
+
+
+class StrategieInvisible:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+    
+    def start(self):
+        self.adaptateur.dessine(False)
+
+    def stop(self):
+        return True
+    
