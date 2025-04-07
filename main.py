@@ -2,7 +2,7 @@ import sys
 import time
 import threading
 import tkinter as tk
-from robot_simulation.controleur.strategie import AvancerDroit, Tourner, Reculer
+from robot_simulation.controleur.strategie import AvancerDroit, StrategieDemiTours, Tourner, Reculer
 from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.affichage.affichage_3d import Affichage3D
@@ -43,7 +43,12 @@ def mode_graphique():
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
     
-    # CONSERVEZ VOTRE SUITE D'ACTIONS EXISTANTE
+    strategie = StrategieDemiTours(
+        adaptateur,
+        env=500,
+        iterations_max=10
+    )
+    controleur.set_strategie(strategie)
     actions = [
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
         AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
