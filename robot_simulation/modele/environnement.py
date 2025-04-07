@@ -14,7 +14,7 @@ class Environnement:
         self.height = height  # Hauteur de l'environnement
         self.obstacles = self.generate_obstacles(obstacle_count)  # Génère les obstacles
 
-    def generate_obstacles(self, count):
+    def generate_obstacles(self, count=3):
         """
         Génère des obstacles aléatoires dans l'environnement.
         
@@ -25,7 +25,7 @@ class Environnement:
         return [
             (random.randint(margin, self.width - margin),
              random.randint(margin, self.height - margin))
-            for _ in range(count)
+            for _ in range(3)
         ]
     
     def detect_collision(self, robot):
