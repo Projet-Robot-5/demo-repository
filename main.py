@@ -57,11 +57,10 @@ def mode_graphique():
     root = tk.Tk()
     root.title("Simulation Robot")
     
-    # Modification ici: pas besoin de .pack() supplémentaire
+    
     affichage = AffichageGraphique(root, adaptateur, controleur)
     affichage.pack(fill=tk.BOTH, expand=True)
     
-    # Conservez le reste de votre code (thread, etc.)
     def run_controleur():
         while getattr(controleur, 'running', True):
             controleur.update()
@@ -71,7 +70,7 @@ def mode_graphique():
     ctrl_thread.start()
     
     root.mainloop()
-    
+
 def mode_3d():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
