@@ -8,11 +8,12 @@ from robot_simulation.controleur.controleur import Controleur  # Importation de 
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
 class AffichageGraphique(ttk.Frame):
-    def __init__(self, master, adaptateur, controleur):
+    def __init__(self, master, adaptateur, controleur, environnement):
         super().__init__(master)
         self.adaptateur = adaptateur
         self.controleur = controleur
         self.trajectoire = []  # Pour stocker le parcours
+        self.environnement = environnement
         
         # Configuration du canvas
         self.canvas = tk.Canvas(self, width=500, height=500, bg='white')
@@ -31,18 +32,18 @@ class AffichageGraphique(ttk.Frame):
         self.update_affichage()
 
     def draw_environment(self):
-        """Dessine les obstacles"""
-        self.canvas.delete("obstacle")
-        if hasattr(self.controleur, 'environnement'):
-            for obs in self.controleur.environnement.obstacles:
-                x, y = obs
-                self.canvas.create_oval(
-                    x-self.obstacle_size, y-self.obstacle_size,
-                    x+self.obstacle_size, y+self.obstacle_size,
-                    fill=self.obstacle_color,
-                    outline='darkred',
-                    tags="obstacle"
-                )
+        """Dessin des obstacles ET des balises"""
+        self.canvas.delete("environment")
+        
+        # Obstacles
+        for obs in self.environnement.obstacles:
+            x, y = obs
+            self.canvas.create_oval(x-5, y-5, x+5, y+5, fill='red', tags="obstacle")
+        
+        # Balises
+        for balise in getattr(self.environnement, 'balises', []):
+            x, y = balise
+            self.canvas.create_oval(x-10, y-10, x+10, y+10, fill='green', tags="balise")
 
     def draw_robot(self):
         """Dessine le robot et sa trajectoire"""
