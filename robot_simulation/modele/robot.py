@@ -10,7 +10,23 @@ class Robot:
         self.wheel_distance = 30  # Distance entre les roues
         self.taille = taille  # Ajout de la taille du robot
         self.is_moving = False  # État de mouvement
+        self.balise_detectee = False
+        self.balise_position = (0, 0)  # (x,y)
 
+    def detecter_balise(self, environnement):
+        """Détecte la balise la plus proche"""
+        self.balise_detectee = False
+        if not hasattr(self, 'environnement') or not hasattr(self.environnement, 'balises'):
+            return False
+            
+        for balise in environnement.balises:
+            distance = math.sqrt((self.x - balise[0])**2 + (self.y - balise[1])**2)
+            if distance < 50:  # Portée de détection
+                self.balise_detectee = True
+                self.balise_position = balise
+                return True
+        return False
+    
     def set_wheel_speed(self, vitesse_gauche, vitesse_droite):
         """Définit les vitesses des roues."""
         self.vitesse_gauche = vitesse_gauche
