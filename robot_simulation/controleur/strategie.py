@@ -1,3 +1,4 @@
+import math
 import time
 class AvancerDroit:
     def __init__(self, adaptateur, distance):
@@ -126,6 +127,130 @@ class Reculer:
             self.adaptateur.stop()  # Arrêter le robot
         return not self.actif
     
+class DetecterBalise:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+        self.actif = False
+        self.balise_trouvee = False
+        
+    def start(self):
+        self.actif = True
+        self.balise_trouvee = False
+        print("Recherche balise...")
+        
+    def step(self):
+        if not self.actif:
+            return
+            
+        if hasattr(self.adaptateur.robot, 'environnement'):
+            balises = getattr(self.adaptateur.robot.environnement, 'balises', [])
+            if balises:
+                self.adaptateur.robot.balise_cible = balises[0]
+                self.balise_trouvee = True
+
+    def stop(self):
+        self.actif = False
+        return self.balise_trouvee  # True si balise trouvée, False sinon
+
+
+class TournerVersBalise:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+        self.actif = False
+        
+    def start(self):
+        self.actif = True
+        print("Alignement sur balise...")
+        
+    def step(self):
+        if not self.actif:
+            return
+            
+        robot = self.adaptateur.robot
+        if hasattr(robot, 'balise_cible'):
+            bx, by = robot.balise_cible
+            dx, dy = bx - robot.x, by - robot.y
+            angle_cible = math.degrees(math.atan2(dy, dx))
+            angle_diff = (angle_cible - robot.orientation) % 360
+            
+            if angle_diff > 180:
+                angle_diff -= 360
+                
+            if abs(angle_diff) > 5:  # Seuil de précision
+                self.adaptateur.tourner(angle_diff * 0.3)
+            else:
+                self.actif = False
+
+    def stop(self):
+        return not self.actif  # True quand alignement terminé
+
+
+class AvancerVersBalise:
+    def __init__(self, adaptateur):
+        self.adaptateur = adaptateur
+        self.actif = False
+        
+    def start(self):
+        self.actif = True
+        print("Approche balise...")
+        
+    def step(self):
+        if not self.actif:
+            return
+            
+        robot = self.adaptateur.robot
+        if hasattr(robot, 'balise_cible'):
+            bx, by = robot.balise_cible
+            distance = math.sqrt((bx-robot.x)**2 + (by-robot.y)**2)
+            
+            if distance > 20:  # Distance d'arrêt
+                self.adaptateur.avancer(min(40, distance * 0.5))
+            else:
+                self.actif = False
+
+    def stop(self):
+        return not self.actif  # True quand distance atteinte
+    
+class SuivreBalise:
+    def __init__(self, adaptateur, environnement):  # Accepte maintenant environnement
+        self.adaptateur = adaptateur
+        self.environnement = environnement
+        self.actif = False
+
+    def start(self):
+        self.actif = True
+        print("Démarrage suivi de balise")
+
+    def step(self):
+        if not self.actif:
+            return
+            
+        robot = self.adaptateur.robot
+        balises = getattr(self.environnement, 'balises', [])
+        
+        if balises:
+            bx, by = balises[0]  # Prend la première balise
+            dx, dy = bx - robot.x, by - robot.y
+            distance = math.sqrt(dx**2 + dy**2)
+            
+            if distance > 20:  # Distance d'arrêt
+                angle_cible = math.degrees(math.atan2(dy, dx))
+                angle_diff = (angle_cible - robot.orientation + 180) % 360 - 180
+                
+                if abs(angle_diff) > 10:  # Seuil de rotation
+                    self.adaptateur.tourner(angle_diff * 0.8)
+                else:
+                    self.adaptateur.avancer(min(40, distance * 0.5))
+            else:
+                self.adaptateur.stop()
+        else:
+            print("Recherche balise...")
+            self.adaptateur.tourner(30)  # Rotation de recherche
+
+    def stop(self):
+        self.actif = False
+        self.adaptateur.stop()
+        return True
     
 class StrategieSequencielle:
     def __init__(self, actions):
