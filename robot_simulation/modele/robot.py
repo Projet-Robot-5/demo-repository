@@ -49,7 +49,7 @@ class Robot:
         if self.vitesse_gauche != self.vitesse_droite:  # Rotation uniquement si vitesses différentes
             rotation_vitesse = (self.vitesse_droite - self.vitesse_gauche) / self.wheel_distance
             delta_orientation = math.degrees(rotation_vitesse * dt) 
-            self.orientation += delta_orientation# Conversion en degrés
+            self.orientation += delta_orientation  # Conversion en degrés
             self.orientation %= 360
 
     def stop(self):
@@ -65,37 +65,38 @@ class Robot:
     def get_orientation(self):
         """Retourne l'orientation actuelle en degrés."""
         return self.orientation
-    
-    def get_distance_devant(self, obstacles):
-        """
-        Calcule la distance au premier obstacle devant le robot.
-        """
-        from math import cos, sin, radians, sqrt
 
-        x, y = self.x, self.y
-        angle = self.orientation  # En degrés
-        dx = cos(radians(angle))
-        dy = sin(radians(angle))
+def get_distance_devant(self, obstacles):
+    """
+    Calcule la distance en cm au premier obstacle dans un cône devant le robot.
+    Les obstacles sont des tuples (x, y) ou (x, y, w, h).
+    """
+    from math import cos, sin, radians, sqrt, atan2, degrees
 
-        min_distance = float("inf")
+    x, y = self.x, self.y
+    angle = radians(self.orientation)  # Orientation en radians
+    dx = cos(angle)
+    dy = sin(angle)
 
-        for obs in obstacles:
-            ox, oy, ow, oh = obs
-            cx = ox + ow / 2
-            cy = oy + oh / 2
-            distance = sqrt((cx - x)**2 + (cy - y)**2)
+    min_distance = float("inf")
+    angle_tolerance = radians(30)  # cône de 60° au total
 
-            # Vérification si obstacle est dans la direction approximative
-            direction_vector = ((cx - x) * dx + (cy - y) * dy)
-            if direction_vector > 0:
-                min_distance = min(min_distance, distance)
+    for obs in obstacles:
+        # Supporte les obstacles sous forme (x, y) ou (x, y, w, h)
+        ox, oy = obs[0], obs[1]
 
-        return min_distance if min_distance != float("inf") else -1
+        vx = ox - x
+        vy = oy - y
+        distance = sqrt(vx**2 + vy**2)
+        if distance == 0:
+            continue  # Ignore le point s’il est à la même position
 
-    def get_distance_parcourue(self):
-        """
-        Calcule la distance entre la position actuelle du robot et l’origine (0, 0).
-        :return: distance en cm
-        """
-        return math.sqrt(self.x ** 2 + self.y ** 2)
+        # Calcul de l'angle entre le vecteur du robot et le vecteur vers l'obstacle
+        angle_to_obstacle = atan2(vy, vx)
+        angle_diff = abs((angle_to_obstacle - angle + 3.14159) % (2 * 3.14159) - 3.14159)
 
+        if angle_diff <= angle_tolerance:
+            min_distance = min(min_distance, distance)
+
+    # Conversion en centimètres (si 1 pixel = 1 cm)
+    return round(min_distance, 2) if min_distance != float("inf") else -1
