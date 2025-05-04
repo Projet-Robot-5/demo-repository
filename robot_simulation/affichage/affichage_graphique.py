@@ -31,6 +31,10 @@ class AffichageGraphique(ttk.Frame):
         self.draw_environment()
         self.update_affichage()
 
+        #Distance
+        self.label_distance = tk.Label(self, text="Distance : 0 cm", font=("Arial", 12))
+        self.label_distance.pack()
+
     def draw_environment(self):
         """Dessin des obstacles ET des balises"""
         self.canvas.delete("environment")
@@ -89,7 +93,24 @@ class AffichageGraphique(ttk.Frame):
         except AttributeError:
             print("Erreur: Impossible d'accéder à la position du robot")
 
+
+    
+    def update_distance_label(self):
+        try:
+            distance = 0
+            if hasattr(self.adaptateur, "get_distance_parcourue"):
+                distance = self.adaptateur.get_distance_parcourue()
+            elif hasattr(self.adaptateur, "robot") and hasattr(self.adaptateur.robot, "get_distance_parcourue"):
+                distance = self.adaptateur.robot.get_distance_parcourue()
+
+            self.label_distance.config(text=f"Distance : {distance:.2f} cm")
+        except Exception as e:
+            self.label_distance.config(text="Erreur de lecture de distance")
+            print("Erreur dans update_distance_label :", e)
+    
+
     def update_affichage(self):
         """Mise à jour périodique"""
         self.draw_robot()
+        self.update_distance_label()
         self.after(50, self.update_affichage)  # 20 FPS
