@@ -65,3 +65,29 @@ class Robot:
     def get_orientation(self):
         """Retourne l'orientation actuelle en degrés."""
         return self.orientation
+    
+    def get_distance_devant(self, obstacles):
+    """
+    Calcule la distance au premier obstacle devant le robot.
+    """
+    from math import cos, sin, radians, sqrt
+
+    x, y = self.x, self.y
+    angle = self.orientation  # En degrés
+    dx = cos(radians(angle))
+    dy = sin(radians(angle))
+
+    min_distance = float("inf")
+
+    for obs in obstacles:
+        ox, oy, ow, oh = obs
+        cx = ox + ow / 2
+        cy = oy + oh / 2
+        distance = sqrt((cx - x)**2 + (cy - y)**2)
+
+        # Vérification si obstacle est dans la direction approximative
+        direction_vector = ((cx - x) * dx + (cy - y) * dy)
+        if direction_vector > 0:
+            min_distance = min(min_distance, distance)
+
+    return min_distance if min_distance != float("inf") else -1
