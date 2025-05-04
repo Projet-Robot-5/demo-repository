@@ -92,3 +92,19 @@ class RobotReel:
         time.sleep(temps_translation)
         self.stop()
 
+    def get_distance_parcourue(self):
+        """
+        Calcule la distance parcourue par le robot depuis le dernier appel.
+        Utilise la vitesse moyenne et le temps écoulé.
+        """
+        maintenant = time.time()
+        temps_ecoule = maintenant - self.dernier_temps
+        self.dernier_temps = maintenant
+
+        vitesse_moyenne_dps = (self.vitesse_gauche + self.vitesse_droite) / 2
+        conversion_cm_par_dps = 0.05  # Conversion à ajuster selon ton matériel
+        vitesse_cm_s = vitesse_moyenne_dps * conversion_cm_par_dps
+
+        return vitesse_cm_s * temps_ecoule
+
+
