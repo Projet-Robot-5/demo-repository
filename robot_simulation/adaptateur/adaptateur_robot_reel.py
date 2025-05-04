@@ -10,6 +10,7 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
         self.x = 0  # Position initiale
         self.y = 0
         self.orientation = 0
+        self.dernier_temps = time.time()
 
     def update_position(self):
         """Met à jour la position à partir des encodeurs"""
@@ -30,10 +31,6 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
         
         self.last_left_ticks = left_ticks
         self.last_right_ticks = right_ticks
-
-    def get_distance_parcourue(self):
-        self.update_position()
-        return math.sqrt(self.x**2 + self.y**2)  # Distance depuis l'origine
 
     def avancer(self, distance):
         vitesse = distance / 10
@@ -61,10 +58,24 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
         self.robot.set_motor_dps("MOTOR_LEFT", 0)
         self.robot.set_motor_dps("MOTOR_RIGHT", 0)
 
-
     def get_distance_parcourue(self):
-        """Retourne la distance totale parcourue."""
-        return self.distance_parcourue
+        """
+        Calcule la distance parcourue par le robot réel en se basant sur les vitesses des roues et le temps écoulé.
+            """
+        maintenant = time.time()
+        dt = maintenant - self.dernier_temps
+        self.dernier_temps = maintenant
+
+        # Moyenne des vitesses gauche/droite en DPS
+        vitesse_moyenne = (self.robot.vitesse_gauche + self.robot.vitesse_droite) / 2
+
+        # Conversion fictive DPS -> m/s (à adapter selon ton robot réel)
+        conversion_cm_par_dps = 0.05
+        vitesse_m_s = vitesse_moyenne * conversion_cm_par_dps / 100
+
+        return vitesse_m_s * dt  # en mètres
+
+
 
     def get_angle_tourne(self):
         """Retourne l'angle total tourné."""
