@@ -67,27 +67,35 @@ class Robot:
         return self.orientation
     
     def get_distance_devant(self, obstacles):
-    """
-    Calcule la distance au premier obstacle devant le robot.
-    """
-    from math import cos, sin, radians, sqrt
+        """
+        Calcule la distance au premier obstacle devant le robot.
+        """
+        from math import cos, sin, radians, sqrt
 
-    x, y = self.x, self.y
-    angle = self.orientation  # En degrés
-    dx = cos(radians(angle))
-    dy = sin(radians(angle))
+        x, y = self.x, self.y
+        angle = self.orientation  # En degrés
+        dx = cos(radians(angle))
+        dy = sin(radians(angle))
 
-    min_distance = float("inf")
+        min_distance = float("inf")
 
-    for obs in obstacles:
-        ox, oy, ow, oh = obs
-        cx = ox + ow / 2
-        cy = oy + oh / 2
-        distance = sqrt((cx - x)**2 + (cy - y)**2)
+        for obs in obstacles:
+            ox, oy, ow, oh = obs
+            cx = ox + ow / 2
+            cy = oy + oh / 2
+            distance = sqrt((cx - x)**2 + (cy - y)**2)
 
-        # Vérification si obstacle est dans la direction approximative
-        direction_vector = ((cx - x) * dx + (cy - y) * dy)
-        if direction_vector > 0:
-            min_distance = min(min_distance, distance)
+            # Vérification si obstacle est dans la direction approximative
+            direction_vector = ((cx - x) * dx + (cy - y) * dy)
+            if direction_vector > 0:
+                min_distance = min(min_distance, distance)
 
-    return min_distance if min_distance != float("inf") else -1
+        return min_distance if min_distance != float("inf") else -1
+
+    def get_distance_parcourue(self):
+        """
+        Calcule la distance entre la position actuelle du robot et l’origine (0, 0).
+        :return: distance en cm
+        """
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+
