@@ -324,7 +324,45 @@ class StrategieConditionnelle:
         else:
             return self.strategie2.stop()  # Arrêter la stratégie 2 si la condition est fausse
         
-        
+class ApprocheMur:
+    """
+    Classe représentant une stratégie pour approcher un mur rapidement sans le toucher.
+
+    Attributs:
+        robot (Robot): L'objet robot à contrôler.
+        environnement (Environnement): L'environnement contenant les obstacles.
+        ecartAvecMur (float): Distance minimale à garder avec le mur.
+    """
+
+    def __init__(self, robot, environnement, ecartAvecMur):
+        self.robot = robot
+        self.environnement = environnement
+        self.ecartAvecMur = ecartAvecMur
+        self.detected_obstacle = False
+        self.arret = False
+
+    def start(self):
+        """Initialise le contrôleur."""
+        self.robot.set_wheel_speed(100, 100)
+        self.detected_obstacle = False
+        self.arret = False
+
+    def step(self):
+        """Exécute une étape de la stratégie."""
+        dist = self.robot.get_distance_devant(self.environnement.obstacles)
+        print("Distance à l'obstacle le plus proche :", dist)
+        if dist != -1 and dist <= self.ecartAvecMur:
+            # Si obstacle détecté et à moins de ecartAvecMur, on s'arrête
+            self.robot.stop()
+            self.arret = True
+        else:
+            # Sinon, on continue à avancer vite
+            self.robot.set_wheel_speed(100, 100)
+
+    def stop(self):
+        """Vérifie si la stratégie doit s'arrêter."""
+        return self.arret
+
 
 
 
