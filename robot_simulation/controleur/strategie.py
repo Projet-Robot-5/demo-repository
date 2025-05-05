@@ -323,6 +323,8 @@ class StrategieConditionnelle:
             return self.strategie1.stop()  # Arrêter la stratégie 1 si la condition est vraie
         else:
             return self.strategie2.stop()  # Arrêter la stratégie 2 si la condition est fausse
+        
+        
 
 
 
