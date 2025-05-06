@@ -204,7 +204,7 @@ class AvancerVersBalise:
             distance = math.sqrt((bx-robot.x)**2 + (by-robot.y)**2)
             
             if distance > 20:  # Distance d'arrêt
-                self.adaptateur.avancer(min(40, distance * 0.5))
+                self.adaptateur.avancer(min(100, distance * 0.5))
             else:
                 self.actif = False
 
@@ -412,3 +412,44 @@ class StrategieBoucle:
         print("Arrêt de la boucle.")
         for action in self.actions:
             action.stop()
+
+class StrategieContournement:
+    """
+    Stratégie autonome pour contourner un obstacle détecté devant le robot.
+    Le robot tourne progressivement jusqu'à ce qu'il n'y ait plus d'obstacle en face.
+    """
+
+    def __init__(self, adaptateur, environnement, seuil_detection=30):
+        """
+        Initialise la stratégie de contournement.
+
+        :param adaptateur: Adaptateur (simulé ou réel) du robot.
+        :param environnement: Environnement contenant les obstacles.
+        :param seuil_detection: Distance seuil pour détecter un obstacle (en cm).
+        """
+        self.adaptateur = adaptateur
+        self.environnement = environnement
+        self.seuil_detection = seuil_detection
+        self.actif = False
+
+    def start(self):
+        self.actif = True
+        print("Stratégie de contournement d’obstacle démarrée.")
+
+    def step(self):
+        if not self.actif:
+            return
+
+        # Mesure la distance devant
+        distance = self.adaptateur.get_distance_devant(self.environnement.obstacles)
+        print(f"[Contournement] Distance détectée : {distance} cm")
+
+        if 0 <= distance <= self.seuil_detection:
+            # Tourne légèrement vers la droite pour chercher un passage libre
+            self.adaptateur.tourner(10)
+        else:
+            # Obstacle évité, on peut continuer
+            self.actif = False
+
+    def stop(self):
+        return not self.actif

@@ -1,123 +1,79 @@
+import math
+import time
 
-import math  # Utilisé pour les fonctions mathématiques, comme les calculs d'angle et de position
-import time  # Utilisé pour gérer le temps (par exemple, mesurer le temps écoulé)
-
-# Définition de la classe RobotSimule
 class RobotSimule:
-    
     def __init__(self, robot):
         """
-        Constructeur de la classe RobotSimule.
-
-        Paramètres :
-        - robot : instance du robot simulé
+        Constructeur du robot simulé.
+        :param robot: Instance de la classe Robot (le modèle réel ou simulé)
         """
-        self.robot = robot  # Objet Robot réel ou simulé
-        self.angle_parcouru = 0  # Initialisation de l'angle parcouru (0° au départ)
-        self.rayon_roue = 10  # Rayon des roues (par défaut à 10 unités)
-        self.largeur = 20  # Largeur entre les roues du robot (par défaut à 20 unités)
+        self.robot = robot
+        self.rayon_roue = 10
+        self.largeur = 20
 
     def set_vitesse(self, vitesse_gauche, vitesse_droite):
         """
-        Définit les vitesses des roues gauche et droite du robot.
-
-        Paramètres :
-        vitesse_gauche : vitesse de la roue gauche
-        vitesse_droite : vitesse de la roue droite
+        Définit les vitesses des deux roues.
         """
         self.robot.set_wheel_speed(vitesse_gauche, vitesse_droite)
 
     def update_temps_passe(self):
         """
         Met à jour le temps écoulé depuis la dernière mise à jour.
-
-        Retour :
-        temps_passe : le temps écoulé depuis la dernière mise à jour (en secondes)
         """
-        temps_actuel = time.time()  # Temps actuel
-        temps_passe = temps_actuel - self.robot.temps_passe  # Temps écoulé
-        self.robot.temps_passe = temps_actuel  # Mise à jour du temps de référence
+        if not hasattr(self.robot, "temps_passe"):
+            self.robot.temps_passe = time.time()
+        temps_actuel = time.time()
+        temps_passe = temps_actuel - self.robot.temps_passe
+        self.robot.temps_passe = temps_actuel
         return temps_passe
-
 
     def calcul_rotation(self, distance_gauche, distance_droite):
         """
-        Calcule l'angle de rotation du robot en fonction de la distance parcourue par chaque roue.
-
-        Paramètres :
-        distance_gauche : distance parcourue par la roue gauche
-        distance_droite : distance parcourue par la roue droite
-
-        Retour :
-        L'angle de rotation du robot (en degrés)
+        Calcule l'angle de rotation du robot en degrés.
         """
-        difference_distance = distance_droite - distance_gauche
-        angle_rotation_rad = difference_distance / self.largeur  # Calcul de l'angle en radians
-        return math.degrees(angle_rotation_rad)  # Conversion en degrés
+        delta_distance = distance_droite - distance_gauche
+        angle_rad = delta_distance / self.largeur
+        return math.degrees(angle_rad)
 
     def get_distance(self):
         """
         Retourne la distance totale parcourue par le robot.
-
-        Retour :
-        La distance parcourue (en unités)
         """
-        return self.robot.distance_parcouru
+        return self.robot.get_distance_parcourue()
 
     def get_position(self):
         """
-        Retourne la position actuelle du robot (coordonnées x, y).
-
-        Retour :
-        Tuple contenant les coordonnées (x, y)
+        Retourne la position actuelle du robot.
         """
-        return self.robot.x, self.robot.y
+        return self.robot.get_position()
 
     def reset(self):
-        """Réinitialise le robot."""
-        self.robot.reset()
-        
+        """
+        Réinitialise le robot (à adapter si nécessaire).
+        """
+        self.robot.x = 0
+        self.robot.y = 0
+        self.robot.orientation = 0
+
     def detection_obstacle(self):
         """
-        Détecte la présence d'obstacles dans l'environnement.
-
-        Retour :
-        La distance à l'obstacle (cette méthode devrait être définie dans la classe Robot)
+        Renvoie une distance simulée au prochain obstacle.
         """
-        return self.robot.get_distance()  # Cette méthode doit être définie dans la classe `Robot` ou une classe héritée
+        if hasattr(self.robot, "get_distance_devant"):
+            return self.robot.get_distance_devant(self.robot.environnement.obstacles)
+        return -1
 
     def afficher_info(self):
         """
-        Affiche les informations de position et d'orientation du robot.
-
-        Affiche :
-        - La position actuelle du robot
-        - L'angle d'orientation du robot
+        Affiche les infos du robot.
         """
-        print(f"Position du robot : ({self.x}, {self.y}), Orientation : {self.angle_parcouru}°")
+        x, y = self.get_position()
+        orientation = self.robot.get_orientation()
+        print(f"Position du robot : ({x:.1f}, {y:.1f}), Orientation : {orientation:.1f}°")
 
-    
     def get_distance_devant(self, obstacles):
         """
-        Calcule la distance entre le robot et l'obstacle le plus proche dans sa direction.
-        :param obstacles: liste de tuples (x, y)
-        :return: distance minimale, ou -1 s'il n'y a aucun obstacle dans l'axe
+        Utilise la méthode du robot pour détecter les obstacles devant lui.
         """
-        x_r, y_r = self.get_position()
-        angle_rad = math.radians(self.orientation)
-
-        dx = math.cos(angle_rad)
-        dy = math.sin(angle_rad)
-
-        distance_min = float('inf')
-        for (x_o, y_o) in obstacles:
-            vx = x_o - x_r
-            vy = y_o - y_r
-            projection = vx * dx + vy * dy
-            if projection > 0:
-                distance = math.hypot(vx, vy)
-                if distance < distance_min:
-                    distance_min = distance
-
-        return distance_min if distance_min != float('inf') else -1
-
+        return self.robot.get_distance_devant(obstacles)

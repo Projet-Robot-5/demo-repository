@@ -96,3 +96,7 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
 
     def servo_rotate(self, port, angle):
         self.robot.servo_rotate(port, angle)
+
+    def get_distance_devant(self, obstacles=None):
+        return self.robot.get_distance_devant()
+

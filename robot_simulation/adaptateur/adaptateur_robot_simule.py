@@ -8,6 +8,8 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
         self.last_time = time.time()
         self.last_position = (robot.x, robot.y)
         self.last_orientation = robot.orientation
+        self.distance_parcourue = 0
+        self.angle_tourne = 0
 
     def update_position(self, dt):
         """Met à jour la position à partir des vitesses"""
@@ -28,77 +30,48 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
         
         self.update_position(dt)
         distance = math.sqrt((self.robot.x - self.last_position[0])**2 + 
-                          (self.robot.y - self.last_position[1])**2)
+                             (self.robot.y - self.last_position[1])**2)
         self.last_position = (self.robot.x, self.robot.y)
+        self.distance_parcourue += distance
         return distance
 
     def avancer(self, distance):
         """
-        Fait avancer le robot simulé d'une certaine distance.
-        
-        :param distance: La distance à parcourir.
+        Fait avancer le robot simulé d'une certaine distance (en cm).
         """
-        # Calculer la vitesse en fonction de la distance
-        vitesse = distance / 10  # Exemple de conversion
+        vitesse = distance / 10  # Conversion simple
         self.robot.set_wheel_speed(vitesse, vitesse)
-        
-        # Mettre à jour la position du robot
-        angle_rad = math.radians(self.robot.orientation)
-        self.robot.x += vitesse * math.cos(angle_rad)
-        self.robot.y += vitesse * math.sin(angle_rad)
-        
-        # Mettre à jour la distance parcourue
-        self.distance_parcourue += distance
+        print(f"[SIMULE] Avance de {distance} cm à {vitesse:.2f} unités")
 
     def tourner(self, angle):
         """
-        Fait tourner le robot simulé d'un certain angle.
-        
-        :param angle: L'angle à tourner (en degrés).
+        Fait tourner le robot simulé d'un certain angle (en degrés).
         """
         if angle > 0:
-            self.robot.set_wheel_speed(-4, 4)  # Rotation à gauche
+            self.robot.set_wheel_speed(-4, 4)
         else:
-            self.robot.set_wheel_speed(4, -4)  # Rotation à droite
-        
-        # Mettre à jour l'orientation du robot
+            self.robot.set_wheel_speed(4, -4)
         self.robot.orientation = (self.robot.orientation + angle) % 360
         self.angle_tourne += angle
+        print(f"[SIMULE] Tourne de {angle} degrés")
 
     def reculer(self, distance):
         """
-        Fait reculer le robot simulé d'une certaine distance.
-        
-        :param distance: La distance à reculer.
+        Fait reculer le robot simulé d'une certaine distance (en cm).
         """
-        # Calculer la vitesse en fonction de la distance
-        vitesse = distance / 10  # Exemple de conversion
+        vitesse = distance *200
         self.robot.set_wheel_speed(-vitesse, -vitesse)
-        
-        # Mettre à jour la position du robot
-        angle_rad = math.radians(self.robot.orientation)
-        self.robot.x -= vitesse * math.cos(angle_rad)
-        self.robot.y -= vitesse * math.sin(angle_rad)
-        
-        # Mettre à jour la distance parcourue
-        self.distance_parcourue += distance
+        print(f"[SIMULE] Recule de {distance} cm à {vitesse:.2f} unités")
 
     def stop(self):
         """Arrête le robot."""
         self.robot.set_wheel_speed(0, 0)
-
-    def get_distance_parcourue(self):
-        """Retourne la distance totale parcourue."""
-        return self.distance_parcourue
+        print("[SIMULE] Robot arrêté.")
 
     def get_angle_tourne(self):
-        """Retourne l'angle total tourné."""
         return self.angle_tourne
-    
+
     def get_distance_devant(self, obstacles):
-        """
-        Retourne la distance à l'obstacle devant en appelant le robot simulé.
-        """
         return self.robot.get_distance_devant(obstacles)
 
     def detect_obstacle(self):

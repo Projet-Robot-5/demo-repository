@@ -7,6 +7,7 @@ from robot_simulation.adaptateur.adaptateur_robot_reel import AdaptateurRobotRee
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
+
 class AffichageGraphique(ttk.Frame):
     def __init__(self, master, adaptateur, controleur, environnement):
         super().__init__(master)
@@ -30,10 +31,6 @@ class AffichageGraphique(ttk.Frame):
         # Dessin initial
         self.draw_environment()
         self.update_affichage()
-
-        #Distance
-        self.label_distance = tk.Label(self, text="Distance : 0 cm", font=("Arial", 12))
-        self.label_distance.pack()
 
     def draw_environment(self):
         """Dessin des obstacles ET des balises"""
@@ -89,28 +86,24 @@ class AffichageGraphique(ttk.Frame):
                 fill='yellow',
                 tags="robot"
             )
-            
+
+            # Afficher la distance devant (nouveau)
+            try:
+                distance = self.adaptateur.get_distance_devant(self.environnement.obstacles)
+                self.canvas.create_text(
+                    250, 20,
+                    text=f"Distance devant : {distance:.2f} cm",
+                    fill="black",
+                    font=("Arial", 12),
+                    tags="robot"
+                )
+            except Exception as e:
+                print("Erreur lors de l’affichage de la distance devant :", e)
+
         except AttributeError:
             print("Erreur: Impossible d'accéder à la position du robot")
-
-
-    
-    def update_distance_label(self):
-        try:
-            distance = 0
-            if hasattr(self.adaptateur, "get_distance_parcourue"):
-                distance = self.adaptateur.get_distance_parcourue()
-            elif hasattr(self.adaptateur, "robot") and hasattr(self.adaptateur.robot, "get_distance_parcourue"):
-                distance = self.adaptateur.robot.get_distance_parcourue()
-
-            self.label_distance.config(text=f"Distance : {distance:.2f} cm")
-        except Exception as e:
-            self.label_distance.config(text="Erreur de lecture de distance")
-            print("Erreur dans update_distance_label :", e)
-    
 
     def update_affichage(self):
         """Mise à jour périodique"""
         self.draw_robot()
-        self.update_distance_label()
         self.after(50, self.update_affichage)  # 20 FPS

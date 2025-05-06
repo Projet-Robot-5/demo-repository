@@ -3,7 +3,7 @@ import math
 import random
 
 class Environnement:
-    def __init__(self, width=500, height=500, obstacle_count=15, balise_count=1):
+    def __init__(self, width=500, height=500, obstacle_count=45, balise_count=1):
         """
         Initialise l'environnement dans lequel le robot évolue.
         :param width: Largeur de l'environnement (par défaut 500).
