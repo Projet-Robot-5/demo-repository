@@ -34,12 +34,16 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
     def get_distance_parcourue(self):
         self.update_position()
         return math.sqrt(self.x**2 + self.y**2)  # Distance depuis l'origine
-
-    def avancer(self, distance):
-        vitesse = distance / 10
+    
+    def avancer(self, vitesse=50):
+        """Fait avancer le robot à une certaine vitesse (en degrés/seconde)."""
         self.robot.set_motor_dps("MOTOR_LEFT", vitesse)
         self.robot.set_motor_dps("MOTOR_RIGHT", vitesse)
-        self.distance_parcourue += distance
+
+    def reculer(self, vitesse=50):
+        """Fait reculer le robot à une certaine vitesse (en degrés/seconde)."""
+        self.robot.set_motor_dps("MOTOR_LEFT", -vitesse)
+        self.robot.set_motor_dps("MOTOR_RIGHT", -vitesse)
 
     def tourner(self, angle):
         if angle > 0:
@@ -50,11 +54,6 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
             self.robot.set_motor_dps("MOTOR_RIGHT", -4)
         self.angle_tourne += angle
 
-    def reculer(self, distance):
-        vitesse = distance / 10
-        self.robot.set_motor_dps("MOTOR_LEFT", -vitesse)
-        self.robot.set_motor_dps("MOTOR_RIGHT", -vitesse)
-        self.distance_parcourue += distance
 
     def stop(self):
         """Arrête le robot."""
