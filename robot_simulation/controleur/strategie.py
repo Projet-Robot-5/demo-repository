@@ -1,47 +1,32 @@
 import time
 class AvancerDroit:
-    def __init__(self, adaptateur, distance):
-        """
-        Initialise la stratégie pour faire avancer le robot.
-        
-        :param adaptateur: L'adaptateur du robot (simulé ou réel).
-        :param distance: La distance à parcourir.
-        """
+    def __init__(self, adaptateur, distance, vitesse=40):
         self.adaptateur = adaptateur
         self.distance = distance
-        self.distance_parcourue = 0
+        self.vitesse = vitesse
+        self.depart = None
         self.actif = False
 
     def start(self):
-        """Démarre la stratégie d'avance."""
-        self.distance_parcourue = 0
+        """Démarre la stratégie d'avance en enregistrant la distance initiale."""
+        self.depart = self.adaptateur.get_distance_parcourue()
         self.actif = True
         print("Début de l'avance droite")
 
     def step(self):
-        """Fait avancer le robot d'une petite étape."""
+        """Commande le robot pour avancer tant que la distance n’est pas atteinte."""
         if not self.actif:
             return
-
-        # Fait avancer le robot d'une petite distance
-        self.adaptateur.avancer(12)  # Avancer de 12 unités
-        self.distance_parcourue += 12
-
-        # Mise à jour de la position et de la distance parcourue
-        if hasattr(self.adaptateur, 'robot'):
-            position = (self.adaptateur.robot.x, self.adaptateur.robot.y)
-        else:
-            position = (0, 0)  # Valeur par défaut
-        
-        print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
-        print(f"Position estimée: {position}")
+        self.adaptateur.avancer(self.vitesse)
+        print(f"Distance parcourue depuis le départ : {self.adaptateur.get_distance_parcourue() - self.depart:.2f}/{self.distance}")
 
     def stop(self):
-        """Retourne vrai si la distance est atteinte."""
-        if self.distance_parcourue >= self.distance:
+        """Arrête le robot si la distance est atteinte."""
+        if (self.adaptateur.get_distance_parcourue() - self.depart) >= self.distance:
             self.actif = False
-            self.adaptateur.stop()  # Arrêter le robot
-        return not self.actif 
+            self.adaptateur.stop()
+        return not self.actif
+
 
 class Tourner:
     def __init__(self, adaptateur, angle):
@@ -87,45 +72,29 @@ class Tourner:
         return not self.actif
     
 class Reculer:
-    def __init__(self, adaptateur, distance):
-        """
-        Initialise la stratégie pour faire reculer le robot.
-        
-        :param adaptateur: L'adaptateur du robot (simulé ou réel).
-        :param distance: La distance à reculer.
-        """
+    def __init__(self, adaptateur, distance, vitesse=60):
         self.adaptateur = adaptateur
         self.distance = distance
-        self.distance_parcourue = 0
+        self.vitesse = -abs(vitesse)
+        self.depart = None
         self.actif = False
 
     def start(self):
-        """Démarre la stratégie de recul."""
-        self.distance_parcourue = 0
+        self.depart = self.adaptateur.get_distance_parcourue()
         self.actif = True
         print("Début du recul")
 
     def step(self):
-        """Fait reculer le robot d'une petite étape."""
         if not self.actif:
             return
-
-        # Fait reculer le robot d'une petite distance
-        self.adaptateur.reculer(12)  # Reculer de 12 unités
-        self.distance_parcourue += 12
-
-        # Mise à jour de la position et de la distance parcourue
-        position = self.adaptateur.get_position()
-        print(f"Recul: {self.distance_parcourue}/{self.distance}")
-        print(f"Position: {position}")
+        self.adaptateur.reculer(abs(self.vitesse))
+        print(f"Distance reculée : {self.adaptateur.get_distance_parcourue() - self.depart:.2f}/{self.distance}")
 
     def stop(self):
-        """Retourne vrai si la distance est atteinte."""
-        if self.distance_parcourue >= self.distance:
+        if (self.adaptateur.get_distance_parcourue() - self.depart) >= self.distance:
             self.actif = False
-            self.adaptateur.stop()  # Arrêter le robot
+            self.adaptateur.stop()
         return not self.actif
-    
     
 class StrategieSequencielle:
     def __init__(self, actions):
