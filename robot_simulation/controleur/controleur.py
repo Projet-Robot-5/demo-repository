@@ -1,59 +1,54 @@
 import time
-from robot_simulation.controleur.strategie import AvancerDroit, Tourner
+from robot_simulation import adaptateur
+from robot_simulation.controleur.strategie import StrategieSequencielle
 from robot_simulation.modele.environnement import Environnement
-
-
+from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
+""""""
 class Controleur:
-    def __init__(self, robot, mode=None, master=None):
-        
-        self.robot = robot
-        self.environnement = Environnement(robot=self.robot,width=500, height=500, obstacle_count=15)  # Associer l'environnement au robot
-        self.mode = mode  # Ajouter un mode, avec une valeur par défaut None
-        self.queue_strategies = []  # Liste des stratégies à exécuter
-        self.strategie_courante = None  # La stratégie en cours
-        self.master = master
-    
-    def run(self, duration=30):
-        """Démarrer la simulation."""
-        if self.mode == "graphique" and self.master:
-            from robot_simulation.affichage.affichage_graphique import AffichageGraphique
-            self.affichage = AffichageGraphique(self.master, self.robot)
-        
-        self.faire_carre()  # Commencer le mouvement en carré
-        self.step()
-    
-    def step(self):
-        """Exécute la stratégie actuelle et passe à la suivante si elle est terminée."""
-        if self.strategie_courante is None or self.strategie_courante.stop():
+    def __init__(self, adptateur):
+        """ Initialise le contrôleur pour gérer les stratégies du robot.
+        """
+        self.adaptateur = adaptateur  # Instanciation de l'adaptateur
+        self.queue_strategies = []
+        self.strategie_courante = None
+        self.running = True  # Variable pour contrôler la boucle
+
+    def update(self):
+        """
+        Méthode appelée à chaque tick pour appliquer la stratégie courante.
+        """
+        if not self.running or not self.strategie_courante:
+            return False
+
+        # Applique un pas de la stratégie courante
+        self.strategie_courante.step()
+
+        # Passe à la stratégie suivante si nécessaire
+        if self.strategie_courante.stop():
             if self.queue_strategies:
                 self.strategie_courante = self.queue_strategies.pop(0)
                 self.strategie_courante.start()
+                return True
             else:
-                return  # Plus rien à exécuter
+                self.running = False
+                return False
+        return True
 
-        if self.strategie_courante:
-            self.strategie_courante.step()  # Exécution de la stratégie actuelle
+    def set_strategie(self, strategie):
+        """
+        Définit la stratégie à exécuter.
+        Args: strategie: Objet stratégie implémentant l'interface de stratégie
+        """
+        self.strategie_courante = strategie
+        self.strategie_courante.start()
+        self.running = True
 
-            if self.strategie_courante.stop():  # Vérifie si la stratégie est terminée
-                self.environnement.mettre_a_jour(dt=1)  # Mise à jour de l'environnement après l'étape
-
-        
-
-        if self.mode == "graphique" and self.master:
-            self.master.after(100, self.step)  # Met à jour toutes les 100ms
-        else:
-            time.sleep(0.1)
-            self.step()
-    
-    def faire_carre(self, cote=120):
-        """Ajoute les stratégies pour faire un carré."""
-        for _ in range(4):
-            avancer = AvancerDroit(self.robot, cote)
-            tourner = Tourner(self.robot, 90)  # Correction pour assurer un carré parfait
-            self.ajouter_strategie(avancer)
-            self.ajouter_strategie(tourner)
-    
     def ajouter_strategie(self, strategie):
         """Ajoute une stratégie à la file d'attente."""
         self.queue_strategies.append(strategie)
 
+    def stop(self):
+        """Arrête la simulation proprement."""
+        self.running = False
+        if self.strategie_courante:
+            self.strategie_courante.stop()

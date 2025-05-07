@@ -1,75 +1,114 @@
 import sys
 import time
+import threading
 import tkinter as tk
-import importlib.util
-
-# Import des modules réorganisés
+from robot_simulation.controleur.strategie import AvancerDroit, Tourner, Reculer
+from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotSimule
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
-from robot_simulation.modele.robot import Robot
+from robot_simulation.affichage.affichage_3d import Affichage3D
 from robot_simulation.controleur.controleur import Controleur
-from robot_simulation.modele.simulation import Simulation
-
-# Vérifier si affichage_graphique.py existe
-affichage_graphique_spec = importlib.util.find_spec("robot_simulation.affichage.affichage_graphique")
-GUI_AVAILABLE = affichage_graphique_spec is not None
-
+from robot_simulation.controleur.strategie import StrategieSequencielle
+from robot_simulation.modele.environnement import Environnement
+from robot_simulation.modele.robot import Robot
 
 def mode_terminal():
-    """Mode terminal sans interface graphique."""
-    print("Mode terminal activé (sans interface graphique).")
+    print("Mode terminal activé")
+    robot = Robot(x=250, y=250)
+    adaptateur = AdaptateurRobotSimule(robot)
+    controleur = Controleur(adaptateur)
+    actions = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    ]
+    controleur.set_strategie(StrategieSequencielle(actions))
 
-    while True:
-        simulation = Simulation()
-        robot = Robot(x=100, y=100, vitesse_gauche=5, vitesse_droite=5)
-        simulation.robot = robot
-        controleur = Controleur(robot, mode="terminal")
-
-        controleur.run(duration=10)  # Lance la simulation pendant 10 sec
-
+    try:
         while True:
-            if not simulation.updateModele():
-                choix = input("CRASH ! Le robot a percuté un obstacle.\nVoulez-vous recommencer ? (o/n) : ").strip().lower()
-                if choix == 'o':
-                    break  # On sort de cette boucle et recommence la simulation
-                else:
-                    return  # On quitte complètement le mode terminal
-
+            controleur.update()
+            # Remplacer par :
+            if hasattr(adaptateur, 'robot'):
+                x, y = adaptateur.robot.x, adaptateur.robot.y
+            else:
+                x, y = 0, 0
+            print(f"Position estimée: ({x:.1f}, {y:.1f})")
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("\nArrêt du programme")
 
 def mode_graphique():
-    """Mode graphique avec Tkinter, et passe au mode terminal si on ferme la fenêtre."""
+    # Initialisation (conservez votre code existant)
+    robot = Robot(x=250, y=250)
+    adaptateur = AdaptateurRobotSimule(robot)
+    controleur = Controleur(adaptateur)
+    
+    # CONSERVEZ VOTRE SUITE D'ACTIONS EXISTANTE
+    actions = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    ]
+    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.environnement = Environnement(width=500, height=500)
+    
+    # Configuration de la fenêtre
     root = tk.Tk()
-    root.title("Simulation de Robot")
-
-   # Initialisation du robot
-    robot = Robot(x=250, y=250)  # Créer le robot directement
-
-    # Création du contrôleur et de l'affichage
-    controleur = Controleur(robot, mode="graphique", master=root)
-    affichage = AffichageGraphique(root, robot)
-
-    def on_close():
-        """Si on ferme la fenêtre, on passe en mode terminal."""
-        print("\nFermeture de l'interface graphique. Passage en mode terminal...\n")
-        root.destroy()
-        mode_terminal()  # Passer au mode terminal
-
-    # Définir le comportement lors de la fermeture de la fenêtre
-    root.protocol("WM_DELETE_WINDOW", on_close)
-
-    # Lancer la simulation pendant 10 sec
-    controleur.run(duration=10)
-
-    # Démarre la boucle principale de Tkinter
+    root.title("Simulation Robot")
+    
+    
+    affichage = AffichageGraphique(root, adaptateur, controleur)
+    affichage.pack(fill=tk.BOTH, expand=True)
+    
+    def run_controleur():
+        while getattr(controleur, 'running', True):
+            controleur.update()
+            time.sleep(0.05)
+    
+    ctrl_thread = threading.Thread(target=run_controleur, daemon=True)
+    ctrl_thread.start()
+    
     root.mainloop()
 
+def mode_3d():
+    robot = Robot(x=250, y=250)
+    adaptateur = AdaptateurRobotSimule(robot)
+    controleur = Controleur(adaptateur)
+    actions = [
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
+        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
+    ]
+    controleur.set_strategie(StrategieSequencielle(actions))
+    controleur.environnement = Environnement()
+
+    def run_controleur():
+        while getattr(controleur, 'running', True):
+            controleur.update()
+            time.sleep(0.05)
+
+    ctrl_thread = threading.Thread(target=run_controleur, daemon=True)
+    ctrl_thread.start()
+
+    affichage = Affichage3D(adaptateur, controleur)
+    try:
+        while getattr(controleur, 'running', True):
+            affichage.update_affichage()
+            time.sleep(0.05)
+    except KeyboardInterrupt:
+        print("\nArrêt du programme")
+    finally:
+        affichage.on_close()
 
 def main():
-    """Choix du mode : terminal ou GUI"""
-    if "--no-gui" in sys.argv or not GUI_AVAILABLE:
+    if "--no-gui" in sys.argv:
         mode_terminal()
+    elif "--3d" in sys.argv:
+        mode_3d()
     else:
         mode_graphique()
-
 
 if __name__ == "__main__":
     main()
