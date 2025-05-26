@@ -15,11 +15,15 @@ def mode_graphique():
     controleur = Controleur(adaptateur)
     
     actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
-    ]
+    AvancerDroit(adaptateur, 100, vitesse=50),  # Distance et vitesse réduites
+    Tourner(adaptateur, 90, vitesse_rotation=100),  # Vitesse très réduite
+    AvancerDroit(adaptateur, 100, vitesse=50),
+    Tourner(adaptateur, 90, vitesse_rotation=100),
+    AvancerDroit(adaptateur, 100, vitesse=50),
+    Tourner(adaptateur, 90, vitesse_rotation=100),
+    AvancerDroit(adaptateur, 100, vitesse=50),
+    Tourner(adaptateur, 90, vitesse_rotation=100)
+]
     controleur.set_strategie(StrategieSequencielle(actions))
     controleur.environnement = Environnement(width=500, height=500)
     
@@ -31,6 +35,10 @@ def mode_graphique():
     
     def run_controleur():
         while getattr(controleur, 'running', True):
+            now = time.time()
+            dt = now - adaptateur.last_time
+            adaptateur.last_time = now
+            adaptateur.update_position(dt)
             controleur.update()
             time.sleep(0.05)
     
