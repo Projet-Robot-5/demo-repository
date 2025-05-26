@@ -20,22 +20,23 @@ class AvancerDroit:
         print("Début de l'avance droite")
 
     def step(self):
-        """Fait avancer le robot d'une petite étape."""
         if not self.actif:
             return
 
-        # Fait avancer le robot d'une petite distance
         self.adaptateur.avancer(12)  # Avancer de 12 unités
+        if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+            self.adaptateur.robot.update_position()  # Mise à jour de la position
+
         self.distance_parcourue += 12
 
-        # Mise à jour de la position et de la distance parcourue
         if hasattr(self.adaptateur, 'robot'):
             position = (self.adaptateur.robot.x, self.adaptateur.robot.y)
         else:
-            position = (0, 0)  # Valeur par défaut
-        
+            position = (0, 0)
+
         print(f"Avance droite: {self.distance_parcourue}/{self.distance}")
         print(f"Position estimée: {position}")
+
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
