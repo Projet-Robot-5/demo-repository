@@ -65,21 +65,22 @@ class Tourner:
         print(f"Début de la rotation de {self.angle} degrés")
 
     def step(self):
-        """Effectue la rotation par petites étapes."""
         if not self.actif:
             return
 
-        # Fait tourner le robot d'un petit angle
-        self.adaptateur.tourner(10)  # Tourner de 10 degrés
+        self.adaptateur.tourner(10)
+        if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+            self.adaptateur.robot.update_position()
+
         self.angle_tourne += 10
 
-        # Mise à jour de l'orientation
         if hasattr(self.adaptateur, 'robot'):
             orientation = self.adaptateur.robot.orientation
         else:
-            orientation = 0  # Valeur par défaut
-            
+            orientation = 0
+
         print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation estimée: {orientation}")
+
         
     def stop(self):
         """Retourne vrai si la rotation est terminée."""
@@ -108,18 +109,19 @@ class Reculer:
         print("Début du recul")
 
     def step(self):
-        """Fait reculer le robot d'une petite étape."""
         if not self.actif:
             return
 
-        # Fait reculer le robot d'une petite distance
         self.adaptateur.reculer(12)  # Reculer de 12 unités
+        if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+            self.adaptateur.robot.update_position()  # Mise à jour de la position
+
         self.distance_parcourue += 12
 
-        # Mise à jour de la position et de la distance parcourue
-        position = self.adaptateur.get_position()
+        position = self.adaptateur.get_position() if hasattr(self.adaptateur, 'get_position') else (0, 0)
         print(f"Recul: {self.distance_parcourue}/{self.distance}")
         print(f"Position: {position}")
+
 
     def stop(self):
         """Retourne vrai si la distance est atteinte."""
@@ -166,21 +168,24 @@ class TournerVersBalise:
     def step(self):
         if not self.actif:
             return
-            
+
         robot = self.adaptateur.robot
         if hasattr(robot, 'balise_cible'):
             bx, by = robot.balise_cible
             dx, dy = bx - robot.x, by - robot.y
             angle_cible = math.degrees(math.atan2(dy, dx))
             angle_diff = (angle_cible - robot.orientation) % 360
-            
+
             if angle_diff > 180:
                 angle_diff -= 360
-                
-            if abs(angle_diff) > 5:  # Seuil de précision
+
+            if abs(angle_diff) > 5:
                 self.adaptateur.tourner(angle_diff * 0.3)
+                if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                    self.adaptateur.robot.update_position()  # Mise à jour de la position
             else:
                 self.actif = False
+
 
     def stop(self):
         return not self.actif  # True quand alignement terminé
@@ -198,16 +203,19 @@ class AvancerVersBalise:
     def step(self):
         if not self.actif:
             return
-            
+
         robot = self.adaptateur.robot
         if hasattr(robot, 'balise_cible'):
             bx, by = robot.balise_cible
-            distance = math.sqrt((bx-robot.x)**2 + (by-robot.y)**2)
-            
-            if distance > 20:  # Distance d'arrêt
+            distance = math.sqrt((bx - robot.x) ** 2 + (by - robot.y) ** 2)
+
+            if distance > 20:
                 self.adaptateur.avancer(min(100, distance * 0.5))
+                if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                    self.adaptateur.robot.update_position()  # Mise à jour de la position
             else:
                 self.actif = False
+
 
     def stop(self):
         return not self.actif  # True quand distance atteinte
@@ -225,28 +233,35 @@ class SuivreBalise:
     def step(self):
         if not self.actif:
             return
-            
+
         robot = self.adaptateur.robot
         balises = getattr(self.environnement, 'balises', [])
-        
+
         if balises:
-            bx, by = balises[0]  # Prend la première balise
+            bx, by = balises[0]
             dx, dy = bx - robot.x, by - robot.y
             distance = math.sqrt(dx**2 + dy**2)
-            
-            if distance > 20:  # Distance d'arrêt
+
+            if distance > 20:
                 angle_cible = math.degrees(math.atan2(dy, dx))
                 angle_diff = (angle_cible - robot.orientation + 180) % 360 - 180
-                
-                if abs(angle_diff) > 10:  # Seuil de rotation
+
+                if abs(angle_diff) > 10:
                     self.adaptateur.tourner(angle_diff * 0.8)
+                    if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                        self.adaptateur.robot.update_position()
                 else:
                     self.adaptateur.avancer(min(40, distance * 0.5))
+                    if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                        self.adaptateur.robot.update_position()
             else:
                 self.adaptateur.stop()
         else:
             print("Recherche balise...")
-            self.adaptateur.tourner(30)  # Rotation de recherche
+            self.adaptateur.tourner(30)
+            if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                self.adaptateur.robot.update_position()
+
 
     def stop(self):
         self.actif = False
@@ -441,16 +456,16 @@ class StrategieContournement:
         if not self.actif:
             return
 
-        # Mesure la distance devant
         distance = self.adaptateur.get_distance_devant(self.environnement.obstacles)
         print(f"[Contournement] Distance détectée : {distance} cm")
 
         if 0 <= distance <= self.seuil_detection:
-            # Tourne légèrement vers la droite pour chercher un passage libre
             self.adaptateur.tourner(10)
+            if hasattr(self.adaptateur, 'robot') and hasattr(self.adaptateur.robot, 'update_position'):
+                self.adaptateur.robot.update_position()
         else:
-            # Obstacle évité, on peut continuer
             self.actif = False
+
 
     def stop(self):
         return not self.actif

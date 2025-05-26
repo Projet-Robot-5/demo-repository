@@ -1,3 +1,4 @@
+import threading
 import time
 from robot_simulation.controleur.strategie import AvancerDroit, Tourner
 from robot_simulation.controleur.strategie import StrategieSequencielle
