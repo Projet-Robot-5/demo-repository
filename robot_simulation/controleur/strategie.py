@@ -29,46 +29,42 @@ class AvancerDroit:
 
 
 class Tourner:
-    def __init__(self, adaptateur, angle):
-        """
-        Initialise la stratégie pour faire tourner le robot.
-        
-        :param adaptateur: L'adaptateur du robot (simulé ou réel).
-        :param angle: L'angle à tourner (en degrés).
-        """
+    def __init__(self, adaptateur, angle, vitesse_rotation=50):
         self.adaptateur = adaptateur
-        self.angle = angle
-        self.angle_tourne = 0
+        self.angle_demande = angle
+        self.vitesse_rotation = vitesse_rotation
+        self.angle_parcouru = 0
         self.actif = False
+        self.direction = 1 if angle > 0 else -1
 
     def start(self):
-        """Démarre la rotation."""
-        self.angle_tourne = 0
+        self.angle_parcouru = 0
         self.actif = True
-        print(f"Début de la rotation de {self.angle} degrés")
+        print(f"Début rotation: {self.angle_demande}°")
+        # Démarrage immédiat de la rotation
+        self.adaptateur.tourner(self.direction * self.angle_demande, self.vitesse_rotation)
 
     def step(self):
-        """Effectue la rotation par petites étapes."""
         if not self.actif:
             return
-
-        # Fait tourner le robot d'un petit angle
-        self.adaptateur.tourner(10)  # Tourner de 10 degrés
-        self.angle_tourne += 10
-
-        # Mise à jour de l'orientation
-        if hasattr(self.adaptateur, 'robot'):
-            orientation = self.adaptateur.robot.orientation
-        else:
-            orientation = 0  # Valeur par défaut
             
-        print(f"Rotation: {self.angle_tourne}/{self.angle} | Orientation estimée: {orientation}")
+        # Mesurer la rotation effective depuis le dernier step
+        current_angle = self.adaptateur.robot.orientation
+        delta = abs(current_angle - self.adaptateur.last_orientation) % 360
+        if delta > 180:
+            delta -= 360
+        self.angle_parcouru += abs(delta)
+        self.adaptateur.last_orientation = current_angle
         
+        print(f"Rotation: {self.angle_parcouru:.1f}/{abs(self.angle_demande)}°")
+
     def stop(self):
-        """Retourne vrai si la rotation est terminée."""
-        if self.angle_tourne >= self.angle:
+        if self.angle_parcouru >= abs(self.angle_demande):
+            self.adaptateur.stop()
             self.actif = False
-            self.adaptateur.stop()  # Arrêter le robot
+            # Forcer l'angle exact
+            target = (self.adaptateur.robot.orientation // 90) * 90
+            self.adaptateur.robot.orientation = target % 360
         return not self.actif
     
 class Reculer:
