@@ -36,20 +36,20 @@ class Tourner:
         self.angle_parcouru = 0
         self.actif = False
         self.direction = 1 if angle > 0 else -1
-        self.last_orientation = None  # 🆕 stocker l'angle précédent
+        self.last_orientation = None  # stocker l'angle précédent
 
     def start(self):
         self.angle_parcouru = 0
         self.actif = True
         print(f"Début rotation: {self.angle_demande}°")
-        self.last_orientation = self.adaptateur.get_angle_tourne()  # 🆕
+        self.last_orientation = self.adaptateur.get_angle_tourne()  
         self.adaptateur.tourner(self.direction * self.angle_demande, self.vitesse_rotation)
 
     def step(self):
         if not self.actif:
             return
 
-        current_angle = self.adaptateur.get_angle_tourne()  # ✅ lecture correcte
+        current_angle = self.adaptateur.get_angle_tourne()  
         delta = (current_angle - self.last_orientation) % 360
 
         if delta > 180:
