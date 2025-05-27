@@ -8,19 +8,16 @@ from robot_simulation.adaptateur.adaptateur_robot_simule import AdaptateurRobotS
 from robot_simulation.affichage.affichage_graphique import AffichageGraphique
 from robot_simulation.modele.robot import Robot
 from robot_simulation.modele.environnement import Environnement
+from robot_simulation.controleur.strategie import faire_carre
 
 def mode_graphique():
     robot = Robot(x=250, y=250)
     adaptateur = AdaptateurRobotSimule(robot)
     controleur = Controleur(adaptateur)
     
-    actions = [
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90),
-        AvancerDroit(adaptateur, 800), Tourner(adaptateur, 90)
-    ]
-    controleur.set_strategie(StrategieSequencielle(actions))
+    strategie = faire_carre(adaptateur, longueur=100, vitesse=50, vitesse_rotation=100)
+    controleur.set_strategie(strategie)
+
     controleur.environnement = Environnement(width=500, height=500)
     
     root = tk.Tk()
@@ -31,6 +28,10 @@ def mode_graphique():
     
     def run_controleur():
         while getattr(controleur, 'running', True):
+            now = time.time()
+            dt = now - adaptateur.last_time
+            adaptateur.last_time = now
+            adaptateur.update_position(dt)
             controleur.update()
             time.sleep(0.05)
     

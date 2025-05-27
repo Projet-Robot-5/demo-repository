@@ -3,10 +3,14 @@ import time  # Pour gérer le temps d'attente entre les mises à jour
 import threading  # Pour exécuter des tâches en parallèle (affichage graphique dans un thread)
 import math
 from tkinter import ttk
-from robot_simulation.adaptateur.adaptateur_robot_reel import AdaptateurRobotReel
 from robot_simulation.controleur.controleur import Controleur  # Importation de la classe Controleur pour gérer les mouvements du robot
 from robot_simulation.modele.simulation import Simulation  # Importation de la classe Simulation (non utilisée dans ce code)
 from robot_simulation.controleur.strategie import StrategieSequencielle # Importation de la stratégie seq
+try:
+    from robot_simulation.adaptateur.adaptateur_robot_reel import AdaptateurRobotReel
+except ImportError:
+    AdaptateurRobotReel = None
+
 class AffichageGraphique(ttk.Frame):
     def __init__(self, master, adaptateur, controleur):
         super().__init__(master)

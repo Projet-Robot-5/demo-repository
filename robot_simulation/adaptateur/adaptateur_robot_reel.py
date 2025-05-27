@@ -1,73 +1,86 @@
 import math
+from gopigo3 import GoPiGo3
 from robot_simulation.adaptateur.adaptateur_abstrait import AdaptateurAbstrait
 
 class AdaptateurRobotReel(AdaptateurAbstrait):
-    def __init__(self, robot):
+    def __init__(self, robot: GoPiGo3):
         super().__init__(robot)
-        self.wheel_radius = 3.5  # Rayon des roues en cm
+        self.robot.MOTOR_LEFT = robot.MOTOR_LEFT
+        self.robot.MOTOR_RIGHT = robot.MOTOR_RIGHT
+        self.wheel_radius = 3.5  # cm
+        self.robot.wheel_distance = 14.2 
         self.last_left_ticks = 0
         self.last_right_ticks = 0
-        self.x = 0  # Position initiale
+        self.x = 0
         self.y = 0
         self.orientation = 0
+        self.distance_parcourue_totale = 0
+
 
     def update_position(self):
-        """Met à jour la position à partir des encodeurs"""
-        left_ticks = self.robot.get_motor_position("MOTOR_LEFT")
-        right_ticks = self.robot.get_motor_position("MOTOR_RIGHT")
-        
-        # Calcul du déplacement des roues
+        left_ticks = self.robot.get_motor_encoder(self.robot.MOTOR_LEFT)
+        right_ticks = self.robot.get_motor_encoder(self.robot.MOTOR_RIGHT)
+
         left_dist = (left_ticks - self.last_left_ticks) * self.wheel_radius * math.pi / 180
         right_dist = (right_ticks - self.last_right_ticks) * self.wheel_radius * math.pi / 180
-        
-        # Mise à jour de la position et orientation
         distance = (left_dist + right_dist) / 2
-        angle_change = (right_dist - left_dist) / self.robot.wheel_distance
-        
-        self.x += distance * math.cos(math.radians(self.orientation))
-        self.y += distance * math.sin(math.radians(self.orientation))
-        self.orientation = (self.orientation + math.degrees(angle_change)) % 360
-        
+
+        dx = distance * math.cos(math.radians(self.orientation))
+        dy = distance * math.sin(math.radians(self.orientation))
+
+        self.x += dx
+        self.y += dy
+
+        delta_theta = (right_dist - left_dist) / self.robot.wheel_distance
+        self.orientation = (self.orientation + math.degrees(delta_theta)) % 360
+
+        self.distance_parcourue_totale += abs(distance)
         self.last_left_ticks = left_ticks
         self.last_right_ticks = right_ticks
 
-    def get_distance_parcourue(self):
-        self.update_position()
-        return math.sqrt(self.x**2 + self.y**2)  # Distance depuis l'origine
+
+
     
     def avancer(self, vitesse=50):
-        """Fait avancer le robot à une certaine vitesse (en degrés/seconde)."""
-        self.robot.set_motor_dps("MOTOR_LEFT", vitesse)
-        self.robot.set_motor_dps("MOTOR_RIGHT", vitesse)
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, vitesse)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, vitesse)
 
     def reculer(self, vitesse=50):
-        """Fait reculer le robot à une certaine vitesse (en degrés/seconde)."""
-        self.robot.set_motor_dps("MOTOR_LEFT", -vitesse)
-        self.robot.set_motor_dps("MOTOR_RIGHT", -vitesse)
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, -vitesse)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, -vitesse)
 
-    def tourner(self, angle):
-        if angle > 0:
-            self.robot.set_motor_dps("MOTOR_LEFT", -4)  # Rotation à gauche
-            self.robot.set_motor_dps("MOTOR_RIGHT", 4)
-        else:
-            self.robot.set_motor_dps("MOTOR_LEFT", 4)  # Rotation à droite
-            self.robot.set_motor_dps("MOTOR_RIGHT", -4)
-        self.angle_tourne += angle
+    def tourner(self, angle_degres, vitesse_dps=50):
+        angle_rad = math.radians(abs(angle_degres))
+        arc_length = angle_rad * (self.robot.wheel_distance / 2)
+        ticks = (arc_length / (self.wheel_radius * math.pi)) * 360  # en degrés moteurs
+
+        self.robot.offset_motor_encoder(self.robot.MOTOR_LEFT, 0)
+        self.robot.offset_motor_encoder(self.robot.MOTOR_RIGHT, 0)
+
+        direction = 1 if angle_degres > 0 else -1
+
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, -direction * vitesse_dps)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, direction * vitesse_dps)
+
+        while True:
+            left = abs(self.robot.get_motor_encoder(self.robot.MOTOR_LEFT))
+            right = abs(self.robot.get_motor_encoder(self.robot.MOTOR_RIGHT))
+            if (left + right) / 2 >= ticks:
+                break
+            time.sleep(0.01)
+
+        self.stop()
 
 
     def stop(self):
-        """Arrête le robot."""
-        self.robot.set_motor_dps("MOTOR_LEFT", 0)
-        self.robot.set_motor_dps("MOTOR_RIGHT", 0)
-
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, 0)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, 0)
 
     def get_distance_parcourue(self):
-        """Retourne la distance totale parcourue."""
-        return self.distance_parcourue
+        return self.distance_parcourue_totale
 
     def get_angle_tourne(self):
-        """Retourne l'angle total tourné."""
-        return self.angle_tourne
+        return self.orientation
     
 
     def detect_obstacle(self):
