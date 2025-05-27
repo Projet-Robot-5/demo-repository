@@ -212,3 +212,10 @@ class StrategieBoucle:
         print("Arrêt de la boucle.")
         for action in self.actions:
             action.stop()
+
+def faire_carre(adaptateur, longueur=200, angle=90, vitesse=40, vitesse_rotation=50):
+    actions = []
+    for _ in range(4):
+        actions.append(AvancerDroit(adaptateur, longueur, vitesse))
+        actions.append(Tourner(adaptateur, angle, vitesse_rotation))
+    return StrategieSequencielle(actions)
