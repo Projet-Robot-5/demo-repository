@@ -52,20 +52,25 @@ class AdaptateurRobotReel(AdaptateurAbstrait):
     def tourner(self, angle_degres, vitesse_dps=50):
         angle_rad = math.radians(abs(angle_degres))
         arc_length = angle_rad * (self.robot.wheel_distance / 2)
-        ticks = (arc_length / (self.wheel_radius * math.pi)) * 180
+        ticks = (arc_length / (self.wheel_radius * math.pi)) * 360  # en degrés moteurs
 
         self.robot.offset_motor_encoder(self.robot.MOTOR_LEFT, 0)
         self.robot.offset_motor_encoder(self.robot.MOTOR_RIGHT, 0)
 
-        self.robot.set_motor_limits(self.robot.MOTOR_LEFT, dps=vitesse_dps)
-        self.robot.set_motor_limits(self.robot.MOTOR_RIGHT, dps=vitesse_dps)
+        direction = 1 if angle_degres > 0 else -1
 
-        if angle_degres > 0:
-            self.robot.set_motor_position_relative(self.robot.MOTOR_LEFT, -ticks)
-            self.robot.set_motor_position_relative(self.robot.MOTOR_RIGHT, ticks)
-        else:
-            self.robot.set_motor_position_relative(self.robot.MOTOR_LEFT, ticks)
-            self.robot.set_motor_position_relative(self.robot.MOTOR_RIGHT, -ticks)
+        self.robot.set_motor_dps(self.robot.MOTOR_LEFT, -direction * vitesse_dps)
+        self.robot.set_motor_dps(self.robot.MOTOR_RIGHT, direction * vitesse_dps)
+
+        while True:
+            left = abs(self.robot.get_motor_encoder(self.robot.MOTOR_LEFT))
+            right = abs(self.robot.get_motor_encoder(self.robot.MOTOR_RIGHT))
+            if (left + right) / 2 >= ticks:
+                break
+            time.sleep(0.01)
+
+        self.stop()
+
 
     def stop(self):
         self.robot.set_motor_dps(self.robot.MOTOR_LEFT, 0)
