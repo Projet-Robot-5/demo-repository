@@ -17,7 +17,6 @@ class AvancerDroit:
         """Commande le robot pour avancer tant que la distance n’est pas atteinte."""
         if not self.actif:
             return
-        self.adaptateur.update_position() 
         self.adaptateur.avancer(self.vitesse)
         print(f"Distance parcourue depuis le départ : {self.adaptateur.get_distance_parcourue() - self.depart:.2f}/{self.distance}")
 
@@ -50,7 +49,6 @@ class Tourner:
         if not self.actif:
             return
 
-        self.adaptateur.update_position() 
         current_angle = self.adaptateur.get_angle_tourne()  # ✅ lecture correcte
         delta = (current_angle - self.last_orientation) % 360
 
