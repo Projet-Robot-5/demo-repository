@@ -39,6 +39,7 @@ class AdaptateurRobotSimule(AdaptateurAbstrait):
         # Mise à jour de la distance parcourue (absolue)
         distance_step = math.sqrt(dx**2 + dy**2)
         self.distance_parcourue += distance_step
+        self.angle_tourne += abs(delta_angle)
 
         print(f"[update_position] dt={dt:.3f}s, dx={dx:.2f}, dy={dy:.2f}, dθ={delta_angle:.2f}°, "
             f"x={self.robot.x:.2f}, y={self.robot.y:.2f}, θ={self.robot.orientation:.2f}°, "

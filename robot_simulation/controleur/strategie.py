@@ -36,37 +36,36 @@ class Tourner:
         self.angle_parcouru = 0
         self.actif = False
         self.direction = 1 if angle > 0 else -1
+        self.last_orientation = None  # 🆕 stocker l'angle précédent
 
     def start(self):
         self.angle_parcouru = 0
         self.actif = True
         print(f"Début rotation: {self.angle_demande}°")
-        # Démarrage immédiat de la rotation
+        self.last_orientation = self.adaptateur.get_angle_tourne()  # 🆕
         self.adaptateur.tourner(self.direction * self.angle_demande, self.vitesse_rotation)
 
     def step(self):
         if not self.actif:
             return
-            
-        # Mesurer la rotation effective depuis le dernier step
-        current_angle = self.adaptateur.robot.orientation
-        delta = abs(current_angle - self.adaptateur.last_orientation) % 360
+
+        current_angle = self.adaptateur.get_angle_tourne()  # ✅ lecture correcte
+        delta = (current_angle - self.last_orientation) % 360
+
         if delta > 180:
             delta -= 360
+
         self.angle_parcouru += abs(delta)
-        self.adaptateur.last_orientation = current_angle
-        
+        self.last_orientation = current_angle
+
         print(f"Rotation: {self.angle_parcouru:.1f}/{abs(self.angle_demande)}°")
 
     def stop(self):
         if self.angle_parcouru >= abs(self.angle_demande):
             self.adaptateur.stop()
             self.actif = False
-            # Forcer l'angle exact
-            target = (self.adaptateur.robot.orientation // 90) * 90
-            self.adaptateur.robot.orientation = target % 360
         return not self.actif
-    
+
 class Reculer:
     def __init__(self, adaptateur, distance, vitesse=60):
         self.adaptateur = adaptateur
