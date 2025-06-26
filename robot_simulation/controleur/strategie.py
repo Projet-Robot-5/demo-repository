@@ -1,4 +1,5 @@
 import time
+import math
 class AvancerDroit:
     def __init__(self, adaptateur, distance, vitesse=40):
         self.adaptateur = adaptateur
@@ -216,3 +217,25 @@ class StrategieBoucle:
         print("Arrêt de la boucle.")
         for action in self.actions:
             action.stop()
+
+class TriangleEquilateral:
+    def __init__(self, adaptateur, longueur=100, angle=(60):
+        self.adaptateur = adaptateur
+        #self.angle=60
+        self.actions = []
+    
+    for adapateur in range(3):   
+        self.actions.append(AvancerDroit(adaptateur, longueur_cote))
+        self.actions.apend(Tourner(adaptateur, angle))
+    self.strategie = StrategieSequencielle(self.action)
+
+    def start(self):
+        self.strategie.start()
+
+    def step(self):
+        self.strategie.step()
+
+    def stop(self):
+        return step.strategie.stop()
+
+    
